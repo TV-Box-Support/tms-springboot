@@ -8,7 +8,9 @@ import java.util.List;
 public class AbstractOutput<T> {
     private int page;
     private int totalPage;
-    private List<T> T = new ArrayList<>();
+    private Integer totalElement;
+    private String message;
+    private List<T> listResult = new ArrayList<>();
 
     public int getPage() {
         return page;
@@ -26,11 +28,27 @@ public class AbstractOutput<T> {
         this.totalPage = totalPage;
     }
 
-    public List<T> getListResult() {
-        return T;
+    public String getMessage() {
+        return message;
     }
 
-    public void setListResult(List<T> t) {
-        T = t;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getTotalElement() {
+        return totalElement;
+    }
+
+    public void setTotalElement(Integer totalElement) {
+        this.totalElement = totalElement;
+    }
+
+    public List<T> getListResult() {
+        return listResult;
+    }
+
+    public void setListResult(List<T> listResult) {
+        this.listResult = listResult;
     }
 }

@@ -16,6 +16,7 @@ public class DeviceApi {
     @Autowired
     private IDeviceService deviceService;
 
+
     @GetMapping(value = "/device")
     public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page,
                                  @RequestParam(value = "limit", required = false) Integer limit) {

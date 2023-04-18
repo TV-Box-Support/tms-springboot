@@ -1,12 +1,6 @@
 package com.vnptt.tms.entity;
 
-import javax.persistence.OneToMany;
-import javax.persistence.ManyToMany;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +12,11 @@ public class ApplicationEntity extends BaseEntity{
     @Column(name = "version", nullable = false)
     private int version;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(name = "device_application",
             joinColumns = @JoinColumn(name = "application_id"),
             inverseJoinColumns = @JoinColumn(name = "device_id"))

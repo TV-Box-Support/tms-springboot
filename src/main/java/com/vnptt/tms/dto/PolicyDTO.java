@@ -1,6 +1,5 @@
 package com.vnptt.tms.dto;
 
-import java.sql.Timestamp;
 
 public class PolicyDTO  extends AbstractDTO<PolicyDTO>{
 

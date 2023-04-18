@@ -1,10 +1,6 @@
 package com.vnptt.tms.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +29,18 @@ public class DeviceEntity extends BaseEntity{
     @Column(name = "desciption", length = 2000)
     private String desciption;
 
-    @ManyToMany(mappedBy = "deviceEntitiesApplication")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },mappedBy = "deviceEntitiesApplication")
     private List<ApplicationEntity> applicationEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "deviceEntityDetail")
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },mappedBy = "deviceEntityDetail")
     private List<DevicePolicyDetailEntity> devicePolicyDetailEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "deviceEntityHistory")
@@ -145,4 +149,18 @@ public class DeviceEntity extends BaseEntity{
     public void setHistoryPerformanceEntities(List<HistoryPerformanceEntity> historyPerformanceEntities) {
         this.historyPerformanceEntities = historyPerformanceEntities;
     }
+
+    public void addApplication(ApplicationEntity applicationEntity) {
+        this.applicationEntities.add(applicationEntity);
+        applicationEntity.getDeviceEntitiesApplication().add(this);
+    }
+
+    public void removeApplication(long applicationId) {
+        ApplicationEntity applicationEntity = this.applicationEntities.stream().filter(app -> app.getId() == applicationId).findFirst().orElse(null);
+        if (applicationEntity != null) {
+            this.applicationEntities.remove(applicationEntity);
+            applicationEntity.getDeviceEntitiesApplication().remove(this);
+        }
+    }
+
 }

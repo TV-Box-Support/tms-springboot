@@ -1,9 +1,6 @@
 package com.vnptt.tms.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,11 @@ public class ApkEntity  extends BaseEntity{
     @Column(name = "packagesize", nullable = false)
     private Long packagesize;
 
-    @ManyToMany(mappedBy = "apkEntitiesPolicy")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },mappedBy = "apkEntitiesPolicy")
     private List<PolicyEntity> policyEntities = new ArrayList<>();
 
     public String getPackagename() {

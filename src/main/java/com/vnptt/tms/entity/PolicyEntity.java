@@ -17,7 +17,11 @@ public class PolicyEntity extends BaseEntity{
     @JoinColumn(name = "commandId", nullable = false)
     private CommandEntity commandEntity;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(name = "apkPolicy",
             joinColumns = @JoinColumn(name = "policy_id"),
             inverseJoinColumns = @JoinColumn(name = "apk_id"))
@@ -25,6 +29,7 @@ public class PolicyEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "policyEntityDetail")
     private List<DevicePolicyDetailEntity> devicePolicyDetailEntities = new ArrayList<>();
+
 
     public String getPolicyname() {
         return policyname;
