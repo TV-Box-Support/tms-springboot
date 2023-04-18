@@ -1,7 +1,5 @@
 package com.vnptt.tms.api.output;
 
-import com.vnptt.tms.dto.UserDTO;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,4 +49,5 @@ public class AbstractOutput<T> {
     public void setListResult(List<T> listResult) {
         this.listResult = listResult;
     }
+
 }

@@ -24,7 +24,9 @@ public interface IApplicationService {
 
     ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model);
 
-    void removeAppOnDevice(Long deviceId, Long applicationId);
+    void removeAppOnDevice(Long deviceId, Long ApplicationId);
 
     List<ApplicationDTO> findByPackagename(String packagename);
+
+    List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable);
 }

@@ -1,14 +1,19 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DeviceConverter;
+import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.dto.DeviceDTO;
+import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +23,9 @@ public class DeviceService implements IDeviceService {
 
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
 
     @Autowired
@@ -68,6 +76,59 @@ public class DeviceService implements IDeviceService {
         }
         return result;
     }
+
+    @Override
+    public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        if (model == null) model = "";
+        if (firmwareVer == null) firmwareVer = "";
+        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer);
+        for (DeviceEntity item: deviceEntities){
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findByLocation(String location) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByLocationContaining(location);
+        for (DeviceEntity item: deviceEntities){
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findByDate(Date date) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByDate(date);
+        for (DeviceEntity item: deviceEntities){
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findAllWithApplication(Long applicationId) {
+        if (!applicationRepository.existsById(applicationId)) {
+            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
+        }
+        List<DeviceEntity> deviceEntities = deviceRepository.findDeviceEntitiesByApplicationEntitiesId(applicationId);
+        List<DeviceDTO> result = new ArrayList<>();
+        for (DeviceEntity entity: deviceEntities){
+            DeviceDTO deviceDTO = deviceConverter.toDTO(entity);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
 
     @Override
     public int totalItem(){

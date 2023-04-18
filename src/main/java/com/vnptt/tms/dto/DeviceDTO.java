@@ -7,7 +7,7 @@ public class DeviceDTO extends AbstractDTO<DeviceDTO> {
     private String mac;
     private String product;
     private String model;
-    private Integer firmwareVer;
+    private String firmwareVer;
     private Integer hdmi;
     private Long ip;
     private Date date;
@@ -46,11 +46,11 @@ public class DeviceDTO extends AbstractDTO<DeviceDTO> {
         this.model = model;
     }
 
-    public Integer getFirmwareVer() {
+    public String getFirmwareVer() {
         return firmwareVer;
     }
 
-    public void setFirmwareVer(Integer firmwareVer) {
+    public void setFirmwareVer(String firmwareVer) {
         this.firmwareVer = firmwareVer;
     }
 

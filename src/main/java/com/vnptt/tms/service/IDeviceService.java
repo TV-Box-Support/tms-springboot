@@ -2,15 +2,31 @@ package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.dto.DeviceDTO;
+import com.vnptt.tms.entity.DeviceEntity;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface IDeviceService {
+
     DeviceDTO save(DeviceDTO deviceDTO);
+
     DeviceDTO findOne(Long id);
+
     int totalItem();
+
     void delete(Long[] ids);
+
     List<DeviceDTO> findAll(Pageable pageable);
+
     List<DeviceDTO> findAll();
+
+    List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer);
+
+    List<DeviceDTO> findByLocation(String location);
+
+    List<DeviceDTO> findByDate(Date date);
+
+    List<DeviceDTO> findAllWithApplication(Long applicationId);
 }

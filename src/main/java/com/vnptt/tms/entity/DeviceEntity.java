@@ -1,5 +1,7 @@
 package com.vnptt.tms.entity;
 
+import com.vnptt.tms.dto.ApplicationDTO;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class DeviceEntity extends BaseEntity{
     @Column(name = "mac", nullable = false, unique = true)
     private String mac;
     @Column(name = "fiwareVersion")
-    private Integer firmwareVer;
+    private String firmwareVer;
     @Column(name = "HDMI")
     private Integer hdmi;
     @Column(name = "IP")
@@ -78,11 +80,11 @@ public class DeviceEntity extends BaseEntity{
         this.mac = mac;
     }
 
-    public Integer getFirmwareVer() {
+    public String getFirmwareVer() {
         return firmwareVer;
     }
 
-    public void setFirmwareVer(Integer firmwareVer) {
+    public void setFirmwareVer(String firmwareVer) {
         this.firmwareVer = firmwareVer;
     }
 
@@ -163,4 +165,10 @@ public class DeviceEntity extends BaseEntity{
         }
     }
 
+    public void updateApplication(ApplicationDTO model){
+        ApplicationEntity applicationEntity = this.applicationEntities.stream().filter(app -> app.getId() == model.getId()).findFirst().orElse(null);
+        if(applicationEntity != null){
+
+        }
+    }
 }
