@@ -12,4 +12,5 @@ public interface IUserService {
     void delete(Long[] ids);
     List<UserDTO> findAll(Pageable pageable);
     List<UserDTO> findAll();
+    List<UserDTO> findAllWithRule(Long ruleId);
 }

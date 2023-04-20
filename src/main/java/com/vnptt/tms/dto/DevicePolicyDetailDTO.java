@@ -4,7 +4,7 @@ public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO>{
 
     private int status;
 
-    private Long policyId;
+    private String policyName;
 
     private String deviceSN;
 
@@ -16,12 +16,12 @@ public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO>{
         this.status = status;
     }
 
-    public Long getPolicyId() {
-        return policyId;
+    public String getPolicyName() {
+        return policyName;
     }
 
-    public void setPolicyId(Long policyId) {
-        this.policyId = policyId;
+    public void setPolicyName(String policyName) {
+        this.policyName = policyName;
     }
 
     public String getDeviceSN() {

@@ -6,10 +6,19 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IDevicePolicyDetailnService {
-    DevicePolicyDetailDTO save(DevicePolicyDetailDTO DevicePolicyDetailDTO);
+    List<DevicePolicyDetailDTO> save(Long[] ids, Long policyId);
+
     DevicePolicyDetailDTO findOne(Long id);
+
     int totalItem();
+
     void delete(Long[] ids);
+
     List<DevicePolicyDetailDTO> findAll(Pageable pageable);
+
     List<DevicePolicyDetailDTO> findAll();
+
+    List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId);
+
+    DevicePolicyDetailDTO update(Long id, int status);
 }

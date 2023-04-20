@@ -13,7 +13,8 @@ public class DeviceConverter {
     private ModelMapper mapper;
 
     /**
-     *  Convert for method Post
+     * Convert for method Post
+     *
      * @param dto
      * @return
      */
@@ -24,7 +25,8 @@ public class DeviceConverter {
     }
 
     /**
-     *  Convert for mehtod get
+     * Convert for mehtod get
+     *
      * @param entity
      * @return
      */
@@ -42,7 +44,8 @@ public class DeviceConverter {
     }
 
     /**
-     *  Convert for method put
+     * Convert for method put
+     *
      * @param dto
      * @param entity
      * @return
@@ -55,8 +58,9 @@ public class DeviceConverter {
         entity.setIp(dto.getIp());
         entity.setLocation(dto.getDesciption());
         entity.setProduct(dto.getProduct());
-        entity.setSn(dto.getSn());
-        entity.setMac(dto.getMac());
+        //unnecessary remove to reduce error
+//        entity.setSn(dto.getSn());
+//        entity.setMac(dto.getMac());
         return entity;
     }
 }

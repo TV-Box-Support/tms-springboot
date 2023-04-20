@@ -33,13 +33,14 @@ public class ApplicationService implements IApplicationService {
     /**
      * unnecessary (only use to test)
      * save to database when post and put app
+     *
      * @param applicationDTO
      * @return
      */
     @Override
     public ApplicationDTO save(ApplicationDTO applicationDTO) {
         ApplicationEntity applicationEntity = new ApplicationEntity();
-        if (applicationDTO.getId() != null){
+        if (applicationDTO.getId() != null) {
             Optional<ApplicationEntity> oldApplicationEntity = applicationRepository.findById(applicationDTO.getId());
             applicationEntity = applicationConverter.toEntity(applicationDTO, oldApplicationEntity.orElse(applicationEntity));
         } else {
@@ -51,6 +52,7 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * find app with id
+     *
      * @param id
      * @return
      */
@@ -62,6 +64,7 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * total item app on database
+     *
      * @return
      */
     @Override
@@ -71,17 +74,19 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * Delete app on database
+     *
      * @param ids list id app
      */
     @Override
     public void delete(Long[] ids) {
-        for (Long item: ids) {
+        for (Long item : ids) {
             applicationRepository.deleteById(item);
         }
     }
 
     /**
      * find all app with pageable
+     *
      * @param pageable
      * @return
      */
@@ -89,7 +94,7 @@ public class ApplicationService implements IApplicationService {
     public List<ApplicationDTO> findAll(Pageable pageable) {
         List<ApplicationEntity> entities = applicationRepository.findAll(pageable).getContent();
         List<ApplicationDTO> result = new ArrayList<>();
-        for(ApplicationEntity item : entities){
+        for (ApplicationEntity item : entities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }
@@ -98,13 +103,14 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * find all app nomal
+     *
      * @return
      */
     @Override
     public List<ApplicationDTO> findAll() {
         List<ApplicationEntity> entities = applicationRepository.findAll();
         List<ApplicationDTO> result = new ArrayList<>();
-        for(ApplicationEntity item : entities){
+        for (ApplicationEntity item : entities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }
@@ -113,6 +119,7 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * find all app on a device
+     *
      * @param deviceId
      * @return
      */
@@ -123,7 +130,7 @@ public class ApplicationService implements IApplicationService {
         }
         List<ApplicationEntity> applicationEntities = applicationRepository.findApplicationEntitiesByDeviceEntitiesApplicationId(deviceId);
         List<ApplicationDTO> result = new ArrayList<>();
-        for (ApplicationEntity entity: applicationEntities){
+        for (ApplicationEntity entity : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(entity);
             result.add(applicationDTO);
         }
@@ -132,6 +139,7 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * add app to device if app not found create new app
+     *
      * @param deviceId
      * @param model
      * @return
@@ -142,19 +150,11 @@ public class ApplicationService implements IApplicationService {
         ApplicationEntity applicationEntity = deviceRepository.findById(deviceId).map(Device -> {
             String packagename = model.getPackagename();
             int version = model.getVersion();
-//            application is existed
-//            if (applicationId != 0L) {
-//                ApplicationEntity app = applicationRepository.findById(applicationId)
-//                        .orElseThrow(() -> new ResourceNotFoundException("Not found Application with id = " + applicationId));
-//                Device.addApplication(app);
-//                deviceRepository.save(Device);
-//                return app;
-//            }
             ApplicationEntity app = applicationRepository.findByPackagenameAndVersion(packagename, version);
-            if (app != null){
+            if (app != null) {
                 //check if exist
-                List <ApplicationEntity> applicationEntities =  Device.getApplicationEntities();
-                for (ApplicationEntity item: applicationEntities){
+                List<ApplicationEntity> applicationEntities = Device.getApplicationEntities();
+                for (ApplicationEntity item : applicationEntities) {
                     if (item.equals(app)) {
                         return app;
                     }
@@ -165,8 +165,9 @@ public class ApplicationService implements IApplicationService {
             } else {
                 // add and create new App
                 ApplicationEntity entity = applicationConverter.toEntity(model);
+                entity = applicationRepository.save(entity);
                 Device.addApplication(entity);
-                return applicationRepository.save(entity);
+                return entity;
             }
 
             return app;
@@ -177,11 +178,12 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * remove app on device in database
+     *
      * @param deviceId
      * @param applicationId
      */
     @Override
-    public  void removeAppOnDevice(Long deviceId, Long applicationId) {
+    public void removeAppOnDevice(Long deviceId, Long applicationId) {
         DeviceEntity deviceEntity = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Device with id = " + deviceId));
 
@@ -191,6 +193,7 @@ public class ApplicationService implements IApplicationService {
 
     /**
      * find by package name for web
+     *
      * @param packagename
      * @return
      */
@@ -199,7 +202,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
         applicationRepository.findByPackagenameContaining(packagename).forEach(applicationEntities::add);
-        for (ApplicationEntity item: applicationEntities){
+        for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }
@@ -211,7 +214,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
         applicationRepository.findByPackagenameContaining(packagename, pageable).forEach(applicationEntities::add);
-        for (ApplicationEntity item: applicationEntities){
+        for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }

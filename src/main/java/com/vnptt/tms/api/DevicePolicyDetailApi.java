@@ -1,7 +1,9 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
+import com.vnptt.tms.api.output.PolicyOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,34 +18,114 @@ public class DevicePolicyDetailApi {
     @Autowired
     private IDevicePolicyDetailnService devicePolicyDetailService;
 
+    /**
+     * unnecessary (Only use to test)
+     *
+     * @return
+     */
     @GetMapping(value = "/devicePolicyDetail")
-    public DevicePolicyDetailOutput showDevicePolicyDetail(@RequestParam(value = "page", required = false) Integer page,
-                               @RequestParam(value = "limit", required = false) Integer limit) {
+    public DevicePolicyDetailOutput showDevicePolicyDetail() {
         DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
-        if (page != null && limit != null){
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page -1, limit );
-            result.setListResult((devicePolicyDetailService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) devicePolicyDetailService.totalItem()/ limit));
+        result.setListResult(devicePolicyDetailService.findAll());
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
         } else {
-            result.setListResult(devicePolicyDetailService.findAll());
+            result.setMessage("no matching element found");
+        }
+
+        return result;
+    }
+
+    /**
+     * find devicePolicyDetail with id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/devicePolicyDetail/{id}")
+    public DevicePolicyDetailDTO showDevicePolicyDetail(@PathVariable("id") Long id) {
+        return devicePolicyDetailService.findOne(id);
+    }
+
+    /**
+     * get list PolicyDetail math with device to check policies unfinished for box
+     *
+     * status of PolicyDetail
+     * status 0 = not run
+     * status 1 = run
+     * status 2 = success
+     * status 3 = error
+     *
+     * @param deviceId
+     * @return
+     */
+    @GetMapping(value = "/device/{deviceId}/devicePolicyDetail")
+    public DevicePolicyDetailOutput showAllPolicyDetailOfDevice(@PathVariable(value = "deviceId") Long deviceId) {
+        DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
+        result.setListResult(devicePolicyDetailService.findAllWithDevice(deviceId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
         }
         return result;
     }
 
-    @PostMapping(value = "/devicePolicyDetail")
-    public DevicePolicyDetailDTO createDevicePolicyDetail(@RequestBody DevicePolicyDetailDTO model) {
-        return devicePolicyDetailService.save(model);
+    /**
+     * create policy detail for web
+     *
+     * status of policy detail
+     * status = 0 not run
+     *
+     * @param ids list device want to run policy
+     * @return
+     */
+    @PostMapping(value = "/policy/{policyId}/devicePolicyDetail")
+    public DevicePolicyDetailOutput createDevicePolicyDetail(@PathVariable(value = "policyId") Long policyId,
+                                                             @RequestBody Long[] ids) {
+        DevicePolicyDetailOutput output = new DevicePolicyDetailOutput();
+        output.setListResult(devicePolicyDetailService.save(ids, policyId));
+
+        if (output.getListResult().size() >= 1) {
+            output.setMessage("Request Success");
+            output.setTotalElement(output.getListResult().size());
+        } else {
+            output.setMessage("no device had choose");
+        }
+        return output;
     }
 
+    /**
+     * update status of policy detail for box
+     *
+     * status of PolicyDetail
+     * status 0 = not run
+     * status 1 = run
+     * status 2 = success
+     * status 3 = error
+     *
+     * @param status
+     * @param id
+     * @return
+     */
     @PutMapping(value = "/devicePolicyDetail/{id}")
-    public DevicePolicyDetailDTO updateDevicePolicyDetail(@RequestBody DevicePolicyDetailDTO model, @PathVariable("id") Long id) {
-        model.setId(id);
-        return devicePolicyDetailService.save(model);
+    public DevicePolicyDetailDTO updateDevicePolicyDetail(@RequestParam(value = "status") int status,
+                                                          @PathVariable("id") Long id) {
+        return devicePolicyDetailService.update(id, status);
     }
 
-    @DeleteMapping(value = "/DevicePolicyDetail")
+    /**
+     * dangerous (only use to test)
+     *
+     * @param ids
+     */
+    @DeleteMapping(value = "/devicePolicyDetail")
     public void updateDevicePolicyDetail(@RequestBody Long[] ids) {
+        //TODO: check test when device or policy delete DevicePolicyDetail must delete
         devicePolicyDetailService.delete(ids);
     }
 }

@@ -49,5 +49,4 @@ public class AbstractOutput<T> {
     public void setListResult(List<T> listResult) {
         this.listResult = listResult;
     }
-
 }

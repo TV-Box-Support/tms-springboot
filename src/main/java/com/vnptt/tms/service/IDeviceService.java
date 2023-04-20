@@ -22,7 +22,10 @@ public interface IDeviceService {
 
     List<DeviceDTO> findAll();
 
+    DeviceDTO findOneBySn(String serialnumber);
+
     List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer);
+    List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable);
 
     List<DeviceDTO> findByLocation(String location);
 

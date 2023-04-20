@@ -12,15 +12,20 @@ import java.util.List;
 @RequestMapping("TMS/api")
 public class RuleApi {
     @Autowired
-    private IRuleService iRuleService;
-
-    @GetMapping(value = "/rule/{id}")
-    public RuleDTO showCategory(@PathVariable("id") Long id) {
-        return iRuleService.findOne(id);
-    }
+    private IRuleService ruleService;
 
     @GetMapping(value = "/rule")
-    public List<RuleDTO> showAllCategory(){
-        return iRuleService.findAll();
+    public List<RuleDTO> showAllCategory() {
+        return ruleService.findAll();
+    }
+
+    @PostMapping(value = "/rule")
+    public RuleDTO createRule(@RequestBody RuleDTO model) {
+        return ruleService.save(model);
+    }
+
+    @DeleteMapping(value = "/rule")
+    public void removeRule(@RequestBody Long[] ids) {
+        ruleService.delete(ids);
     }
 }

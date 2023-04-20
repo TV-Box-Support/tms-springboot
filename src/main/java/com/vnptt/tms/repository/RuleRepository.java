@@ -11,6 +11,4 @@ public interface RuleRepository extends JpaRepository<RuleEntity, Long> {
 
     RuleEntity findOneById(Long id);
 
-    @Override
-    Optional<RuleEntity> findById(Long id);
 }

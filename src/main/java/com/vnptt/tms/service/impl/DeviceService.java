@@ -31,6 +31,11 @@ public class DeviceService implements IDeviceService {
     @Autowired
     private DeviceConverter deviceConverter;
 
+    /**
+     * Save device in production path and update device infor for box
+     * @param deviceDTO
+     * @return
+     */
     @Override
     public DeviceDTO save(DeviceDTO deviceDTO) {
         DeviceEntity deviceEntity = new DeviceEntity();
@@ -46,6 +51,9 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public DeviceDTO findOne(Long id) {
+        if (!applicationRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Not found device with id = " + id);
+        }
         DeviceEntity entity = deviceRepository.findOneById(id);
         return deviceConverter.toDTO(entity);
     }
@@ -78,12 +86,35 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
+    public DeviceDTO findOneBySn(String serialnumber) {
+        DeviceEntity entity = deviceRepository.findOneBySn(serialnumber);
+        if (entity == null) {
+            throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
+        }
+        return deviceConverter.toDTO(entity);
+    }
+
+    @Override
     public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         if (model == null) model = "";
         if (firmwareVer == null) firmwareVer = "";
         deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer);
+        for (DeviceEntity item: deviceEntities){
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        if (model == null) model = "";
+        if (firmwareVer == null) firmwareVer = "";
+        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer, pageable);
         for (DeviceEntity item: deviceEntities){
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -115,6 +146,11 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
+    /**
+     * find all device with application id
+     * @param applicationId
+     * @return
+     */
     @Override
     public List<DeviceDTO> findAllWithApplication(Long applicationId) {
         if (!applicationRepository.existsById(applicationId)) {
@@ -135,6 +171,10 @@ public class DeviceService implements IDeviceService {
         return (int) deviceRepository.count();
     }
 
+    /**
+     * too dangerous (only use to test)
+     * @param ids
+     */
     @Override
     public void delete(Long[] ids) {
         for (Long item: ids) {

@@ -164,11 +164,4 @@ public class DeviceEntity extends BaseEntity{
             applicationEntity.getDeviceEntitiesApplication().remove(this);
         }
     }
-
-    public void updateApplication(ApplicationDTO model){
-        ApplicationEntity applicationEntity = this.applicationEntities.stream().filter(app -> app.getId() == model.getId()).findFirst().orElse(null);
-        if(applicationEntity != null){
-
-        }
-    }
 }

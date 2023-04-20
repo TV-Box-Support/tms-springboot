@@ -2,9 +2,11 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DevicePolicyDetailConverter;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.DevicePolicyDetailEntity;
 import com.vnptt.tms.entity.PolicyEntity;
+import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.DevicePolicyDetailRepository;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.PolicyRepository;
@@ -33,34 +35,31 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     @Autowired
     private DevicePolicyDetailConverter devicePolicyDetailConverter;
 
+    /**
+     * create list policy detail with list deviceId math
+     *
+     * @param ids list deviceId
+     * @return
+     */
     @Override
-    public DevicePolicyDetailDTO save(DevicePolicyDetailDTO devicePolicyDetailDTO) {
-        DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
-        if (devicePolicyDetailDTO.getId() != null){
-            Optional <DevicePolicyDetailEntity> oldDevicePolicyDetailEntity = devicePolicyDetailRepository.findById(devicePolicyDetailDTO.getId());
-            devicePolicyDetailEntity = devicePolicyDetailConverter.toEntity(devicePolicyDetailDTO, oldDevicePolicyDetailEntity.get());
-        } else {
-            devicePolicyDetailEntity = devicePolicyDetailConverter.toEntity(devicePolicyDetailDTO);
-        }
-        // Set Device and Policy to PolyceDetail table @{
-        try{
-            PolicyEntity policyEntity = policyRepository.findOneById(devicePolicyDetailDTO.getPolicyId());
-            devicePolicyDetailEntity.setPolicyEntityDetail(policyEntity);
-        } catch (Exception e){
-            devicePolicyDetailDTO.setDeviceSN("value wrong");
-            return devicePolicyDetailDTO;
-        }
-        try {
-            DeviceEntity deviceEntity = deviceRepository.findOneBySn(devicePolicyDetailDTO.getDeviceSN());
-            devicePolicyDetailEntity.setDeviceEntityDetail(deviceEntity);
-        } catch (Exception e){
-            devicePolicyDetailDTO.setDeviceSN("Can't find device " + devicePolicyDetailDTO.getDeviceSN());
-            return devicePolicyDetailDTO;
-        }
-        //}@
+    public List<DevicePolicyDetailDTO> save(Long[] ids, Long policyId) {
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+        PolicyEntity entity = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
 
-        devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
-        return devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity);
+        for ( Long id : ids){
+            DeviceEntity deviceEntity = deviceRepository.findOneById(id);
+            if(deviceEntity != null){
+                DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
+                devicePolicyDetailEntity.setDeviceEntityDetail(deviceEntity);
+                devicePolicyDetailEntity.setPolicyEntityDetail(entity);
+                devicePolicyDetailEntity.setStatus(0);
+
+                devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
+                result.add(devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -94,6 +93,41 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
             result.add(devicePolicyDetailDTO);
         }
         return result;
+    }
+
+    /**
+     * find all polycy of device
+     *
+     * @param deviceId
+     * @return
+     */
+    @Override
+    public List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId) {
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+        }
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailId(deviceId);
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+        for (DevicePolicyDetailEntity entity: devicePolicyDetailEntities){
+            DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
+            result.add(devicePolicyDetailDTO);
+        }
+        return result;
+    }
+
+    /**
+     * box update status when active policy done
+     *
+     * @param id id of policyDeviceDetail
+     * @param status
+     * @return
+     */
+    @Override
+    public DevicePolicyDetailDTO update(Long id, int status) {
+        DevicePolicyDetailEntity devicePolicyDetailEntity = devicePolicyDetailRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found devicePolicyDEtail with id = " + id));
+        devicePolicyDetailEntity.setStatus(status);
+        return devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity);
     }
 
     @Override

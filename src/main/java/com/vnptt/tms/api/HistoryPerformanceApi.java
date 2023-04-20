@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.HistoryPerformanceOutput;
+import com.vnptt.tms.dto.HistoryApplicationDTO;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.service.IHistoryPerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,18 @@ public class HistoryPerformanceApi {
         }
         return result;
     }
+
+    /**
+     * find historyPerformance with id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/historyPerformance/{id}")
+    public HistoryPerformanceDTO showHistoryPerformance(@PathVariable("id") Long id) {
+        return historyPerformanceService.findOne(id);
+    }
+
 
     @PostMapping(value = "/historyPerformance")
     public HistoryPerformanceDTO createHistoryPerformance(@RequestBody HistoryPerformanceDTO model) {

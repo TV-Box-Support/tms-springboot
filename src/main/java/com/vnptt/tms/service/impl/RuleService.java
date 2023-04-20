@@ -24,15 +24,36 @@ public class RuleService implements IRuleService {
     public List<RuleDTO> findAll() {
         List<RuleEntity> entities = ruleRepository.findAll();
         List<RuleDTO> result = new ArrayList<>();
-        for(RuleEntity item : entities){
+        for (RuleEntity item : entities) {
             result.add(ruleConverter.toDTO(item));
         }
         return result;
     }
 
+    /**
+     * unnecessary (only use to test)
+     *
+     * @param model
+     * @return
+     */
     @Override
-    public RuleDTO findOne(Long id) {
-        RuleEntity entity = ruleRepository.findOneById(id);
-        return ruleConverter.toDTO(entity);
+    public RuleDTO save(RuleDTO model) {
+        RuleEntity ruleEntity = ruleConverter.toEntity(model);
+        ruleEntity = ruleRepository.save(ruleEntity);
+        return ruleConverter.toDTO(ruleEntity);
     }
+
+    /**
+     * unnecessary (only use to test)
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public void delete(Long[] ids) {
+        for (Long item : ids) {
+            ruleRepository.deleteById(item);
+        }
+    }
+
 }

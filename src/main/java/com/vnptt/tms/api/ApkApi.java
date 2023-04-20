@@ -1,11 +1,16 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.ApkOutput;
+import com.vnptt.tms.api.output.ApplicationOutput;
 import com.vnptt.tms.dto.ApkDTO;
+import com.vnptt.tms.dto.ApplicationDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IApkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -18,17 +23,69 @@ public class ApkApi {
 
     @GetMapping(value = "/apk")
     public ApkOutput showApk(@RequestParam(value = "page", required = false) Integer page,
-                               @RequestParam(value = "limit", required = false) Integer limit) {
+                             @RequestParam(value = "limit", required = false) Integer limit) {
         ApkOutput result = new ApkOutput();
-        if (page != null && limit != null){
+        if (page != null && limit != null) {
             result.setPage(page);
-            Pageable pageable = PageRequest.of(page -1, limit );
+            Pageable pageable = PageRequest.of(page - 1, limit);
             result.setListResult(apkService.findAll(pageable));
-            result.setTotalPage((int) Math.ceil((double) apkService.totalItem()/ limit));
+            result.setTotalPage((int) Math.ceil((double) apkService.totalItem() / limit));
         } else {
             result.setListResult(apkService.findAll());
         }
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+
         return result;
+    }
+
+    /**
+     * find apk with id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/apk/{id}")
+    public ApkDTO showApk(@PathVariable("id") Long id) {
+        return apkService.findOne(id);
+    }
+
+    /**
+     * see the apk available on the policy for box and web
+     *
+     * @param policyId device want to search
+     * @return
+     */
+    @GetMapping("/policy/{policyId}/apk")
+    public ApkOutput showAllApkInPolicy(@PathVariable(value = "policyId") Long policyId) {
+        ApkOutput result = new ApkOutput();
+        result.setListResult(apkService.findAllOnPolicy(policyId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * Mapp apk to policy
+     *
+     * @param policyId policy has apk
+     * @param apkId
+     * @return
+     */
+    @PostMapping(value = "/policy/{policyId}/apk/{apkId}")
+    public ApkDTO addApplicationToDevice(@PathVariable(value = "policyId") Long policyId,
+                                         @PathVariable(value = "apkId") Long apkId) {
+        return apkService.addApkToPolicy(policyId, apkId);
     }
 
     @PostMapping(value = "/apk")
@@ -42,6 +99,25 @@ public class ApkApi {
         return apkService.save(model);
     }
 
+    /**
+     * remove apk in policy
+     *
+     * @param policyId
+     * @param apkId
+     * @return
+     */
+    @DeleteMapping(value = "/policy/{policyId}/apk/{apkId}")
+    public ResponseEntity<HttpStatus> removeApkinPolicy(@PathVariable(value = "policyId") Long policyId,
+                                                        @PathVariable(value = "apkId") Long apkId) {
+        apkService.removeApkinPolicy(policyId, apkId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * delete apk in database (very dangerous) (only use to test)
+     *
+     * @param ids
+     */
     @DeleteMapping(value = "/apk")
     public void updateApk(@RequestBody Long[] ids) {
         apkService.delete(ids);

@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.HistoryApplicationOutput;
+import com.vnptt.tms.dto.ApkDTO;
 import com.vnptt.tms.dto.HistoryApplicationDTO;
 import com.vnptt.tms.service.IHistoryApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,25 @@ public class HistoryApplicationApi {
         } else {
             result.setListResult(historyApplicationService.findAll());
         }
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
         return result;
+    }
+
+    /**
+     * find HistoryApplication with id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/historyApplication/{id}")
+    public HistoryApplicationDTO showHistoryApplication(@PathVariable("id") Long id) {
+        return historyApplicationService.findOne(id);
     }
 
     @PostMapping(value = "/historyApplication")

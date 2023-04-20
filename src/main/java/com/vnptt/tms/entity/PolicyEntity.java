@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name ="policy")
-public class PolicyEntity extends BaseEntity{
+@Table(name = "policy")
+public class PolicyEntity extends BaseEntity {
     @Column(name = "policyname", unique = true, nullable = false)
     private String policyname;
 
@@ -14,7 +14,7 @@ public class PolicyEntity extends BaseEntity{
     private int Status;
 
     @ManyToOne
-    @JoinColumn(name = "commandId", nullable = false)
+    @JoinColumn(name = "commandId")
     private CommandEntity commandEntity;
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -27,7 +27,11 @@ public class PolicyEntity extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "apk_id"))
     private List<ApkEntity> apkEntitiesPolicy = new ArrayList<>();
 
-    @OneToMany(mappedBy = "policyEntityDetail")
+    @OneToMany(mappedBy = "policyEntityDetail",
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.REMOVE
+            })
     private List<DevicePolicyDetailEntity> devicePolicyDetailEntities = new ArrayList<>();
 
 
@@ -69,5 +73,18 @@ public class PolicyEntity extends BaseEntity{
 
     public void setDevicePolicyDetailEntities(List<DevicePolicyDetailEntity> devicePolicyDetailEntities) {
         this.devicePolicyDetailEntities = devicePolicyDetailEntities;
+    }
+
+    public void addApk(ApkEntity apk) {
+        this.apkEntitiesPolicy.add(apk);
+        apk.getPolicyEntities().add(this);
+    }
+
+    public void removeApk(long apkId) {
+        ApkEntity apkEntity = this.apkEntitiesPolicy.stream().filter(app -> app.getId() == apkId).findFirst().orElse(null);
+        if (apkEntity != null) {
+            this.apkEntitiesPolicy.remove(apkEntity);
+            apkEntity.getPolicyEntities().remove(this);
+        }
     }
 }

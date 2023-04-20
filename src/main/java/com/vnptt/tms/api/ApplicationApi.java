@@ -2,6 +2,7 @@ package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.ApplicationOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -58,6 +59,17 @@ public class ApplicationApi {
     }
 
     /**
+     * find applciation with id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/application/{id}")
+    public ApplicationDTO showApplication(@PathVariable("id") Long id) {
+        return applicationService.findOne(id);
+    }
+
+    /**
      * see the apps available on the device for box and web
      *
      * @param deviceId device want to search
@@ -85,7 +97,7 @@ public class ApplicationApi {
      * @return
      */
     @PostMapping(value = "/application")
-    public ResponseEntity<ApplicationDTO>  createApplication(@RequestBody ApplicationDTO model) {
+    public ResponseEntity<ApplicationDTO> createApplication(@RequestBody ApplicationDTO model) {
 //        return applicationService.save(model);
         return new ResponseEntity<>(applicationService.save(model), HttpStatus.OK);
     }
@@ -106,6 +118,7 @@ public class ApplicationApi {
 
     /**
      * unnecessary (only use to test)
+     *
      * @param ids
      */
     @DeleteMapping(value = "/application")

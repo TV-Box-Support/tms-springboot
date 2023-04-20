@@ -8,10 +8,14 @@ import org.springframework.stereotype.Component;
 public class RuleConverter {
     public RuleDTO toDTO(RuleEntity entity) {
         RuleDTO dto = new RuleDTO();
-        if(entity.getId() != null) {
-            dto.setId(entity.getId());
-        }
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         return dto;
+    }
+
+    public RuleEntity toEntity(RuleDTO dto) {
+        RuleEntity entity = new RuleEntity();
+        entity.setName(dto.getName());
+        return entity;
     }
 }

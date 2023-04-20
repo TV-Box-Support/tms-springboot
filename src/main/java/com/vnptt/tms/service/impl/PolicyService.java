@@ -4,7 +4,10 @@ import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.CommandEntity;
 import com.vnptt.tms.entity.PolicyEntity;
+import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.repository.ApkRepository;
 import com.vnptt.tms.repository.CommandRepository;
+import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.PolicyRepository;
 import com.vnptt.tms.service.IPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +29,33 @@ public class PolicyService implements IPolicyService {
     private CommandRepository commandRepository;
 
     @Autowired
+    private ApkRepository apkRepository;
+
+    @Autowired
+    private DeviceRepository deviceRepository;
+
+    @Autowired
     private PolicyConverter policyConverter;
 
+    /**
+     * create policy from web
+     *
+     * @param policyDTO
+     * @return
+     */
     @Override
     public PolicyDTO save(PolicyDTO policyDTO) {
         PolicyEntity policyEntity = new PolicyEntity();
-        if (policyDTO.getId() != null){
-            Optional <PolicyEntity> oldPolicyEntity = policyRepository.findById(policyDTO.getId());
+        if (policyDTO.getId() != null) {
+            Optional<PolicyEntity> oldPolicyEntity = policyRepository.findById(policyDTO.getId());
             policyEntity = policyConverter.toEntity(policyDTO, oldPolicyEntity.get());
         } else {
             policyEntity = policyConverter.toEntity(policyDTO);
         }
-        try{
-            CommandEntity commandEntity = commandRepository.findOneByCommand(policyDTO.getCommandName());
-            policyEntity.setCommandEntity(commandEntity);
-        } catch (Exception e){
-            policyDTO.setCommandName("Can't not find " + policyDTO.getCommandName());
-            return policyDTO;
-        }
+        // oke if policy don't have command
+        CommandEntity commandEntity = commandRepository.findOneByCommand(policyDTO.getCommandName());
+        policyEntity.setCommandEntity(commandEntity);
+
         policyEntity = policyRepository.save(policyEntity);
         return policyConverter.toDTO(policyEntity);
     }
@@ -55,7 +67,8 @@ public class PolicyService implements IPolicyService {
     }
 
     /**
-     *  find item with page number and totalPage number
+     * find item with page number and totalPage number
+     *
      * @param pageable
      * @return
      */
@@ -63,7 +76,7 @@ public class PolicyService implements IPolicyService {
     public List<PolicyDTO> findAll(Pageable pageable) {
         List<PolicyEntity> entities = policyRepository.findAll(pageable).getContent();
         List<PolicyDTO> result = new ArrayList<>();
-        for(PolicyEntity item : entities){
+        for (PolicyEntity item : entities) {
             PolicyDTO policyDTO = policyConverter.toDTO(item);
             result.add(policyDTO);
         }
@@ -74,21 +87,87 @@ public class PolicyService implements IPolicyService {
     public List<PolicyDTO> findAll() {
         List<PolicyEntity> entities = policyRepository.findAll();
         List<PolicyDTO> result = new ArrayList<>();
-        for(PolicyEntity item : entities){
+        for (PolicyEntity item : entities) {
             PolicyDTO policyDTO = policyConverter.toDTO(item);
             result.add(policyDTO);
         }
         return result;
     }
 
+    /**
+     * find all policy with command Id
+     *
+     * @param commandId
+     * @return
+     */
     @Override
-    public int totalItem(){
+    public List<PolicyDTO> findAllWithCommand(Long commandId) {
+        if (!commandRepository.existsById(commandId)) {
+            throw new ResourceNotFoundException("Not found command with id = " + commandId);
+        }
+        List<PolicyEntity> policyEntities = policyRepository.findAllByCommandEntityId(commandId);
+        List<PolicyDTO> result = new ArrayList<>();
+        for (PolicyEntity entity : policyEntities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+            result.add(policyDTO);
+        }
+        return result;
+    }
+
+    /**
+     * find all policy have apk
+     *
+     * @param apkId
+     * @return
+     */
+    @Override
+    public List<PolicyDTO> findAllWithApk(Long apkId) {
+        if (!apkRepository.existsById(apkId)) {
+            throw new ResourceNotFoundException("Not found apk with id = " + apkId);
+        }
+        List<PolicyDTO> result = new ArrayList<>();
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByApkEntitiesPolicyId(apkId);
+        for (PolicyEntity entity : policyEntities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+            result.add(policyDTO);
+        }
+        return result;
+    }
+
+    /**
+     *find all policy in device
+     *
+     * @param deviceId
+     * @return
+     */
+    @Override
+    public List<PolicyDTO> findAllWithDeviceId(Long deviceId) {
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found apk device id = " + deviceId);
+        }
+        List<PolicyDTO> result = new ArrayList<>();
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailId(deviceId);
+        for (PolicyEntity entity : policyEntities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+            result.add(policyDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public PolicyDTO updateStatus(Long id, int status) {
+        //TODO: update code
+        return null;
+    }
+
+    @Override
+    public int totalItem() {
         return (int) policyRepository.count();
     }
 
     @Override
     public void delete(Long[] ids) {
-        for (Long item: ids) {
+        for (Long item : ids) {
             policyRepository.deleteById(item);
         }
     }

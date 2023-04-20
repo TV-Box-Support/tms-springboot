@@ -14,17 +14,19 @@ public class DevicePolicyDetailConverter {
 
     /**
      *  Convert for method Post
+     *  No nead to use (only use to test)
      * @param dto
      * @return
      */
-    public DevicePolicyDetailEntity toEntity(DevicePolicyDetailDTO dto) {
-        DevicePolicyDetailEntity entity = new DevicePolicyDetailEntity();
-        entity = mapper.map(dto, DevicePolicyDetailEntity.class);
-        return entity;
-    }
+//    public DevicePolicyDetailEntity toEntity(DevicePolicyDetailDTO dto) {
+//        DevicePolicyDetailEntity entity = new DevicePolicyDetailEntity();
+//        entity = mapper.map(dto, DevicePolicyDetailEntity.class);
+//        return entity;
+//    }
 
     /**
-     *  Convert for method get
+     * Convert for method get
+     *
      * @param entity
      * @return
      */
@@ -34,11 +36,11 @@ public class DevicePolicyDetailConverter {
             dto.setId(entity.getId());
         }
         dto = mapper.map(entity, DevicePolicyDetailDTO.class);
-        if (entity.getDeviceEntityDetail() != null){
+        if (entity.getDeviceEntityDetail() != null) {
             dto.setDeviceSN(entity.getDeviceEntityDetail().getSn());
         }
-        if (entity.getPolicyEntityDetail() != null){
-            dto.setPolicyId(entity.getPolicyEntityDetail().getId());
+        if (entity.getPolicyEntityDetail() != null) {
+            dto.setPolicyName(entity.getPolicyEntityDetail().getPolicyname());
         }
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
@@ -48,13 +50,15 @@ public class DevicePolicyDetailConverter {
     }
 
     /**
-     *  Convert for method put
+     * Convert for method put
+     * No nead to use (only use to test)
+     *
      * @param dto
      * @param entity
      * @return
      */
-    public DevicePolicyDetailEntity toEntity(DevicePolicyDetailDTO dto, DevicePolicyDetailEntity entity) {
-        entity.setStatus(dto.getStatus());
-        return entity;
-    }
+//    public DevicePolicyDetailEntity toEntity(DevicePolicyDetailDTO dto, DevicePolicyDetailEntity entity) {
+//        entity.setStatus(dto.getStatus());
+//        return entity;
+//    }
 }
