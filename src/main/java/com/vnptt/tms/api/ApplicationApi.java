@@ -1,8 +1,10 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.ApplicationOutput;
+import com.vnptt.tms.api.output.UserOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.dto.PolicyDTO;
+import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -89,6 +91,7 @@ public class ApplicationApi {
         return result;
     }
 
+
     /**
      * unnecessary (only use to test)
      * add new app to database
@@ -103,7 +106,7 @@ public class ApplicationApi {
     }
 
     /**
-     * Mapp app to device for box
+     * Mapp app to device for box, if database don't have app, create and add
      *
      * @param deviceId device has app
      * @param model    dto application (need Id from responce when post new app)

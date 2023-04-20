@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class HistoryApplicationDTO extends AbstractDTO<HistoryApplicationDTO>{
 
     private Long applicationId;
-    private Long historyPerId;
+    private Long deviceId;
     private double cpu;
     private double memory;
     private boolean status;
@@ -18,12 +18,12 @@ public class HistoryApplicationDTO extends AbstractDTO<HistoryApplicationDTO>{
         this.applicationId = applicationId;
     }
 
-    public Long getHistoryPerId() {
-        return historyPerId;
+    public Long getDeviceId() {
+        return deviceId;
     }
 
-    public void setHistoryPerId(Long historyPerId) {
-        this.historyPerId = historyPerId;
+    public void setDeviceId(Long deviceId) {
+        this.deviceId = deviceId;
     }
 
     public double getCpu() {

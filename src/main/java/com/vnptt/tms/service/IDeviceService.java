@@ -32,4 +32,6 @@ public interface IDeviceService {
     List<DeviceDTO> findByDate(Date date);
 
     List<DeviceDTO> findAllWithApplication(Long applicationId);
+
+    List<DeviceDTO> findAllWithHistoryApplication(Long applicationId, boolean status);
 }

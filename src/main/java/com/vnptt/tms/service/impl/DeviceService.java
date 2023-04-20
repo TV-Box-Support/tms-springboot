@@ -165,6 +165,15 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
+    @Override
+    public List<DeviceDTO> findAllWithHistoryApplication(Long applicationId, boolean status) {
+        if (!applicationRepository.existsById(applicationId)) {
+            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
+        }
+        //List<DeviceEntity> deviceEntities = deviceRepository.
+        return null;
+    }
+
 
     @Override
     public int totalItem(){

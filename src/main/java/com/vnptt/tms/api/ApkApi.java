@@ -119,7 +119,7 @@ public class ApkApi {
      * @param ids
      */
     @DeleteMapping(value = "/apk")
-    public void updateApk(@RequestBody Long[] ids) {
+    public void removeApk(@RequestBody Long[] ids) {
         apkService.delete(ids);
     }
 }

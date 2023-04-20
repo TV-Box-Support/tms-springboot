@@ -1,8 +1,10 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DeviceOutput;
+import com.vnptt.tms.api.output.UserOutput;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.dto.PolicyDTO;
+import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -142,6 +144,27 @@ public class DeviceApi {
     }
 
     /**
+     * Show list device play application now
+     *
+     * @param ruleId
+     * @return
+     */
+    @GetMapping(value = "/application/{ApplicationId}/device/status")
+    public DeviceOutput showAppRunNow(@PathVariable(value = "ApplicationId") Long ApplicationId,
+                                      @RequestParam(value = "status", required = false, defaultValue = "true") boolean status) {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.findAllWithHistoryApplication(ApplicationId, status));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            throw new ResourceNotFoundException("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * Create new device for production batch
      *
      * @param model serialNumber, dateOfManufacture, mac have required
@@ -168,6 +191,7 @@ public class DeviceApi {
 
     /**
      * should not be used because it affects all historical information, very dangerous
+     * (only use to test)
      *
      * @param ids
      */

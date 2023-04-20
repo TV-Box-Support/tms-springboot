@@ -48,6 +48,17 @@ public class DeviceEntity extends BaseEntity{
     @OneToMany(mappedBy = "deviceEntityHistory")
     private List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "deviceEntityAppHistory")
+    private List<HistoryApplicationEntity> historyApplicationEntities;
+
+    public List<HistoryApplicationEntity> getHistoryApplicationEntities() {
+        return historyApplicationEntities;
+    }
+
+    public void setHistoryApplicationEntities(List<HistoryApplicationEntity> historyApplicationEntities) {
+        this.historyApplicationEntities = historyApplicationEntities;
+    }
+
     public String getProduct() {
         return product;
     }

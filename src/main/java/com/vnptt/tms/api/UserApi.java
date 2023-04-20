@@ -60,7 +60,7 @@ public class UserApi {
     }
 
     /**
-     * Show User with Id for web
+     * Show list User with rule for web
      *
      * @param ruleId
      * @return

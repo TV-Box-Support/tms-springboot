@@ -56,7 +56,7 @@ public class HistoryPerformanceApi {
     }
 
     @DeleteMapping(value = "/historyPerformance")
-    public void updateHistoryPerformance(@RequestBody Long[] ids) {
+    public void removeHistoryPerformance(@RequestBody Long[] ids) {
         historyPerformanceService.delete(ids);
     }
 }

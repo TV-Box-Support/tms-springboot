@@ -17,8 +17,8 @@ public class HistoryApplicationEntity extends BaseEntity{
     private ApplicationEntity applicationEntityHistory;
 
     @ManyToOne
-    @JoinColumn(name = "historyId", nullable = false)
-    private HistoryPerformanceEntity historyPerformanceEntityHistory;
+    @JoinColumn(name = "deviceId", nullable = false)
+    private DeviceEntity deviceEntityAppHistory;
 
     public double getCpu() {
         return cpu;
@@ -52,11 +52,11 @@ public class HistoryApplicationEntity extends BaseEntity{
         this.applicationEntityHistory = applicationEntityHistory;
     }
 
-    public HistoryPerformanceEntity getHistoryPerformanceEntityHistory() {
-        return historyPerformanceEntityHistory;
+    public DeviceEntity getDeviceEntityAppHistory() {
+        return deviceEntityAppHistory;
     }
 
-    public void setHistoryPerformanceEntityHistory(HistoryPerformanceEntity historyPerformanceEntityHistory) {
-        this.historyPerformanceEntityHistory = historyPerformanceEntityHistory;
+    public void setDeviceEntityAppHistory(DeviceEntity deviceEntityAppHistory) {
+        this.deviceEntityAppHistory = deviceEntityAppHistory;
     }
 }

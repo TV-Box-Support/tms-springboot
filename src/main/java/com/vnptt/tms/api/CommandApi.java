@@ -68,7 +68,7 @@ public class CommandApi {
     }
 
     @DeleteMapping(value = "/Command")
-    public void updateCommand(@RequestBody Long[] ids) {
+    public void removeCommand(@RequestBody Long[] ids) {
         commandService.delete(ids);
     }
 }

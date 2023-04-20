@@ -62,7 +62,7 @@ public class HistoryApplicationApi {
     }
 
     @DeleteMapping(value = "/historyApplication")
-    public void updateHistoryApplication(@RequestBody Long[] ids) {
+    public void removeHistoryApplication(@RequestBody Long[] ids) {
         historyApplicationService.delete(ids);
     }
 }

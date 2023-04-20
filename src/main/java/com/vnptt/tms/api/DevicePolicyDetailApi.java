@@ -120,12 +120,12 @@ public class DevicePolicyDetailApi {
 
     /**
      * dangerous (only use to test)
+     * When
      *
      * @param ids
      */
     @DeleteMapping(value = "/devicePolicyDetail")
-    public void updateDevicePolicyDetail(@RequestBody Long[] ids) {
-        //TODO: check test when device or policy delete DevicePolicyDetail must delete
+    public void removeDevicePolicyDetail(@RequestBody Long[] ids) {
         devicePolicyDetailService.delete(ids);
     }
 }

@@ -18,17 +18,6 @@ public class HistoryPerformanceEntity extends  BaseEntity{
     @JoinColumn(name ="deviceId", nullable = false)
     private DeviceEntity deviceEntityHistory;
 
-    @OneToMany(mappedBy = "historyPerformanceEntityHistory")
-    private List<HistoryApplicationEntity> historyApplicationEntities;
-
-    public List<HistoryApplicationEntity> getHistoryApplicationEntities() {
-        return historyApplicationEntities;
-    }
-
-    public void setHistoryApplicationEntities(List<HistoryApplicationEntity> historyApplicationEntities) {
-        this.historyApplicationEntities = historyApplicationEntities;
-    }
-
     public double getCpu() {
         return cpu;
     }

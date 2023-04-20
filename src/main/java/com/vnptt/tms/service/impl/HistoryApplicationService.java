@@ -3,11 +3,11 @@ package com.vnptt.tms.service.impl;
 import com.vnptt.tms.converter.HistoryApplicationConverter;
 import com.vnptt.tms.dto.HistoryApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
+import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.HistoryApplicationEntity;
-import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.repository.ApplicationRepository;
+import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.HistoryApplicationRepository;
-import com.vnptt.tms.repository.HistoryPerformanceRepository;
 import com.vnptt.tms.service.IHistoryApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class HistoryApplicationService implements IHistoryApplicationService {
     private HistoryApplicationRepository historyApplicationRepository;
 
     @Autowired
-    private HistoryPerformanceRepository historyPerformanceRepository;
+    private DeviceRepository deviceRepository;
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -42,8 +42,8 @@ public class HistoryApplicationService implements IHistoryApplicationService {
         } else {
             historyApplicationEntity = historyApplicationConverter.toEntity(historyApplicationDTO);
         }
-        HistoryPerformanceEntity historyPerformanceEntity = historyPerformanceRepository.findOneById(historyApplicationDTO.getHistoryPerId());
-        historyApplicationEntity.setHistoryPerformanceEntityHistory(historyPerformanceEntity);
+        DeviceEntity deviceEntity = deviceRepository.findOneById(historyApplicationDTO.getDeviceId());
+        historyApplicationEntity.setDeviceEntityAppHistory(deviceEntity);
         ApplicationEntity applicationEntity = applicationRepository.findOneById(historyApplicationDTO.getApplicationId());
         historyApplicationEntity.setApplicationEntityHistory(applicationEntity);
         historyApplicationEntity = historyApplicationRepository.save(historyApplicationEntity);

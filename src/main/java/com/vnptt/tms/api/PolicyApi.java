@@ -137,7 +137,7 @@ public class PolicyApi {
 
     /**
      * update status for policy
-     *
+     * <p>
      * status of policy
      * status 0 = not run
      * status 1 = run
@@ -156,6 +156,7 @@ public class PolicyApi {
 
     /**
      * should not be used because it affects all historical information, very dangerous
+     * when delete policy all policyDetail will remove (be Carefull)
      *
      * @param ids
      */

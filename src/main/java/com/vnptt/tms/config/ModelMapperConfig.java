@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ModelMapperConfig {
+
     /**
-     *  create object and config
+     * Mapper DTO and Entity
+     *
      * @return
      */
     @Bean

@@ -17,4 +17,5 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     List<DeviceEntity> findAllByLocationContaining(String location);
     List<DeviceEntity> findAllByDate(Date date);
     List<DeviceEntity> findDeviceEntitiesByApplicationEntitiesId(Long applicationEntitiesId);
+    //List<DeviceEntity> findDeviceEntitiesBy
 }

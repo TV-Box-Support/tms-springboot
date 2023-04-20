@@ -1,5 +1,7 @@
 package com.vnptt.tms.dto;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,9 +9,9 @@ import java.util.List;
 public class AbstractDTO<T> {
     private Long id;
     private String createdBy;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private String modifiedBy;
-    private Date modifiedDate;
+    private LocalDateTime modifiedDate;
     private List<T> listResutl = new ArrayList<>();
 
     public Long getId() {
@@ -28,14 +30,6 @@ public class AbstractDTO<T> {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getModifiedBy() {
         return modifiedBy;
     }
@@ -44,19 +38,27 @@ public class AbstractDTO<T> {
         this.modifiedBy = modifiedBy;
     }
 
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
     public List<T> getListResutl() {
         return listResutl;
     }
 
     public void setListResutl(List<T> listResutl) {
         this.listResutl = listResutl;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

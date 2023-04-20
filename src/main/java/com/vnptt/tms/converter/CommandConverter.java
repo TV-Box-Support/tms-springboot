@@ -36,7 +36,7 @@ public class CommandConverter {
         dto = mapper.map(entity, CommandDTO.class);
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
-        dto.setModifiedDate(entity.getModifiedDate());
+        dto.setModifiedDate(entity.getCreatedDate());
         dto.setModifiedBy(entity.getModifiedBy());
         return dto;
     }
