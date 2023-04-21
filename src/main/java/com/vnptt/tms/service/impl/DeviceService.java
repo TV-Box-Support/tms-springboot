@@ -1,19 +1,26 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.DeviceOutput;
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.dto.DeviceDTO;
+import com.vnptt.tms.dto.HistoryApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.HistoryApplicationEntity;
+import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
+import com.vnptt.tms.repository.HistoryApplicationRepository;
+import com.vnptt.tms.repository.HistoryPerformanceRepository;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,19 +34,25 @@ public class DeviceService implements IDeviceService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private HistoryApplicationRepository historyApplicationRepository;
+
+    @Autowired
+    private HistoryPerformanceRepository historyPerformanceRepository;
 
     @Autowired
     private DeviceConverter deviceConverter;
 
     /**
      * Save device in production path and update device infor for box
+     *
      * @param deviceDTO
      * @return
      */
     @Override
     public DeviceDTO save(DeviceDTO deviceDTO) {
         DeviceEntity deviceEntity = new DeviceEntity();
-        if (deviceDTO.getId() != null){
+        if (deviceDTO.getId() != null) {
             Optional<DeviceEntity> oldDeviceEntity = deviceRepository.findById(deviceDTO.getId());
             deviceEntity = deviceConverter.toEntity(deviceDTO, oldDeviceEntity.get());
         } else {
@@ -51,7 +64,7 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public DeviceDTO findOne(Long id) {
-        if (!applicationRepository.existsById(id)) {
+        if (!deviceRepository.existsById(id)) {
             throw new ResourceNotFoundException("Not found device with id = " + id);
         }
         DeviceEntity entity = deviceRepository.findOneById(id);
@@ -59,7 +72,8 @@ public class DeviceService implements IDeviceService {
     }
 
     /**
-     *  find item with page number and totalPage number
+     * find item with page number and totalPage number
+     *
      * @param pageable
      * @return
      */
@@ -67,7 +81,7 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAll(Pageable pageable) {
         List<DeviceEntity> entities = deviceRepository.findAll(pageable).getContent();
         List<DeviceDTO> result = new ArrayList<>();
-        for(DeviceEntity item : entities){
+        for (DeviceEntity item : entities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
@@ -78,13 +92,19 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAll() {
         List<DeviceEntity> entities = deviceRepository.findAll();
         List<DeviceDTO> result = new ArrayList<>();
-        for(DeviceEntity item : entities){
+        for (DeviceEntity item : entities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
         return result;
     }
 
+    /**
+     * find STB infor by SN for box
+     *
+     * @param serialnumber
+     * @return
+     */
     @Override
     public DeviceDTO findOneBySn(String serialnumber) {
         DeviceEntity entity = deviceRepository.findOneBySn(serialnumber);
@@ -94,6 +114,13 @@ public class DeviceService implements IDeviceService {
         return deviceConverter.toDTO(entity);
     }
 
+    /**
+     * find nomal
+     *
+     * @param model
+     * @param firmwareVer
+     * @return
+     */
     @Override
     public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
@@ -101,13 +128,21 @@ public class DeviceService implements IDeviceService {
         if (model == null) model = "";
         if (firmwareVer == null) firmwareVer = "";
         deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer);
-        for (DeviceEntity item: deviceEntities){
+        for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
         return result;
     }
 
+    /**
+     * find with pageable
+     *
+     * @param model
+     * @param firmwareVer
+     * @param pageable
+     * @return
+     */
     @Override
     public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
@@ -115,7 +150,7 @@ public class DeviceService implements IDeviceService {
         if (model == null) model = "";
         if (firmwareVer == null) firmwareVer = "";
         deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer, pageable);
-        for (DeviceEntity item: deviceEntities){
+        for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
@@ -127,7 +162,7 @@ public class DeviceService implements IDeviceService {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         deviceEntities = deviceRepository.findAllByLocationContaining(location);
-        for (DeviceEntity item: deviceEntities){
+        for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
@@ -139,7 +174,7 @@ public class DeviceService implements IDeviceService {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         deviceEntities = deviceRepository.findAllByDate(date);
-        for (DeviceEntity item: deviceEntities){
+        for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
         }
@@ -148,6 +183,7 @@ public class DeviceService implements IDeviceService {
 
     /**
      * find all device with application id
+     *
      * @param applicationId
      * @return
      */
@@ -158,35 +194,68 @@ public class DeviceService implements IDeviceService {
         }
         List<DeviceEntity> deviceEntities = deviceRepository.findDeviceEntitiesByApplicationEntitiesId(applicationId);
         List<DeviceDTO> result = new ArrayList<>();
-        for (DeviceEntity entity: deviceEntities){
+        for (DeviceEntity entity : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(entity);
             result.add(deviceDTO);
         }
         return result;
     }
 
+    /**
+     * find all device are running 3 minute later to now
+     *
+     * @return
+     */
     @Override
-    public List<DeviceDTO> findAllWithHistoryApplication(Long applicationId, boolean status) {
-        if (!applicationRepository.existsById(applicationId)) {
-            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
+    public List<DeviceDTO> findAllDeviceRunNow() {
+        List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+        for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
+            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
+                result.add(deviceConverter.toDTO(deviceEntity));
+            }
         }
-        //List<DeviceEntity> deviceEntities = deviceRepository.
-        return null;
+        return result;
+    }
+
+    /**
+     * find all device are running app 3 minute later to now
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findAllDeviceRunApp(Long id) {
+        List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        historyApplicationEntities = historyApplicationRepository.findAllByApplicationEntityHistoryIdAndCreatedDateBetween(id, time, LocalDateTime.now());
+        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityAppHistory().getId());
+            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
+                result.add(deviceConverter.toDTO(deviceEntity));
+            }
+        }
+        return result;
     }
 
 
     @Override
-    public int totalItem(){
+    public int totalItem() {
         return (int) deviceRepository.count();
     }
 
     /**
      * too dangerous (only use to test)
+     *
      * @param ids
      */
     @Override
     public void delete(Long[] ids) {
-        for (Long item: ids) {
+        for (Long item : ids) {
             deviceRepository.deleteById(item);
         }
     }

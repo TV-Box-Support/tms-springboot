@@ -12,4 +12,7 @@ public interface IHistoryApplicationService {
     void delete(Long[] ids);
     List<HistoryApplicationDTO> findAll(Pageable pageable);
     List<HistoryApplicationDTO> findAll();
+
+    List<HistoryApplicationDTO> findHistoryAppDeviceLater(Long deviceId, Long applicationId, int day, long hour, int minutes);
+
 }

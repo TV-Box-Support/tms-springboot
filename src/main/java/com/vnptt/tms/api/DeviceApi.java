@@ -1,9 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DeviceOutput;
-import com.vnptt.tms.api.output.UserOutput;
 import com.vnptt.tms.dto.DeviceDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +70,7 @@ public class DeviceApi {
     public DeviceDTO showDevice(@PathVariable("id") Long id) {
         return deviceService.findOne(id);
     }
+
     /**
      * show device of production
      *
@@ -146,14 +145,32 @@ public class DeviceApi {
     /**
      * Show list device play application now
      *
-     * @param ruleId
+     * @param ApplicationId
      * @return
      */
-    @GetMapping(value = "/application/{ApplicationId}/device/status")
-    public DeviceOutput showAppRunNow(@PathVariable(value = "ApplicationId") Long ApplicationId,
-                                      @RequestParam(value = "status", required = false, defaultValue = "true") boolean status) {
+    @GetMapping(value = "/application/{ApplicationId}/device/now")
+    public DeviceOutput showAppRunNow(@PathVariable(value = "ApplicationId") Long ApplicationId) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findAllWithHistoryApplication(ApplicationId, status));
+        result.setListResult(deviceService.findAllDeviceRunApp(ApplicationId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            throw new ResourceNotFoundException("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * Show list device active now
+     *
+     * @return
+     */
+    @GetMapping(value = "/device/now")
+    public DeviceOutput showdeviceRunNow() {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.findAllDeviceRunNow());
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -172,6 +189,7 @@ public class DeviceApi {
      */
     @PostMapping(value = "/device")
     public DeviceDTO createDevice(@RequestBody DeviceDTO model) {
+        //TODO modify to create a list of device
         return deviceService.save(model);
     }
 

@@ -148,7 +148,7 @@ public class PolicyApi {
      * @param status
      * @return
      */
-    @PutMapping(value = "/policy/{id}/Status/{status}")
+    @PutMapping(value = "/policy/{id}/status/{status}")
     public PolicyDTO updateStatus(@PathVariable("id") Long id,
                                   @PathVariable(value = "status") int status) {
         return policyService.updateStatus(id, status);

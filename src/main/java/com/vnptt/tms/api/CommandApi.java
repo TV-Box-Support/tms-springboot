@@ -2,7 +2,6 @@ package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.CommandOutput;
 import com.vnptt.tms.dto.CommandDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.ICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,8 @@ public class CommandApi {
 
     /**
      * show command for web
-     * @param page number of page want to show
+     *
+     * @param page  number of page want to show
      * @param limit total number element in a page
      * @return
      */
@@ -27,11 +27,11 @@ public class CommandApi {
     public CommandOutput showCommand(@RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "limit", required = false) Integer limit) {
         CommandOutput result = new CommandOutput();
-        if (page != null && limit != null){
+        if (page != null && limit != null) {
             result.setPage(page);
-            Pageable pageable = PageRequest.of(page -1, limit );
+            Pageable pageable = PageRequest.of(page - 1, limit);
             result.setListResult((commandService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) commandService.totalItem()/ limit));
+            result.setTotalPage((int) Math.ceil((double) commandService.totalItem() / limit));
         } else {
             result.setListResult(commandService.findAll());
         }
@@ -48,6 +48,7 @@ public class CommandApi {
 
     /**
      * find command with id
+     *
      * @param id
      * @return
      */

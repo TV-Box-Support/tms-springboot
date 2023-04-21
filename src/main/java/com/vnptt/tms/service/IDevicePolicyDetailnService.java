@@ -21,4 +21,6 @@ public interface IDevicePolicyDetailnService {
     List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId);
 
     DevicePolicyDetailDTO update(Long id, int status);
+
+    List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId);
 }

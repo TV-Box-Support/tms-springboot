@@ -53,12 +53,13 @@ public class DeviceConverter {
     public DeviceEntity toEntity(DeviceDTO dto, DeviceEntity entity) {
         entity.setDesciption(dto.getDesciption());
         entity.setHdmi(dto.getHdmi());
-        entity.setModel(dto.getDesciption());
+        entity.setModel(dto.getModel());
         entity.setFirmwareVer(dto.getFirmwareVer());
         entity.setIp(dto.getIp());
-        entity.setLocation(dto.getDesciption());
+        entity.setLocation(dto.getLocation());
         entity.setProduct(dto.getProduct());
-        //unnecessary remove to reduce error
+//        unnecessary remove to reduce error
+//        entity.setDate(dto.getDate());
 //        entity.setSn(dto.getSn());
 //        entity.setMac(dto.getMac());
         return entity;

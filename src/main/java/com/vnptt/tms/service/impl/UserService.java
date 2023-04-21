@@ -44,10 +44,14 @@ public class UserService implements IUserService {
             RuleEntity ruleEntity = ruleRepository.findOneByName(userDTO.getRuleName());
             userEntity.setRuleEntity(ruleEntity);
         } catch (Exception e) {
-            userDTO.setRuleName(" wrong value");
-            return userDTO;
+            throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
         }
-        userEntity = userRepository.save(userEntity);
+        try{
+            userEntity = userRepository.save(userEntity);
+        } catch (Exception e){
+            throw new ResourceNotFoundException("have the same Username of account alive: " + userDTO.getUsername());
+        }
+
         return userConverter.toDTO(userEntity);
     }
 

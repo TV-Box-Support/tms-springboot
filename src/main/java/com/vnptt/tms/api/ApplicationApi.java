@@ -1,10 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.ApplicationOutput;
-import com.vnptt.tms.api.output.UserOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
-import com.vnptt.tms.dto.PolicyDTO;
-import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -117,7 +114,6 @@ public class ApplicationApi {
                                                  @RequestBody ApplicationDTO model) {
         return applicationService.addAppToDevice(deviceId, model);
     }
-
 
     /**
      * unnecessary (only use to test)

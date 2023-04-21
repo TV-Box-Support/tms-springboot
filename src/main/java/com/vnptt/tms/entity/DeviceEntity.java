@@ -49,7 +49,7 @@ public class DeviceEntity extends BaseEntity{
     private List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "deviceEntityAppHistory")
-    private List<HistoryApplicationEntity> historyApplicationEntities;
+    private List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
 
     public List<HistoryApplicationEntity> getHistoryApplicationEntities() {
         return historyApplicationEntities;

@@ -1,7 +1,6 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.UserOutput;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.dto.UserDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IUserService;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -51,6 +48,7 @@ public class UserApi {
 
     /**
      * find user by id
+     *
      * @param id
      * @return
      */

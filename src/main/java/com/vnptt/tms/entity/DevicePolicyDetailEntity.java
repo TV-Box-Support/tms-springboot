@@ -14,6 +14,9 @@ public class DevicePolicyDetailEntity extends BaseEntity{
     @Column(name = "status", nullable = false)
     private int status;
 
+    @Column(name = "action", nullable = false)
+    private int action;
+
     @ManyToOne
     @JoinColumn(name = "policyId", nullable = false)
     private PolicyEntity policyEntityDetail;
@@ -44,5 +47,13 @@ public class DevicePolicyDetailEntity extends BaseEntity{
 
     public void setDeviceEntityDetail(DeviceEntity deviceEntityDetail) {
         this.deviceEntityDetail = deviceEntityDetail;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
     }
 }

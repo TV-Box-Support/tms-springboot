@@ -6,6 +6,7 @@ public class PolicyDTO  extends AbstractDTO<PolicyDTO>{
     private String commandName;
     private String policyname;
     private int Status;
+    private int action;
 
     public String getCommandName() {
         return commandName;
@@ -29,5 +30,13 @@ public class PolicyDTO  extends AbstractDTO<PolicyDTO>{
 
     public void setStatus(int status) {
         Status = status;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
     }
 }

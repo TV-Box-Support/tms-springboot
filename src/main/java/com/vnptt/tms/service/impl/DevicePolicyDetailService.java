@@ -2,7 +2,6 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DevicePolicyDetailConverter;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.DevicePolicyDetailEntity;
 import com.vnptt.tms.entity.PolicyEntity;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -47,13 +45,14 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         PolicyEntity entity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
 
-        for ( Long id : ids){
+        for (Long id : ids) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(id);
-            if(deviceEntity != null){
+            if (deviceEntity != null) {
                 DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
                 devicePolicyDetailEntity.setDeviceEntityDetail(deviceEntity);
                 devicePolicyDetailEntity.setPolicyEntityDetail(entity);
                 devicePolicyDetailEntity.setStatus(0);
+                devicePolicyDetailEntity.setAction(entity.getAction());
 
                 devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
                 result.add(devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity));
@@ -69,7 +68,8 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     }
 
     /**
-     *  find item with page number and totalPage number
+     * find item with page number and totalPage number
+     *
      * @param pageable
      * @return
      */
@@ -77,7 +77,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     public List<DevicePolicyDetailDTO> findAll(Pageable pageable) {
         List<DevicePolicyDetailEntity> entities = devicePolicyDetailRepository.findAll(pageable).getContent();
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
-        for(DevicePolicyDetailEntity item : entities){
+        for (DevicePolicyDetailEntity item : entities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(item);
             result.add(devicePolicyDetailDTO);
         }
@@ -88,7 +88,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     public List<DevicePolicyDetailDTO> findAll() {
         List<DevicePolicyDetailEntity> entities = devicePolicyDetailRepository.findAll();
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
-        for(DevicePolicyDetailEntity item : entities){
+        for (DevicePolicyDetailEntity item : entities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(item);
             result.add(devicePolicyDetailDTO);
         }
@@ -108,7 +108,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         }
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailId(deviceId);
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
-        for (DevicePolicyDetailEntity entity: devicePolicyDetailEntities){
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
             result.add(devicePolicyDetailDTO);
         }
@@ -118,7 +118,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     /**
      * box update status when active policy done
      *
-     * @param id id of policyDeviceDetail
+     * @param id     id of policyDeviceDetail
      * @param status
      * @return
      */
@@ -127,17 +127,38 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         DevicePolicyDetailEntity devicePolicyDetailEntity = devicePolicyDetailRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found devicePolicyDEtail with id = " + id));
         devicePolicyDetailEntity.setStatus(status);
+        devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
         return devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity);
     }
 
+    /**
+     * find all policy of device
+     *
+     * @param policyId
+     * @return
+     */
     @Override
-    public int totalItem(){
+    public List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId) {
+        if (!policyRepository.existsById(policyId)) {
+            throw new ResourceNotFoundException("Not found policy with id = " + policyId);
+        }
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailId(policyId);
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
+            DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
+            result.add(devicePolicyDetailDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public int totalItem() {
         return (int) devicePolicyDetailRepository.count();
     }
 
     @Override
     public void delete(Long[] ids) {
-        for (Long item: ids) {
+        for (Long item : ids) {
             devicePolicyDetailRepository.deleteById(item);
         }
     }

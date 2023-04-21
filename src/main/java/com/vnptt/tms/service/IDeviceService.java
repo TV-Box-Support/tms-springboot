@@ -6,6 +6,7 @@ import com.vnptt.tms.entity.DeviceEntity;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IDeviceService {
@@ -33,5 +34,8 @@ public interface IDeviceService {
 
     List<DeviceDTO> findAllWithApplication(Long applicationId);
 
-    List<DeviceDTO> findAllWithHistoryApplication(Long applicationId, boolean status);
+    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
+
+    List<DeviceDTO> findAllDeviceRunNow();
+
 }

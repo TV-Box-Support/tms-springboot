@@ -1,12 +1,14 @@
 package com.vnptt.tms.dto;
 
-public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO>{
+public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO> {
 
     private int status;
 
     private String policyName;
 
     private String deviceSN;
+
+    private int action;
 
     public int getStatus() {
         return status;
@@ -30,5 +32,13 @@ public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO>{
 
     public void setDeviceSN(String deviceSN) {
         this.deviceSN = deviceSN;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
     }
 }

@@ -1,13 +1,9 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
-import com.vnptt.tms.api.output.PolicyOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -51,7 +47,7 @@ public class DevicePolicyDetailApi {
 
     /**
      * get list PolicyDetail math with device to check policies unfinished for box
-     *
+     * <p>
      * status of PolicyDetail
      * status 0 = not run
      * status 1 = run
@@ -76,12 +72,39 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * create policy detail for web
+     * get list PolicyDetail math with device to check policies detail unfinished for policy
+     * <p>
+     * status of PolicyDetail
+     * status 0 = not run
+     * status 1 = run
+     * status 2 = success
+     * status 3 = error
      *
+     * @param
+     * @return
+     */
+    @GetMapping(value = "/policy/{policyId}/devicePolicyDetail")
+    public DevicePolicyDetailOutput showAllPolicyDetailOfPolicy(@PathVariable(value = "policyId") Long policyId) {
+        DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
+        result.setListResult(devicePolicyDetailService.findAllWithPolicy(policyId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * create policy detail for web
+     * <p>
      * status of policy detail
      * status = 0 not run
      *
-     * @param ids list device want to run policy
+     * @param policyId id of policy
+     * @param ids      list id device
      * @return
      */
     @PostMapping(value = "/policy/{policyId}/devicePolicyDetail")
@@ -101,7 +124,7 @@ public class DevicePolicyDetailApi {
 
     /**
      * update status of policy detail for box
-     *
+     * <p>
      * status of PolicyDetail
      * status 0 = not run
      * status 1 = run

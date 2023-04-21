@@ -52,7 +52,8 @@ public class PolicyConverter {
      */
     public PolicyEntity toEntity(PolicyDTO dto, PolicyEntity entity) {
         entity.setPolicyname(dto.getPolicyname());
-        entity.setStatus(dto.getStatus());
+        //not use
+        //entity.setStatus(dto.getStatus());
         return entity;
     }
 }

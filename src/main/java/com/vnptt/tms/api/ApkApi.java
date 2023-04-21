@@ -1,10 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.ApkOutput;
-import com.vnptt.tms.api.output.ApplicationOutput;
 import com.vnptt.tms.dto.ApkDTO;
-import com.vnptt.tms.dto.ApplicationDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IApkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

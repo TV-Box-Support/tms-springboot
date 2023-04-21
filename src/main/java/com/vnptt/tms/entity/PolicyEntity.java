@@ -11,7 +11,10 @@ public class PolicyEntity extends BaseEntity {
     private String policyname;
 
     @Column(name = "status", nullable = false)
-    private int Status;
+    private int status;
+
+    @Column(name = "action", nullable = false)
+    private int action;
 
     @ManyToOne
     @JoinColumn(name = "commandId")
@@ -44,11 +47,11 @@ public class PolicyEntity extends BaseEntity {
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public CommandEntity getCommandEntity() {
@@ -73,6 +76,14 @@ public class PolicyEntity extends BaseEntity {
 
     public void setDevicePolicyDetailEntities(List<DevicePolicyDetailEntity> devicePolicyDetailEntities) {
         this.devicePolicyDetailEntities = devicePolicyDetailEntities;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
     }
 
     public void addApk(ApkEntity apk) {
