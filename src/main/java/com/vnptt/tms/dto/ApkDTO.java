@@ -3,9 +3,10 @@ package com.vnptt.tms.dto;
 public class ApkDTO extends AbstractDTO<ApkDTO>{
     private String packagename;
     private String apkfileUrl;
-    private int version;
+    private long version;
     private String md5;
     private Long packagesize;
+
 
     public String getPackagename() {
         return packagename;
@@ -23,11 +24,11 @@ public class ApkDTO extends AbstractDTO<ApkDTO>{
         this.apkfileUrl = apkfileUrl;
     }
 
-    public int getVersion() {
+    public long getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(long version) {
         this.version = version;
     }
 

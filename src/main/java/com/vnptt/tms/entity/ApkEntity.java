@@ -1,6 +1,11 @@
 package com.vnptt.tms.entity;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +16,8 @@ public class ApkEntity  extends BaseEntity{
     private String packagename;
     @Column(name = "apkfileUrl", nullable = false)
     private String apkfileUrl;
-    @Column(name = "version", nullable = false)
-    private int version;
+    @Column(name = "version")
+    private long version;
     @Column(name ="md5", nullable = false)
     private String md5;
     @Column(name = "packagesize", nullable = false)
@@ -41,11 +46,11 @@ public class ApkEntity  extends BaseEntity{
         this.apkfileUrl = apkfileUrl;
     }
 
-    public int getVersion() {
+    public long getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(long version) {
         this.version = version;
     }
 
@@ -72,4 +77,5 @@ public class ApkEntity  extends BaseEntity{
     public void setPolicyEntities(List<PolicyEntity> policyEntities) {
         this.policyEntities = policyEntities;
     }
+
 }

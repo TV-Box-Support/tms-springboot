@@ -1,7 +1,9 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.ApkDTO;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,4 +25,8 @@ public interface IApkService {
     ApkDTO addApkToPolicy(Long policyId, Long apkId);
 
     void removeApkinPolicy(Long policyId, Long apkId);
+
+    ApkDTO saveFile(MultipartFile file);
+
+    Resource loadFileAsResource(String fileName);
 }

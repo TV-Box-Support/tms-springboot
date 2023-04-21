@@ -4,11 +4,18 @@ import com.vnptt.tms.api.output.ApkOutput;
 import com.vnptt.tms.dto.ApkDTO;
 import com.vnptt.tms.service.IApkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -18,6 +25,13 @@ public class ApkApi {
     @Autowired
     private IApkService apkService;
 
+    /**
+     * get all apk infor from server
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
     @GetMapping(value = "/apk")
     public ApkOutput showApk(@RequestParam(value = "page", required = false) Integer page,
                              @RequestParam(value = "limit", required = false) Integer limit) {
@@ -39,6 +53,37 @@ public class ApkApi {
         }
 
         return result;
+    }
+
+    /**
+     * dowload apk for box
+     *
+     * @param fileName
+     * @param request
+     * @return
+     */
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+
+        // Load file as Resource
+        Resource resource = apkService.loadFileAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ignored) {
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
     /**
@@ -85,11 +130,35 @@ public class ApkApi {
         return apkService.addApkToPolicy(policyId, apkId);
     }
 
+    /**
+     * create apk normal
+     *
+     * @param model
+     * @return
+     */
     @PostMapping(value = "/apk")
     public ApkDTO createApk(@RequestBody ApkDTO model) {
         return apkService.save(model);
     }
 
+    /**
+     * upload file to server and save apk info
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/uploadFile")
+    public ApkDTO uploadFile(@RequestParam("file") MultipartFile file) {
+        return apkService.saveFile(file);
+    }
+
+    /**
+     * update apk info
+     *
+     * @param model
+     * @param id
+     * @return
+     */
     @PutMapping(value = "/apk/{id}")
     public ApkDTO updateApk(@RequestBody ApkDTO model, @PathVariable("id") Long id) {
         model.setId(id);

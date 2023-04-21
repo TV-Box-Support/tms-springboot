@@ -34,4 +34,26 @@ public class ControllerExceptionHandler {
     
     return message;
   }
+
+  @ExceptionHandler(FileStorageException.class)
+  @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErrorMessage FileStorageException(FileStorageException ex, WebRequest request) {
+    ErrorMessage message = new ErrorMessage(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            new Date(),
+            ex.getMessage(),
+            request.getDescription(false));
+    return message;
+  }
+
+  @ExceptionHandler(FileNotFoundException.class)
+  @ResponseStatus(value = HttpStatus.NOT_FOUND)
+  public ErrorMessage FileNotFoundException(FileNotFoundException ex, WebRequest request) {
+    ErrorMessage message = new ErrorMessage(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            new Date(),
+            ex.getMessage(),
+            request.getDescription(false));
+    return message;
+  }
 }
