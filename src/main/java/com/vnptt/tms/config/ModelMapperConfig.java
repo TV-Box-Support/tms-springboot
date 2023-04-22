@@ -5,14 +5,12 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Mapper DTO and Entity
+ */
 @Configuration
 public class ModelMapperConfig {
 
-    /**
-     * Mapper DTO and Entity
-     *
-     * @return
-     */
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
