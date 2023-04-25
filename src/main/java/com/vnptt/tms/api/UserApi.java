@@ -7,6 +7,7 @@ import com.vnptt.tms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -25,8 +26,8 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/user")
-    public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page,
-                               @RequestParam(value = "limit", required = false) Integer limit) {
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         UserOutput result = new UserOutput();
         if (page != null && limit != null) {
             result.setPage(page);
@@ -53,6 +54,7 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/user/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDTO showUser(@PathVariable("id") Long id) {
         return userService.findOne(id);
     }
@@ -64,6 +66,7 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/rule/{ruleId}/user")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserOutput showUserWithRule(@PathVariable(value = "ruleId") Long ruleId) {
         UserOutput result = new UserOutput();
         result.setListResult(userService.findAllWithRule(ruleId));
@@ -78,15 +81,15 @@ public class UserApi {
     }
 
     /**
-     * create new user
+     * create new user (only use to test before token
      *
      * @param model
      * @return
      */
-    @PostMapping(value = "/user")
-    public UserDTO createUser(@RequestBody UserDTO model) {
-        return userService.save(model);
-    }
+//    @PostMapping(value = "/user")
+//    public UserDTO createUser(@RequestBody UserDTO model) {
+//        return userService.save(model);
+//    }
 
     /**
      * update infor user
@@ -96,12 +99,14 @@ public class UserApi {
      * @return
      */
     @PutMapping(value = "/user/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);
-        return userService.save(model);
+        return userService.update(model);
     }
 
     @DeleteMapping(value = "/user")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void removeUser(@RequestBody Long[] ids) {
         userService.delete(ids);
     }

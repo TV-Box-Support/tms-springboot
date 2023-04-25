@@ -1,10 +1,14 @@
 package com.vnptt.tms.converter;
 
 import com.vnptt.tms.dto.UserDTO;
-import org.modelmapper.ModelMapper;
+import com.vnptt.tms.entity.RuleEntity;
 import com.vnptt.tms.entity.UserEntity;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserConverter {
@@ -13,7 +17,8 @@ public class UserConverter {
     private ModelMapper mapper;
 
     /**
-     *  Convert for method Post
+     * Convert for method Post
+     *
      * @param dto
      * @return
      */
@@ -24,7 +29,8 @@ public class UserConverter {
     }
 
     /**
-     *  Convert for mehtod get
+     * Convert for mehtod get
+     *
      * @param entity
      * @return
      */
@@ -34,9 +40,15 @@ public class UserConverter {
             dto.setId(entity.getId());
         }
         dto = mapper.map(entity, UserDTO.class);
-        if (entity.getRuleEntity() != null) {
-            dto.setRuleName(entity.getRuleEntity().getName());
+
+        // handle out put rule name
+        List<String> rules = new ArrayList<>();
+        List<RuleEntity> ruleEntities = entity.getRuleEntities();
+        for (RuleEntity iteam : ruleEntities) {
+            rules.add(iteam.getName().name());
         }
+
+        dto.setRuleName(rules);
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setModifiedDate(entity.getModifiedDate());
@@ -45,22 +57,19 @@ public class UserConverter {
     }
 
     /**
-     *  Convert for method put
+     * Convert for method put
+     *
      * @param dto
      * @param entity
      * @return
      */
     public UserEntity toEntity(UserDTO dto, UserEntity entity) {
-        //entity = mapper.map(dto, UserEntity.class);
         entity.setName(dto.getName());
-        if (dto.getPassword() != null ){
-            entity.setPassword(dto.getPassword());
-        }
-        if (dto.getCompany() != null){
+        if (dto.getCompany() != null) {
             entity.setCompany(dto.getCompany());
         }
-        if (dto.getEmail() != null){
-            entity.setMail(dto.getEmail());
+        if (dto.getEmail() != null) {
+            entity.setEmail(dto.getEmail());
         }
         entity.setContact(dto.getContact());
         return entity;

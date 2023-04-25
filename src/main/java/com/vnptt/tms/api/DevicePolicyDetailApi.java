@@ -4,6 +4,7 @@ import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -148,6 +149,7 @@ public class DevicePolicyDetailApi {
      * @param ids
      */
     @DeleteMapping(value = "/devicePolicyDetail")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void removeDevicePolicyDetail(@RequestBody Long[] ids) {
         devicePolicyDetailService.delete(ids);
     }

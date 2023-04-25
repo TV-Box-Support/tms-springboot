@@ -38,9 +38,10 @@ public class RuleService implements IRuleService {
      */
     @Override
     public RuleDTO save(RuleDTO model) {
-        RuleEntity ruleEntity = ruleConverter.toEntity(model);
-        ruleEntity = ruleRepository.save(ruleEntity);
-        return ruleConverter.toDTO(ruleEntity);
+//        RuleEntity ruleEntity = ruleConverter.toEntity(model);
+//        ruleEntity = ruleRepository.save(ruleEntity);
+//        return ruleConverter.toDTO(ruleEntity);
+        return null;
     }
 
     /**

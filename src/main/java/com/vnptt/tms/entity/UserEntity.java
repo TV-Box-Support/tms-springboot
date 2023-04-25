@@ -1,6 +1,8 @@
 package com.vnptt.tms.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table (name ="User")
@@ -13,13 +15,19 @@ public class UserEntity extends BaseEntity{
     private String password;
     @Column(name = "company")
     private String company;
-    @Column(name = "mail")
-    private String mail;
+    @Column(name = "email")
+    private String email;
     @Column(name = "contact")
     private Long contact;
-    @ManyToOne
-    @JoinColumn(name = "ruleId", nullable = false)
-    private RuleEntity ruleEntity;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "rule_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "rule_id"))
+    private List<RuleEntity> ruleEntities = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -53,12 +61,12 @@ public class UserEntity extends BaseEntity{
         this.company = company;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getContact() {
@@ -69,11 +77,11 @@ public class UserEntity extends BaseEntity{
         this.contact = contact;
     }
 
-    public RuleEntity getRuleEntity() {
-        return ruleEntity;
+    public List<RuleEntity> getRuleEntities() {
+        return ruleEntities;
     }
 
-    public void setRuleEntity(RuleEntity ruleEntity) {
-        this.ruleEntity = ruleEntity;
+    public void setRuleEntities(List<RuleEntity> ruleEntities) {
+        this.ruleEntities = ruleEntities;
     }
 }

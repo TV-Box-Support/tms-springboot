@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@CrossOrigin
 @RestController
 @RequestMapping("TMS/api")
 public class ApkApi {

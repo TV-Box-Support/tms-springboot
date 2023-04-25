@@ -1,7 +1,9 @@
 package com.vnptt.tms.dto;
 
 
-public class UserDTO extends AbstractDTO<UserDTO>{
+import java.util.List;
+
+public class UserDTO extends AbstractDTO<UserDTO>  {
 
     private String name;
     private String username;
@@ -9,15 +11,7 @@ public class UserDTO extends AbstractDTO<UserDTO>{
     private String company;
     private String email;
     private Long contact;
-    private String ruleName;
-
-    public String getRuleName() {
-        return ruleName;
-    }
-
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
+    private List<String> ruleName;
 
     public String getName() {
         return name;
@@ -65,5 +59,13 @@ public class UserDTO extends AbstractDTO<UserDTO>{
 
     public void setContact(Long contact) {
         this.contact = contact;
+    }
+
+    public List<String> getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(List<String> ruleName) {
+        this.ruleName = ruleName;
     }
 }

@@ -1,10 +1,6 @@
 package com.vnptt.tms.dto;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class AbstractDTO<T> {
     private Long id;
@@ -12,7 +8,6 @@ public class AbstractDTO<T> {
     private LocalDateTime createdDate;
     private String modifiedBy;
     private LocalDateTime modifiedDate;
-    private List<T> listResutl = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -36,14 +31,6 @@ public class AbstractDTO<T> {
 
     public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
-    }
-
-    public List<T> getListResutl() {
-        return listResutl;
-    }
-
-    public void setListResutl(List<T> listResutl) {
-        this.listResutl = listResutl;
     }
 
     public LocalDateTime getCreatedDate() {

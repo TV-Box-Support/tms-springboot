@@ -6,6 +6,7 @@ import com.vnptt.tms.service.IHistoryApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -107,6 +108,7 @@ public class HistoryApplicationApi {
     }
 
     @DeleteMapping(value = "/historyApplication")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void removeHistoryApplication(@RequestBody Long[] ids) {
         historyApplicationService.delete(ids);
     }

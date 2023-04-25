@@ -6,6 +6,7 @@ import com.vnptt.tms.service.ICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -69,6 +70,7 @@ public class CommandApi {
     }
 
     @DeleteMapping(value = "/Command")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void removeCommand(@RequestBody Long[] ids) {
         commandService.delete(ids);
     }

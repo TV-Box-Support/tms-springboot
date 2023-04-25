@@ -7,6 +7,7 @@ import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -29,10 +30,7 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device")
-    public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page,
-                                   @RequestParam(value = "limit", required = false) Integer limit,
-                                   @RequestParam(value = "model", required = false) String model,
-                                   @RequestParam(value = "firmware", required = false) String firmware) {
+    public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "model", required = false) String model, @RequestParam(value = "firmware", required = false) String firmware) {
         DeviceOutput result = new DeviceOutput();
         if (page != null && limit != null) {
             result.setPage(page);
@@ -193,7 +191,6 @@ public class DeviceApi {
         return deviceService.save(model);
     }
 
-
     /**
      * update device infor for Box
      *
@@ -214,6 +211,7 @@ public class DeviceApi {
      * @param ids
      */
     @DeleteMapping(value = "/device")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void deleteDevice(@RequestBody Long[] ids) {
         deviceService.delete(ids);
     }

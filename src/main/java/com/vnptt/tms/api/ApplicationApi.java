@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -91,6 +92,7 @@ public class ApplicationApi {
 
     /**
      * unnecessary (only use to test)
+     * beacause device only use addApplicationToDevice
      * add new app to database
      *
      * @param model dto application
@@ -121,6 +123,7 @@ public class ApplicationApi {
      * @param ids
      */
     @DeleteMapping(value = "/application")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void deleteApplication(@RequestBody Long[] ids) {
         applicationService.delete(ids);
     }

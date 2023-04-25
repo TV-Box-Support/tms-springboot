@@ -1,9 +1,8 @@
 package com.vnptt.tms.repository;
 
 import com.vnptt.tms.entity.RuleEntity;
+import com.vnptt.tms.config.ERole;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
 
 public interface RuleRepository extends JpaRepository<RuleEntity, Long> {
 
@@ -11,4 +10,5 @@ public interface RuleRepository extends JpaRepository<RuleEntity, Long> {
 
     RuleEntity findOneById(Long id);
 
+    RuleEntity findByName(ERole eRole);
 }

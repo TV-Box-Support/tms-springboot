@@ -1,24 +1,39 @@
 package com.vnptt.tms.entity;
 
+import com.vnptt.tms.config.ERole;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "rule")
-public class RuleEntity extends BaseEntity{
+public class RuleEntity{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false,  unique = true)
-    private String name;
+    private ERole name;
 
-    @OneToMany(mappedBy = "ruleEntity")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },mappedBy = "ruleEntities")
     private List<UserEntity> userEntities =new ArrayList<>();
 
-    public String getName() {
+    public Long getId() {
+        return id;
+    }
+
+    public ERole getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(ERole name) {
         this.name = name;
     }
 

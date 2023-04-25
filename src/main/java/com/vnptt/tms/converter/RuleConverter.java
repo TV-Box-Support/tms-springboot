@@ -9,13 +9,13 @@ public class RuleConverter {
     public RuleDTO toDTO(RuleEntity entity) {
         RuleDTO dto = new RuleDTO();
         dto.setId(entity.getId());
-        dto.setName(entity.getName());
+        dto.setName(entity.getName().toString());
         return dto;
     }
 
-    public RuleEntity toEntity(RuleDTO dto) {
-        RuleEntity entity = new RuleEntity();
-        entity.setName(dto.getName());
-        return entity;
-    }
+//    public RuleEntity toEntity(RuleDTO dto) {
+//        RuleEntity entity = new RuleEntity();
+////        entity.setName(dto.getName();
+//        return entity;
+//    }
 }
