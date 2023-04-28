@@ -89,7 +89,8 @@ public class HistoryPerformanceApi {
     }
 
     @PutMapping(value = "/historyPerformance/{id}")
-    public HistoryPerformanceDTO updateHistoryPerformance(@RequestBody HistoryPerformanceDTO model, @PathVariable("id") Long id) {
+    public HistoryPerformanceDTO updateHistoryPerformance(@RequestBody HistoryPerformanceDTO model,
+                                                          @PathVariable("id") Long id) {
         model.setId(id);
         return historyPerformanceService.save(model);
     }

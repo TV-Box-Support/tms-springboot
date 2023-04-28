@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("TMS/api")
 public class RuleApi {
+
     @Autowired
     private IRuleService ruleService;
 

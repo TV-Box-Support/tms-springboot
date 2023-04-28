@@ -11,7 +11,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * Application Programming Interface for application manager
+ * include:
+ * <p>
+ * - get list application from database pageable or none
+ * - get single application form database by id
+ * - show (get method) all apps available on the box
+ * - post application to database
+ * - Map (post method) app to device if database don't have app, create and add app to database
+ * - delete map app no longer on the device
+ * - remove (delete method) apk out of database
+ * <p>
+ * ...
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("TMS/api")
@@ -26,7 +39,7 @@ public class ApplicationApi {
      * @param page        desired page to display
      * @param limit       number of elements 1 page
      * @param packagename the name of the app you want to find
-     * @return
+     * @return List app DTO
      */
     @GetMapping(value = "/application")
     public ApplicationOutput showApplicationes(@RequestParam(value = "page", required = false) Integer page,
@@ -49,7 +62,7 @@ public class ApplicationApi {
         }
 
         if (result.getListResult().size() >= 1) {
-            result.setMessage("Request Success");
+            result.setMessage("Get List application success");
             result.setTotalElement(result.getListResult().size());
         } else {
             result.setMessage("no matching element found");
@@ -59,10 +72,10 @@ public class ApplicationApi {
     }
 
     /**
-     * find applciation with id
+     * show application with id
      *
-     * @param id
-     * @return
+     * @param id id of app want to show
+     * @return app DTO
      */
     @GetMapping(value = "/application/{id}")
     public ApplicationDTO showApplication(@PathVariable("id") Long id) {
@@ -73,7 +86,7 @@ public class ApplicationApi {
      * see the apps available on the device for box and web
      *
      * @param deviceId device want to search
-     * @return
+     * @return List application DTO
      */
     @GetMapping("/device/{deviceId}/application")
     public ApplicationOutput getAllApplicationByDeviceEntityId(@PathVariable(value = "deviceId") Long deviceId) {
@@ -89,14 +102,13 @@ public class ApplicationApi {
         return result;
     }
 
-
     /**
      * unnecessary (only use to test)
-     * beacause device only use addApplicationToDevice
+     * because device only use addApplicationToDevice
      * add new app to database
      *
      * @param model dto application
-     * @return
+     * @return http status ok 200
      */
     @PostMapping(value = "/application")
     public ResponseEntity<ApplicationDTO> createApplication(@RequestBody ApplicationDTO model) {
@@ -105,10 +117,10 @@ public class ApplicationApi {
     }
 
     /**
-     * Mapp app to device for box, if database don't have app, create and add
+     * Map app to device for box, if database don't have app, create and add
      *
      * @param deviceId device has app
-     * @param model    dto application (need Id from responce when post new app)
+     * @param model    dto application (need Id from response when post new app)
      * @return
      */
     @PostMapping(value = "/device/{deviceId}/application")
@@ -120,7 +132,7 @@ public class ApplicationApi {
     /**
      * unnecessary (only use to test)
      *
-     * @param ids
+     * @param ids list id of app want to delete ex: [1,2,3]
      */
     @DeleteMapping(value = "/application")
     @PreAuthorize("hasRole('MODERATOR')")
@@ -131,9 +143,9 @@ public class ApplicationApi {
     /**
      * remove app no longer on the device
      *
-     * @param deviceId
-     * @param applicationId
-     * @return
+     * @param deviceId      id of device need modify app list
+     * @param applicationId id of application need remove
+     * @return http status 204
      */
     @DeleteMapping(value = "/device/{deviceId}/application/{applicationId}")
     public ResponseEntity<HttpStatus> removeApplicationOnDevice(@PathVariable(value = "deviceId") Long deviceId,

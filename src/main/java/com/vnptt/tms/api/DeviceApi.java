@@ -3,15 +3,27 @@ package com.vnptt.tms.api;
 import com.vnptt.tms.api.output.DeviceOutput;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 
+/**
+ * Application Programming Interface for device manager
+ * include:
+ * <p>
+ * - get list device from database pageable or none
+ * - get single device form database by id
+ * - show (get mothod) device with production
+ * <p>
+ * ...
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("TMS/api")
@@ -20,6 +32,10 @@ public class DeviceApi {
     @Autowired
     private IDeviceService deviceService;
 
+    // add for get jwt of box
+    @Autowired
+    private JwtUtils jwtUtils;
+
     /**
      * show device with model and firmware for web
      *
@@ -27,10 +43,13 @@ public class DeviceApi {
      * @param limit    element on a page
      * @param model    type STB
      * @param firmware firmware version
-     * @return
+     * @return List of device DTO
      */
     @GetMapping(value = "/device")
-    public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "model", required = false) String model, @RequestParam(value = "firmware", required = false) String firmware) {
+    public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page,
+                                   @RequestParam(value = "limit", required = false) Integer limit,
+                                   @RequestParam(value = "model", required = false) String model,
+                                   @RequestParam(value = "firmware", required = false) String firmware) {
         DeviceOutput result = new DeviceOutput();
         if (page != null && limit != null) {
             result.setPage(page);
@@ -61,8 +80,8 @@ public class DeviceApi {
     /**
      * find device with id
      *
-     * @param id
-     * @return
+     * @param id if of device
+     * @return device DTO
      */
     @GetMapping(value = "/device/{id}")
     public DeviceDTO showDevice(@PathVariable("id") Long id) {
@@ -70,10 +89,10 @@ public class DeviceApi {
     }
 
     /**
-     * show device of production
+     * show device with production
      *
-     * @param dateOfManufacture
-     * @return
+     * @param dateOfManufacture ex 2022-12-30
+     * @return list device DTO
      */
     @GetMapping(value = "/device/date")
     public DeviceOutput showDeviceWithDate(@RequestParam(value = "date") Date dateOfManufacture) {
@@ -89,10 +108,10 @@ public class DeviceApi {
     }
 
     /**
-     * Show device infor in database for box and web
+     * Show device info with serialnumber
      *
-     * @param serialnumber
-     * @return
+     * @param serialnumber sb of device, unique field in database
+     * @return device DTO
      */
     @GetMapping(value = "/device/serialnumber")
     public DeviceDTO showDeviceWithSn(@RequestParam(value = "serialnumber") String serialnumber) {
@@ -166,7 +185,7 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device/now")
-    public DeviceOutput showdeviceRunNow() {
+    public DeviceOutput showDeviceRunNow() {
         DeviceOutput result = new DeviceOutput();
         result.setListResult(deviceService.findAllDeviceRunNow());
 
@@ -177,6 +196,20 @@ public class DeviceApi {
             throw new ResourceNotFoundException("no matching element found");
         }
         return result;
+    }
+
+    /**
+     * get jwt of box (only use to test)
+     *
+     * @param serialnumber
+     * @param mac
+     * @return
+     */
+    @GetMapping(value = "/device/jwt")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<?> showDeviceJwt(@RequestParam String serialnumber,
+                                           @RequestParam String mac) {
+        return deviceService.authenticateDevice(serialnumber, mac);
     }
 
     /**

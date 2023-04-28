@@ -58,17 +58,35 @@ public class CommandApi {
         return commandService.findOne(id);
     }
 
+    /**
+     * post one model command
+     *
+     * @param model
+     * @return
+     */
     @PostMapping(value = "/command")
     public CommandDTO createCommand(@RequestBody CommandDTO model) {
         return commandService.save(model);
     }
 
+    /**
+     * modify command
+     *
+     * @param model
+     * @param id
+     * @return
+     */
     @PutMapping(value = "/command/{id}")
     public CommandDTO updateCommand(@RequestBody CommandDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return commandService.save(model);
     }
 
+    /**
+     * delete command (only use to test)
+     *
+     * @param ids
+     */
     @DeleteMapping(value = "/Command")
     @PreAuthorize("hasRole('MODERATOR')")
     public void removeCommand(@RequestBody Long[] ids) {

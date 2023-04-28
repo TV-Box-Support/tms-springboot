@@ -1,10 +1,8 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.HistoryPerformanceConverter;
-import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.entity.DeviceEntity;
-import com.vnptt.tms.entity.HistoryApplicationEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.DeviceRepository;

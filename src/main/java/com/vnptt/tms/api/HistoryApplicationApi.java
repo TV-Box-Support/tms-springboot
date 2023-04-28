@@ -82,7 +82,7 @@ public class HistoryApplicationApi {
      *
      * @param deviceId
      * @param applicationId
-     * @param model (cpu, memory, status)
+     * @param model         (cpu, memory, status)
      * @return
      */
     @PostMapping(value = "/device/{deviceId}/application/{applicationId}/historyApplication")

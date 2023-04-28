@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {//extends WebSecurityConfigurerAdapter {\
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
@@ -28,13 +30,19 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
+    /**
+     * filter for TMS . user
+     *
+     * @return
+     */
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProviderTMS() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
@@ -56,29 +64,22 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http
                 .cors()// Prevent request from another domain
                 .and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler) //create error page
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // for server http
                 .and().authorizeRequests()
-                    .antMatchers("/TMS/api/auth/signin").permitAll() //Allow everyone to access addresses
-                    .anyRequest().authenticated()
+                .antMatchers("/TMS/api/auth/signin").permitAll() //Allow everyone to access addresses
+                .anyRequest().authenticated()
                 .and().logout().logoutUrl("/TMS/logout").logoutSuccessUrl("/TMS/logoutSuccessful");
 
-        http.authenticationProvider(authenticationProvider());
+        http.authenticationProvider(authenticationProviderTMS());
 
         // Add a Filter class that checks for jwt
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
-//    for remember me
-//    @Bean
-//    public PersistentTokenRepository persistentTokenRepository() {
-//        InMemoryTokenRepositoryImpl memory = new InMemoryTokenRepositoryImpl(); // Ta lưu tạm remember me trong memory (RAM). Nếu cần mình có thể lưu trong database
-//        return memory;
-//    }
 }

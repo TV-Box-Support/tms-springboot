@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table (name ="User")
-public class UserEntity extends BaseEntity{
+@Table(name = "User")
+public class UserEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "username", nullable = false,  unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
     @Column(name = "password", nullable = false)
     private String password;

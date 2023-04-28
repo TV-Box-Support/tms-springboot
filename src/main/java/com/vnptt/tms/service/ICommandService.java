@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface ICommandService {
     CommandDTO save(CommandDTO commandDTO);
+
     CommandDTO findOne(Long id);
+
     int totalItem();
+
     void delete(Long[] ids);
+
     List<CommandDTO> findAll(Pageable pageable);
+
     List<CommandDTO> findAll();
 }

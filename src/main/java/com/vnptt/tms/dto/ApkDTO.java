@@ -1,12 +1,11 @@
 package com.vnptt.tms.dto;
 
-public class ApkDTO extends AbstractDTO<ApkDTO>{
+public class ApkDTO extends AbstractDTO{
     private String packagename;
     private String apkfileUrl;
     private long version;
     private String md5;
     private Long packagesize;
-
 
     public String getPackagename() {
         return packagename;

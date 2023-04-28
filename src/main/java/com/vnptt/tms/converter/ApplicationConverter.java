@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationConverter {
+
     @Autowired
     private ModelMapper mapper;
 

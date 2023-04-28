@@ -1,7 +1,7 @@
 package com.vnptt.tms.repository;
 
-import com.vnptt.tms.entity.RuleEntity;
 import com.vnptt.tms.config.ERole;
+import com.vnptt.tms.entity.RuleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RuleRepository extends JpaRepository<RuleEntity, Long> {

@@ -10,6 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * Application Programming Interface for auth manager
+ * include:
+ * <p>
+ * - signin for everybody with Unauthorization
+ * - signup for only admin and mod
+ * <p>
+ * ...
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/TMS/api/auth")

@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "application")
-public class ApplicationEntity extends BaseEntity{
+public class ApplicationEntity extends BaseEntity {
     @Column(name = "packagename", nullable = false)
     private String packagename;
     @Column(name = "version", nullable = false)

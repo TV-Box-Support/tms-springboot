@@ -1,12 +1,10 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.DeviceDTO;
-import com.vnptt.tms.dto.DeviceDTO;
-import com.vnptt.tms.entity.DeviceEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IDeviceService {
@@ -26,6 +24,7 @@ public interface IDeviceService {
     DeviceDTO findOneBySn(String serialnumber);
 
     List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer);
+
     List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable);
 
     List<DeviceDTO> findByLocation(String location);
@@ -38,4 +37,5 @@ public interface IDeviceService {
 
     List<DeviceDTO> findAllDeviceRunNow();
 
+    ResponseEntity<?> authenticateDevice(String serialnumber, String mac);
 }

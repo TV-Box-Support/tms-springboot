@@ -1,13 +1,10 @@
 package com.vnptt.tms.dto;
 
-public class DevicePolicyDetailDTO extends AbstractDTO<DevicePolicyDetailDTO> {
+public class DevicePolicyDetailDTO extends AbstractDTO {
 
     private int status;
-
     private String policyName;
-
     private String deviceSN;
-
     private int action;
 
     public int getStatus() {

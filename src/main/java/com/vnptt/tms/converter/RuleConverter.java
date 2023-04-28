@@ -12,10 +12,4 @@ public class RuleConverter {
         dto.setName(entity.getName().toString());
         return dto;
     }
-
-//    public RuleEntity toEntity(RuleDTO dto) {
-//        RuleEntity entity = new RuleEntity();
-////        entity.setName(dto.getName();
-//        return entity;
-//    }
 }

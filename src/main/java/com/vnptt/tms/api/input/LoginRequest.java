@@ -1,5 +1,8 @@
 package com.vnptt.tms.api.input;
 
+/**
+ * Data Transfer Objects of form login
+ */
 public class LoginRequest {
 
     private String username;

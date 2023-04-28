@@ -1,11 +1,10 @@
 package com.vnptt.tms.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "historyperformance")
-public class HistoryPerformanceEntity extends  BaseEntity{
+public class HistoryPerformanceEntity extends BaseEntity {
 
     @Column(name = "cpu")
     private double cpu;
@@ -15,7 +14,7 @@ public class HistoryPerformanceEntity extends  BaseEntity{
     private String network;
 
     @ManyToOne
-    @JoinColumn(name ="deviceId", nullable = false)
+    @JoinColumn(name = "deviceId", nullable = false)
     private DeviceEntity deviceEntityHistory;
 
     public double getCpu() {

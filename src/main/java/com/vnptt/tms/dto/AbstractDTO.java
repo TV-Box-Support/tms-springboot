@@ -2,7 +2,7 @@ package com.vnptt.tms.dto;
 
 import java.time.LocalDateTime;
 
-public class AbstractDTO<T> {
+public class AbstractDTO {
     private Long id;
     private String createdBy;
     private LocalDateTime createdDate;

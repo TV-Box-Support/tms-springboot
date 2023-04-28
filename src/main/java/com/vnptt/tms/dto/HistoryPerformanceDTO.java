@@ -1,7 +1,7 @@
 package com.vnptt.tms.dto;
 
 
-public class HistoryPerformanceDTO extends AbstractDTO<HistoryPerformanceDTO> {
+public class HistoryPerformanceDTO extends AbstractDTO {
 
     private String devicesn;
     private double cpu;

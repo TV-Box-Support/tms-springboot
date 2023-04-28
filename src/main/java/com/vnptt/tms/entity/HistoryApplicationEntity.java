@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "historyapplication")
-public class HistoryApplicationEntity extends BaseEntity{
+public class HistoryApplicationEntity extends BaseEntity {
     @Column(name = "cpu")
     private double cpu;
     @Column(name = "memory")

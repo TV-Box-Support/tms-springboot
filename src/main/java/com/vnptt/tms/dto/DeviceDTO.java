@@ -2,7 +2,7 @@ package com.vnptt.tms.dto;
 
 import java.sql.Date;
 
-public class DeviceDTO extends AbstractDTO<DeviceDTO> {
+public class DeviceDTO extends AbstractDTO{
     private String sn;
     private String mac;
     private String product;

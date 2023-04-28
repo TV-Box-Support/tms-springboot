@@ -1,24 +1,19 @@
 package com.vnptt.tms.entity;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import javax.persistence.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name ="apk")
-public class ApkEntity  extends BaseEntity{
+@Table(name = "apk")
+public class ApkEntity extends BaseEntity {
     @Column(name = "packagename", nullable = false)
     private String packagename;
     @Column(name = "apkfileUrl", nullable = false)
     private String apkfileUrl;
-    @Column(name = "version")
+    @Column(name = "version", nullable = false)
     private long version;
-    @Column(name ="md5", nullable = false)
+    @Column(name = "md5", nullable = false)
     private String md5;
     @Column(name = "packagesize", nullable = false)
     private Long packagesize;
@@ -27,7 +22,7 @@ public class ApkEntity  extends BaseEntity{
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },mappedBy = "apkEntitiesPolicy")
+            }, mappedBy = "apkEntitiesPolicy")
     private List<PolicyEntity> policyEntities = new ArrayList<>();
 
     public String getPackagename() {

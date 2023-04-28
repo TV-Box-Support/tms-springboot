@@ -17,6 +17,24 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Application Programming Interface for apk manager
+ * include:
+ * <p>
+ * - get list apk from database pageable or none
+ * - get single apk form database by id
+ * - dowload (get method) apk file by fileDownloadUri
+ * - show (get method) the apk available on the policy for box and web
+ * - Map (post method) apk to policy
+ * - create (post method) apk normal with info add manually
+ * - create (post method) apk by upload file
+ * - update (put method) apk infor
+ * - delete map apk to policy
+ * - remove (delete method) apk out of database
+ * <p>
+ * ...
+ */
+@CrossOrigin
 @RestController
 @RequestMapping("TMS/api")
 public class ApkApi {
@@ -25,11 +43,11 @@ public class ApkApi {
     private IApkService apkService;
 
     /**
-     * get all apk infor from server
+     * get list apk from database
      *
-     * @param page
-     * @param limit
-     * @return
+     * @param page  the number of page you want to display
+     * @param limit the number of element in a page
+     * @return List apk DTO
      */
     @GetMapping(value = "/apk")
     public ApkOutput showApk(@RequestParam(value = "page", required = false) Integer page,
@@ -55,11 +73,11 @@ public class ApkApi {
     }
 
     /**
-     * dowload apk for box
+     * dowload apk file
      *
-     * @param fileName
-     * @param request
-     * @return
+     * @param fileName name of apk file
+     * @param request  HTTP Header
+     * @return file raw
      */
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
@@ -86,10 +104,10 @@ public class ApkApi {
     }
 
     /**
-     * find apk with id
+     * show apk with id
      *
-     * @param id
-     * @return
+     * @param id id of apk
+     * @return apk DTO
      */
     @GetMapping(value = "/apk/{id}")
     public ApkDTO showApk(@PathVariable("id") Long id) {
@@ -100,7 +118,7 @@ public class ApkApi {
      * see the apk available on the policy for box and web
      *
      * @param policyId device want to search
-     * @return
+     * @return List Apk DTO
      */
     @GetMapping("/policy/{policyId}/apk")
     public ApkOutput showAllApkInPolicy(@PathVariable(value = "policyId") Long policyId) {
@@ -119,9 +137,9 @@ public class ApkApi {
     /**
      * Mapp apk to policy
      *
-     * @param policyId policy has apk
-     * @param apkId
-     * @return
+     * @param policyId policy want to map
+     * @param apkId    apk want to map
+     * @return apk in policy want to map
      */
     @PostMapping(value = "/policy/{policyId}/apk/{apkId}")
     public ApkDTO addApplicationToDevice(@PathVariable(value = "policyId") Long policyId,
@@ -132,8 +150,8 @@ public class ApkApi {
     /**
      * create apk normal
      *
-     * @param model
-     * @return
+     * @param model apk DTO
+     * @return apk DTO after save on database
      */
     @PostMapping(value = "/apk")
     public ApkDTO createApk(@RequestBody ApkDTO model) {
@@ -143,8 +161,8 @@ public class ApkApi {
     /**
      * upload file to server and save apk info
      *
-     * @param file
-     * @return
+     * @param file MultipartFile file apk
+     * @return apk DTO after apk has upload done in dir (in application.properties)
      */
     @PostMapping("/uploadFile")
     public ApkDTO uploadFile(@RequestParam("file") MultipartFile file) {
@@ -154,9 +172,9 @@ public class ApkApi {
     /**
      * update apk info
      *
-     * @param model
-     * @param id
-     * @return
+     * @param model new info of element apk
+     * @param id    id of apk in database
+     * @return apk DTO after save in database
      */
     @PutMapping(value = "/apk/{id}")
     public ApkDTO updateApk(@RequestBody ApkDTO model, @PathVariable("id") Long id) {
@@ -165,11 +183,11 @@ public class ApkApi {
     }
 
     /**
-     * remove apk in policy
+     * remove map of apk and policy
      *
-     * @param policyId
-     * @param apkId
-     * @return
+     * @param policyId id of policy want to modify
+     * @param apkId    id of apk want to remove in policy
+     * @return http status no content 204
      */
     @DeleteMapping(value = "/policy/{policyId}/apk/{apkId}")
     public ResponseEntity<HttpStatus> removeApkinPolicy(@PathVariable(value = "policyId") Long policyId,
@@ -181,7 +199,7 @@ public class ApkApi {
     /**
      * delete apk in database (very dangerous) (only use to test)
      *
-     * @param ids
+     * @param ids list id apk want to delete ex: [1,2,3]
      */
     @DeleteMapping(value = "/apk")
     public void removeApk(@RequestBody Long[] ids) {

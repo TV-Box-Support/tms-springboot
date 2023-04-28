@@ -3,6 +3,11 @@ package com.vnptt.tms.api.output;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The main return pattern for information returned is a list
+ *
+ * @param <T> T is object has extended this class
+ */
 public class AbstractOutput<T> {
     private int page;
     private int totalPage;

@@ -3,7 +3,7 @@ package com.vnptt.tms.dto;
 
 import java.util.List;
 
-public class UserDTO extends AbstractDTO<UserDTO>  {
+public class UserDTO extends AbstractDTO  {
 
     private String name;
     private String username;

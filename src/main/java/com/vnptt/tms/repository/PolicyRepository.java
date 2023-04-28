@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PolicyRepository extends JpaRepository <PolicyEntity, Long> {
+public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
 
     PolicyEntity findOneById(Long id);
+
     PolicyEntity findOneByPolicyname(String policyname);
+
     List<PolicyEntity> findAllByCommandEntityId(Long commandId);
 
     List<PolicyEntity> findPolicyEntitiesByApkEntitiesPolicyId(Long apkId);

@@ -1,9 +1,7 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.ApplicationDTO;
-import com.vnptt.tms.entity.ApplicationEntity;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

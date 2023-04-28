@@ -1,7 +1,7 @@
 package com.vnptt.tms.dto;
 
 
-public class PolicyDTO  extends AbstractDTO<PolicyDTO>{
+public class PolicyDTO  extends AbstractDTO{
 
     private String commandName;
     private String policyname;

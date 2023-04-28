@@ -1,8 +1,6 @@
 package com.vnptt.tms.dto;
 
-import java.sql.Timestamp;
-
-public class HistoryApplicationDTO extends AbstractDTO<HistoryApplicationDTO>{
+public class HistoryApplicationDTO extends AbstractDTO{
 
     private Long applicationId;
     private Long deviceId;

@@ -194,7 +194,7 @@ public class ApkService implements IApkService {
 
         //create link to dowload apk
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
+                .path("/TMS/api/downloadFile/")
                 .path(packagename)
                 .toUriString();
 

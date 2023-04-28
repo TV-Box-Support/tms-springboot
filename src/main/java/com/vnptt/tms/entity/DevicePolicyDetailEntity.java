@@ -9,7 +9,7 @@ import javax.persistence.Column;
 
 @Entity
 @Table(name = "devicePolicyDetail")
-public class DevicePolicyDetailEntity extends BaseEntity{
+public class DevicePolicyDetailEntity extends BaseEntity {
 
     @Column(name = "status", nullable = false)
     private int status;

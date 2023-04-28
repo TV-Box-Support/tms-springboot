@@ -1,7 +1,5 @@
 package com.vnptt.tms.entity;
 
-import com.vnptt.tms.dto.ApplicationDTO;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -9,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Device")
-public class DeviceEntity extends BaseEntity{
+public class DeviceEntity extends BaseEntity {
     @Column(name = "product")
     private String product;
     @Column(name = "model", nullable = false)
@@ -35,14 +33,14 @@ public class DeviceEntity extends BaseEntity{
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },mappedBy = "deviceEntitiesApplication")
+            }, mappedBy = "deviceEntitiesApplication")
     private List<ApplicationEntity> applicationEntities = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },mappedBy = "deviceEntityDetail")
+            }, mappedBy = "deviceEntityDetail")
     private List<DevicePolicyDetailEntity> devicePolicyDetailEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "deviceEntityHistory")

@@ -19,15 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +30,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService {//, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -55,17 +49,6 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     private PasswordEncoder encoder;
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUsername(username);
-        if (userEntity == null) {
-            throw new UsernameNotFoundException("User Not Found with username: " + username);
-        }
-
-        return build(userEntity);
-    }
 
     /**
      * update user for put request
@@ -102,17 +85,6 @@ public class UserService implements IUserService, UserDetailsService {
 
         return userConverter.toDTO(userEntity);
     }
-
-    /**
-     * @Override public UserDTO update(UserDTO userDTO) {
-     * UserEntity oldUserEntity = userRepository.findOne(userDTO.getId());
-     * UserEntity userEntity = userConverter.toEntity(userDTO, oldUserEntity)
-     * RuleEntity ruleEntity = ruleRepository.findOneByName(userDTO.getRuleName());
-     * userEntity.setRuleEntityUser(ruleEntity);
-     * userEntity = userRepository.save(userEntity);
-     * return userConverter.toDTO(userEntity);
-     * }
-     **/
 
     @Override
     public UserDTO findOne(Long id) {
@@ -163,7 +135,12 @@ public class UserService implements IUserService, UserDetailsService {
         return null;
     }
 
-
+    /**
+     * create new account
+     *
+     * @param model model user DTO
+     * @return user DTO after save on database
+     */
     @Override
     public UserDTO signup(UserDTO model) {
         if (userRepository.existsByUsername(model.getUsername())) {
@@ -232,11 +209,13 @@ public class UserService implements IUserService, UserDetailsService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                rules));
+        return ResponseEntity.ok(
+                new JwtResponse(jwt,
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getEmail(),
+                        rules,
+                        "TMS"));
     }
 
     @Override
@@ -249,18 +228,5 @@ public class UserService implements IUserService, UserDetailsService {
         for (Long item : ids) {
             userRepository.deleteById(item);
         }
-    }
-
-    public UserDetails build(UserEntity user) {
-        List<GrantedAuthority> authorities = user.getRuleEntities().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
-
-        return new UserDetailsImpl(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities);
     }
 }

@@ -141,7 +141,7 @@ public class PolicyService implements IPolicyService {
     }
 
     /**
-     *find all policy in device
+     * find all policy in device
      *
      * @param deviceId
      * @return
@@ -177,8 +177,8 @@ public class PolicyService implements IPolicyService {
         PolicyEntity policyEntity = policyRepository.findOneById(id);
         policyEntity.setStatus(status);
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = policyEntity.getDevicePolicyDetailEntities();
-        for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities){
-            if (iteam.getStatus() != 3 ){
+        for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities) {
+            if (iteam.getStatus() != 3) {
                 iteam.setStatus(status);
             }
         }

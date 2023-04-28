@@ -1,7 +1,6 @@
 package com.vnptt.tms.repository;
 
 import com.vnptt.tms.entity.DeviceEntity;
-import com.vnptt.tms.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -2,11 +2,9 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.HistoryApplicationConverter;
 import com.vnptt.tms.dto.HistoryApplicationDTO;
-import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.HistoryApplicationEntity;
-import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
@@ -20,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service

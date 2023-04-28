@@ -1,11 +1,7 @@
 package com.vnptt.tms.service.impl;
 
-import com.vnptt.tms.api.output.DeviceOutput;
 import com.vnptt.tms.converter.DeviceConverter;
-import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.dto.DeviceDTO;
-import com.vnptt.tms.dto.HistoryApplicationDTO;
-import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.HistoryApplicationEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
@@ -14,15 +10,20 @@ import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.HistoryApplicationRepository;
 import com.vnptt.tms.repository.HistoryPerformanceRepository;
+import com.vnptt.tms.security.jwt.JwtUtils;
+import com.vnptt.tms.security.responce.JwtBoxResponse;
 import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,12 @@ public class DeviceService implements IDeviceService {
 
     @Autowired
     private DeviceConverter deviceConverter;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     /**
      * Save device in production path and update device infor for box
@@ -219,6 +226,38 @@ public class DeviceService implements IDeviceService {
             }
         }
         return result;
+    }
+
+//    @Override
+//    public ResponseEntity<?> authenticateDevice(String serialnumber, String mac) {
+//        return null;
+//    }
+
+    /**
+     * todo: modify
+     *
+     * @param serialnumber
+     * @param mac
+     * @return
+     */
+    @Override
+    public ResponseEntity<?> authenticateDevice(String serialnumber, String mac) {
+        DeviceEntity deviceEntity = deviceRepository.findOneBySn(serialnumber);
+        if (deviceEntity == null) {
+            throw new ResourceNotFoundException("not found Box with sn = " + serialnumber);
+        }
+        if (!Objects.equals(deviceEntity.getMac(), mac)) {
+            throw new ResourceNotFoundException("not found Box with sn = " + serialnumber + " mac = " + mac);
+        }
+        String jwt = jwtUtils.generateJwtTokenBOX(deviceEntity);
+
+        return ResponseEntity.ok(
+                new JwtBoxResponse(jwt,
+                        deviceEntity.getId(),
+                        deviceEntity.getSn(),
+                        deviceEntity.getMac(),
+                        "ROLE_USER",
+                        "BOX"));
     }
 
     /**

@@ -27,7 +27,8 @@ public class UserApi {
      */
     @GetMapping(value = "/user")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
+    public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page,
+                               @RequestParam(value = "limit", required = false) Integer limit) {
         UserOutput result = new UserOutput();
         if (page != null && limit != null) {
             result.setPage(page);
@@ -106,7 +107,7 @@ public class UserApi {
     }
 
     @DeleteMapping(value = "/user")
-    @PreAuthorize("hasRole('MODERATOR')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void removeUser(@RequestBody Long[] ids) {
         userService.delete(ids);
     }
