@@ -66,8 +66,8 @@ public class WebSecurityConfig {//extends WebSecurityConfigurerAdapter {\
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http
-                .cors()// Prevent request from another domain
-                .and().csrf().disable()
+                .cors().and()// Prevent request from another domain
+                .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler) //create error page
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // for server http
                 .and().authorizeRequests()
