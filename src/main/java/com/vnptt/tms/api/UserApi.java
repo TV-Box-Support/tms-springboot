@@ -28,15 +28,28 @@ public class UserApi {
     @GetMapping(value = "/user")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page,
-                               @RequestParam(value = "limit", required = false) Integer limit) {
+                               @RequestParam(value = "limit", required = false) Integer limit,
+                               @RequestParam(value = "active", required = false) Integer active) {
         UserOutput result = new UserOutput();
+
         if (page != null && limit != null) {
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult((userService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+            if (active != null){
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((userService.findAllWithActive(pageable, active)));
+                result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+            } else {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((userService.findAll(pageable)));
+                result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+            }
         } else {
-            result.setListResult(userService.findAll());
+            if (active != null){
+                result.setListResult(userService.findAllWithActive(active));
+            } else {
+                result.setListResult(userService.findAll());
+            }
         }
 
         if (result.getListResult().size() >= 1) {
@@ -55,7 +68,6 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/user/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDTO showUser(@PathVariable("id") Long id) {
         return userService.findOne(id);
     }
@@ -93,7 +105,7 @@ public class UserApi {
 //    }
 
     /**
-     * update infor user
+     * update info user
      *
      * @param model
      * @param id
@@ -101,6 +113,19 @@ public class UserApi {
      */
     @PutMapping(value = "/user/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public UserDTO forcedUpdateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
+        model.setId(id);
+        return userService.forcedUpdate(model);
+    }
+
+    /**
+     * update info user for user
+     *
+     * @param model
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/user/{id}")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return userService.update(model);

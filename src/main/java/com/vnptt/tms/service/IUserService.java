@@ -25,7 +25,13 @@ public interface IUserService {
 
     ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
 
-    UserDTO update(UserDTO model);
+    UserDTO forcedUpdate(UserDTO model);
 
     void remove(Long id);
+
+    List<UserDTO> findAllWithActive(Pageable pageable, Integer active);
+
+    List<UserDTO> findAllWithActive(Integer active);
+
+    UserDTO update(UserDTO model);
 }

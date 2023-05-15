@@ -57,7 +57,7 @@ public class UserService implements IUserService {//, UserDetailsService {
      * @return
      */
     @Override
-    public UserDTO update(UserDTO userDTO) {
+    public UserDTO forcedUpdate(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
 
         Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
@@ -94,6 +94,72 @@ public class UserService implements IUserService {//, UserDetailsService {
         }
         userEntity.setActive(false);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public List<UserDTO> findAllWithActive(Pageable pageable, Integer active) {
+        boolean activeConvert = true;
+        if (active == 0){
+            activeConvert = false;
+        }
+        List<UserEntity> entities = userRepository.findAllByActive(pageable, activeConvert);
+        List<UserDTO> result = new ArrayList<>();
+        for (UserEntity item : entities) {
+            UserDTO userDTO = userConverter.toDTO(item);
+            result.add(userDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<UserDTO> findAllWithActive(Integer active) {
+        boolean activeConvert = true;
+        if (active == 0){
+            activeConvert = false;
+        }
+        List<UserEntity> entities = userRepository.findAllByActive(activeConvert);
+        List<UserDTO> result = new ArrayList<>();
+        for (UserEntity item : entities) {
+            UserDTO userDTO = userConverter.toDTO(item);
+            result.add(userDTO);
+        }
+        return result;
+    }
+
+    /**
+     * update user for put request
+     *
+     * @param userDTO
+     * @return
+     */
+    @Override
+    public UserDTO update(UserDTO userDTO) {
+        UserEntity userEntity = new UserEntity();
+
+        Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
+        userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
+
+        List<RuleEntity> ruleEntities = new ArrayList<>();
+        List<String> rules = userDTO.getRuleName();
+        if (rules != null) {
+            for (String iteam : rules) {
+                RuleEntity ruleEntity = ruleRepository.findOneByName(iteam);
+                if (ruleEntity == null) {
+                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
+                }
+                ruleEntities.add(ruleEntity);
+            }
+
+            userEntity.setRuleEntities(ruleEntities);
+        }
+
+        try {
+            userEntity = userRepository.save(userEntity);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("have the same Username of account alive: " + userDTO.getUsername());
+        }
+
+        return userConverter.toDTO(userEntity);
     }
 
     @Override
