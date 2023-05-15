@@ -125,7 +125,7 @@ public class UserApi {
      * @param id
      * @return
      */
-    @PutMapping(value = "/user/{id}")
+    @PutMapping(value = "/user/remove/{id}")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return userService.update(model);
