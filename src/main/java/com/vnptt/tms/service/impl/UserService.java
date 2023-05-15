@@ -88,11 +88,12 @@ public class UserService implements IUserService {//, UserDetailsService {
 
     @Override
     public void remove(Long id) {
-        UserEntity entity = userRepository.findOneById(id);
-        if (entity == null){
+        UserEntity userEntity = userRepository.findOneById(id);
+        if (userEntity == null){
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
-        entity.setActive(false);
+        userEntity.setActive(false);
+        userRepository.save(userEntity);
     }
 
     @Override
