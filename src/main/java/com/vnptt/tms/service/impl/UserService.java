@@ -57,7 +57,7 @@ public class UserService implements IUserService {//, UserDetailsService {
      * @return
      */
     @Override
-    public UserDTO forcedUpdate(UserDTO userDTO) {
+    public UserDTO update(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
 
         Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
@@ -83,6 +83,46 @@ public class UserService implements IUserService {//, UserDetailsService {
             throw new ResourceNotFoundException("have the same Username of account alive: " + userDTO.getUsername());
         }
 
+        return userConverter.toDTO(userEntity);
+    }
+
+    /**
+     * update password for user
+     *
+     * @param id
+     * @param passwordold
+     * @param passwordnew
+     * @return
+     */
+    @Override
+    public UserDTO updatePassword(Long id, String passwordold, String passwordnew) {
+        UserEntity userEntity = userRepository.findOneById(id);
+        if (userEntity == null){
+            throw new ResourceNotFoundException("not found user with id = " + id);
+        }
+        if (encoder.matches(userEntity.getPassword(), passwordold)){
+            throw new RuntimeException("Wrong password: " + passwordold);
+        }
+        userEntity.setPassword(encoder.encode(passwordnew));
+        userRepository.save(userEntity);
+        return userConverter.toDTO(userEntity);
+    }
+
+    /**
+     * update password with role admin
+     *
+     * @param id
+     * @param passwordnew
+     * @return
+     */
+    @Override
+    public UserDTO forcedUpdatePassword(Long id, String passwordnew) {
+        UserEntity userEntity = userRepository.findOneById(id);
+        if (userEntity == null){
+            throw new ResourceNotFoundException("not found user with id = " + id);
+        }
+        userEntity.setPassword(encoder.encode(passwordnew));
+        userRepository.save(userEntity);
         return userConverter.toDTO(userEntity);
     }
 
@@ -126,41 +166,6 @@ public class UserService implements IUserService {//, UserDetailsService {
         return result;
     }
 
-    /**
-     * update user for put request
-     *
-     * @param userDTO
-     * @return
-     */
-    @Override
-    public UserDTO update(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity();
-
-        Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
-        userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
-
-        List<RuleEntity> ruleEntities = new ArrayList<>();
-        List<String> rules = userDTO.getRuleName();
-        if (rules != null) {
-            for (String iteam : rules) {
-                RuleEntity ruleEntity = ruleRepository.findOneByName(iteam);
-                if (ruleEntity == null) {
-                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
-                }
-                ruleEntities.add(ruleEntity);
-            }
-
-            userEntity.setRuleEntities(ruleEntities);
-        }
-
-        try {
-            userEntity = userRepository.save(userEntity);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("have the same Username of account alive: " + userDTO.getUsername());
-        }
-
-        return userConverter.toDTO(userEntity);
-    }
 
     @Override
     public UserDTO findOne(Long id) {

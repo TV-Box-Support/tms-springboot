@@ -25,8 +25,6 @@ public interface IUserService {
 
     ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
 
-    UserDTO forcedUpdate(UserDTO model);
-
     void remove(Long id);
 
     List<UserDTO> findAllWithActive(Pageable pageable, Integer active);
@@ -34,4 +32,8 @@ public interface IUserService {
     List<UserDTO> findAllWithActive(Integer active);
 
     UserDTO update(UserDTO model);
+
+    UserDTO updatePassword(Long id, String passwordold, String passwordnew);
+
+    UserDTO forcedUpdatePassword(Long id, String passwordnew);
 }

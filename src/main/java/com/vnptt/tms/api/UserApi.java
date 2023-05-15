@@ -105,17 +105,29 @@ public class UserApi {
 //    }
 
     /**
-     * update info user
+     * update password
      *
-     * @param model
      * @param id
      * @return
      */
-    @PutMapping(value = "/user/{id}")
+    @PutMapping(value = "/user/updatePassword/{id}")
+    public UserDTO updatePassword (@PathVariable("id") Long id,
+                                   @RequestParam(name = "passwordold") String passwordold,
+                                   @RequestParam(name = "passwordnew") String passwordnew) {
+        return userService.updatePassword(id, passwordold, passwordnew);
+    }
+
+    /**
+     * update password
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/user/forcedUpdatePassword/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public UserDTO forcedUpdateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
-        model.setId(id);
-        return userService.forcedUpdate(model);
+    public UserDTO forcedUpdatePassword(@PathVariable("id") Long id,
+                                         @RequestParam(name = "passwordnew") String passwordnew) {
+        return userService.forcedUpdatePassword(id, passwordnew);
     }
 
     /**
@@ -125,20 +137,30 @@ public class UserApi {
      * @param id
      * @return
      */
-    @PutMapping(value = "/user/remove/{id}")
+    @PutMapping(value = "/user/{id}")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return userService.update(model);
     }
 
-    @DeleteMapping(value = "/user/{id}")
+    /**
+     * change active to off
+     *
+     * @param id
+     */
+    @DeleteMapping(value = "/user/remove/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void removeUser(@PathVariable("id") Long id) {
         userService.remove(id);
     }
 
+    /**
+     * only use to test
+     *
+     * @param ids
+     */
     @DeleteMapping(value = "/user")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR')")
     public void removeUser(@RequestBody Long[] ids) {
         userService.delete(ids);
     }
