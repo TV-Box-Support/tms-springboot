@@ -87,8 +87,20 @@ public class UserService implements IUserService {//, UserDetailsService {
     }
 
     @Override
+    public void remove(Long id) {
+        UserEntity entity = userRepository.findOneById(id);
+        if (entity == null){
+            throw new ResourceNotFoundException("not found user with id = " + id);
+        }
+        entity.setActive(false);
+    }
+
+    @Override
     public UserDTO findOne(Long id) {
         UserEntity entity = userRepository.findOneById(id);
+        if (entity == null){
+            throw new ResourceNotFoundException("not found user with id = " + id);
+        }
         return userConverter.toDTO(entity);
     }
 
@@ -148,6 +160,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         }
 
         UserEntity userEntity = userConverter.toEntity(model);
+        userEntity.setActive(true);
 
         // Create new user's account
         userEntity.setPassword(encoder.encode(model.getPassword()));

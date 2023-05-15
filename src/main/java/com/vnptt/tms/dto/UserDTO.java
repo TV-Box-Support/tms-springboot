@@ -11,6 +11,7 @@ public class UserDTO extends AbstractDTO  {
     private String company;
     private String email;
     private Long contact;
+    private boolean active;
     private List<String> ruleName;
 
     public String getName() {
@@ -59,6 +60,14 @@ public class UserDTO extends AbstractDTO  {
 
     public void setContact(Long contact) {
         this.contact = contact;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public List<String> getRuleName() {

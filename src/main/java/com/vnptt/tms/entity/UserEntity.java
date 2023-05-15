@@ -19,6 +19,8 @@ public class UserEntity extends BaseEntity {
     private String email;
     @Column(name = "contact")
     private Long contact;
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+    private Boolean active;
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
@@ -75,6 +77,14 @@ public class UserEntity extends BaseEntity {
 
     public void setContact(Long contact) {
         this.contact = contact;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public List<RuleEntity> getRuleEntities() {

@@ -26,4 +26,6 @@ public interface IUserService {
     ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
 
     UserDTO update(UserDTO model);
+
+    void remove(Long id);
 }

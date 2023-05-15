@@ -106,6 +106,12 @@ public class UserApi {
         return userService.update(model);
     }
 
+    @DeleteMapping(value = "/user/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void removeUser(@PathVariable("id") Long id) {
+        userService.remove(id);
+    }
+
     @DeleteMapping(value = "/user")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void removeUser(@RequestBody Long[] ids) {
