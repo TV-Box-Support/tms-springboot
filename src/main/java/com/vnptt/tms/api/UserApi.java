@@ -110,7 +110,7 @@ public class UserApi {
      * @param id
      * @return
      */
-    @PutMapping(value = "/user/updatePassword/{id}")
+    @PutMapping(value = "/user/password/{id}")
     public UserDTO updatePassword (@PathVariable("id") Long id,
                                    @RequestParam(name = "passwordold") String passwordold,
                                    @RequestParam(name = "passwordnew") String passwordnew) {
@@ -123,7 +123,7 @@ public class UserApi {
      * @param id
      * @return
      */
-    @PutMapping(value = "/user/forcedUpdatePassword/{id}")
+    @PutMapping(value = "/user/admin/password/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDTO forcedUpdatePassword(@PathVariable("id") Long id,
                                          @RequestParam(name = "passwordnew") String passwordnew) {
