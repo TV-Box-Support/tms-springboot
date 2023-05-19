@@ -120,7 +120,7 @@ public class ApplicationApi {
      * Map app to device for box, if database don't have app, create and add
      *
      * @param deviceId device has app
-     * @param model    dto application (need Id from response when post new app)
+     * @param model    dto application (need id from response when post new app)
      * @return
      */
     @PostMapping(value = "/device/{deviceId}/application")

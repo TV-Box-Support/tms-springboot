@@ -79,6 +79,7 @@ public class DeviceApi {
 
     /**
      * find device with id
+     * check information for web
      *
      * @param id if of device
      * @return device DTO
@@ -225,7 +226,7 @@ public class DeviceApi {
     }
 
     /**
-     * update device infor for Box
+     * update device info for Box
      *
      * @param model
      * @param id    must get and have required
