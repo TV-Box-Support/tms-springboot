@@ -72,6 +72,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+
+                logger.error("getLocalAddr: " + request.getLocalAddr());
+                logger.error("getRemoteAddr: " + request.getRemoteAddr());
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
