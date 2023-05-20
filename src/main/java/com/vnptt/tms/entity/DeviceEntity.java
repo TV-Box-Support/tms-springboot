@@ -21,7 +21,7 @@ public class DeviceEntity extends BaseEntity {
     @Column(name = "HDMI")
     private Integer hdmi;
     @Column(name = "IP")
-    private Long ip;
+    private String ip;
     @Column(name = "dateOfManufacture", nullable = false)
     private Date date;
     @Column(name = "location")
@@ -105,11 +105,11 @@ public class DeviceEntity extends BaseEntity {
         this.hdmi = hdmi;
     }
 
-    public Long getIp() {
+    public String getIp() {
         return ip;
     }
 
-    public void setIp(Long ip) {
+    public void setIp(String ip) {
         this.ip = ip;
     }
 

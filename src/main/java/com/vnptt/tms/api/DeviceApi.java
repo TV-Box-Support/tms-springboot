@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 
 /**
@@ -233,7 +234,10 @@ public class DeviceApi {
      * @return
      */
     @PutMapping(value = "/device/{id}")
-    public DeviceDTO updateDevice(@RequestBody DeviceDTO model, @PathVariable("id") Long id) {
+    public DeviceDTO updateDevice(HttpServletRequest request,
+                                  @RequestBody DeviceDTO model,
+                                  @PathVariable("id") Long id) {
+        model.setIp(request.getRemoteAddr());
         model.setId(id);
         return deviceService.save(model);
     }

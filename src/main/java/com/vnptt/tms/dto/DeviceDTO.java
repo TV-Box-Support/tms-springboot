@@ -9,7 +9,7 @@ public class DeviceDTO extends AbstractDTO{
     private String model;
     private String firmwareVer;
     private Integer hdmi;
-    private Long ip;
+    private String ip;
     private Date date;
     private String location;
     private String desciption;
@@ -62,11 +62,11 @@ public class DeviceDTO extends AbstractDTO{
         this.hdmi = hdmi;
     }
 
-    public Long getIp() {
+    public String getIp() {
         return ip;
     }
 
-    public void setIp(Long ip) {
+    public void setIp(String ip) {
         this.ip = ip;
     }
 
