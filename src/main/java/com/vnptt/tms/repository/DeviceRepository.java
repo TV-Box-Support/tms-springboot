@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
@@ -23,5 +24,5 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     List<DeviceEntity> findDeviceEntitiesByApplicationEntitiesId(Long applicationEntitiesId);
 
-    //List<DeviceEntity> findDeviceEntitiesByHistoryApplicationEntities
+    List<DeviceEntity> findAllByHistoryPerformanceEntitiesAndCreatedDateBetween(LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 }

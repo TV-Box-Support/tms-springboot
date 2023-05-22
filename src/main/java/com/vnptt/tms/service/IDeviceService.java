@@ -38,4 +38,6 @@ public interface IDeviceService {
     List<DeviceDTO> findAllDeviceRunNow();
 
     ResponseEntity<?> authenticateDevice(String serialnumber, String mac);
+
+    List<DeviceDTO> findDeviceActive(int day, long hour, int minutes);
 }

@@ -51,7 +51,7 @@ public class HistoryPerformanceApi {
     }
 
     /**
-     * find all history performan of device
+     * find all history performance of device
      *
      * @param deviceId
      * @param day

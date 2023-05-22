@@ -216,6 +216,30 @@ public class DeviceApi {
     }
 
     /**
+     * find all device active with time
+     *
+     * @param day
+     * @param hour
+     * @param minutes
+     * @return
+     */
+    @GetMapping(value = "/device/active")
+    public DeviceOutput showHistoryPerformanceDevice(@RequestParam(value = "day") int day,
+                                                     @RequestParam(value = "hour") long hour,
+                                                     @RequestParam(value = "minutes") int minutes) {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.findDeviceActive(day, hour, minutes));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * Create new device for production batch
      *
      * @param model serialNumber, dateOfManufacture, mac have required

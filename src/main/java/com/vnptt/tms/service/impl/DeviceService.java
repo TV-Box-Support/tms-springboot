@@ -265,6 +265,27 @@ public class DeviceService implements IDeviceService {
     }
 
     /**
+     * find device active with time
+     *
+     * @param day
+     * @param hour
+     * @param minutes
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findDeviceActive(int day, long hour, int minutes) {
+        List<DeviceDTO> result = new ArrayList<>();
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
+        deviceEntities = deviceRepository.findAllByHistoryPerformanceEntitiesAndCreatedDateBetween(time, LocalDateTime.now());
+        for (DeviceEntity iteam : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(iteam);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    /**
      * find all device are running app 3 minute later to now
      *
      * @param id
