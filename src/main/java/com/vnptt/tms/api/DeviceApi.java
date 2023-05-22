@@ -224,9 +224,9 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device/active")
-    public DeviceOutput showHistoryPerformanceDevice(@RequestParam(value = "day") int day,
-                                                     @RequestParam(value = "hour") long hour,
-                                                     @RequestParam(value = "minutes") int minutes) {
+    public DeviceOutput showDeviceActive(@RequestParam(value = "day") int day,
+                                         @RequestParam(value = "hour") long hour,
+                                         @RequestParam(value = "minutes") int minutes) {
         DeviceOutput result = new DeviceOutput();
         result.setListResult(deviceService.findDeviceActive(day, hour, minutes));
 

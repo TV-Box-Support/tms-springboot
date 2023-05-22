@@ -232,11 +232,6 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
-//    @Override
-//    public ResponseEntity<?> authenticateDevice(String serialnumber, String mac) {
-//        return null;
-//    }
-
     /**
      * todo: modify
      *
@@ -274,13 +269,15 @@ public class DeviceService implements IDeviceService {
      */
     @Override
     public List<DeviceDTO> findDeviceActive(int day, long hour, int minutes) {
+        List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        List<DeviceEntity> deviceEntities = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        deviceEntities = deviceRepository.findAllByHistoryPerformanceEntitiesAndCreatedDateBetween(time, LocalDateTime.now());
-        for (DeviceEntity iteam : deviceEntities) {
-            DeviceDTO deviceDTO = deviceConverter.toDTO(iteam);
-            result.add(deviceDTO);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+        for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
+            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
+                result.add(deviceConverter.toDTO(deviceEntity));
+            }
         }
         return result;
     }
