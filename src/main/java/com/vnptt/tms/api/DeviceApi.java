@@ -165,13 +165,13 @@ public class DeviceApi {
     /**
      * Show list device play application now
      *
-     * @param ApplicationId
+     * @param applicationId
      * @return
      */
-    @GetMapping(value = "/application/{ApplicationId}/device/now")
-    public DeviceOutput showAppRunNow(@PathVariable(value = "ApplicationId") Long ApplicationId) {
+    @GetMapping(value = "/application/{applicationId}/device/now")
+    public DeviceOutput showAppRunNow(@PathVariable(value = "applicationId") Long applicationId) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findAllDeviceRunApp(ApplicationId));
+        result.setListResult(deviceService.findAllDeviceRunApp(applicationId));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
