@@ -100,7 +100,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         if (userEntity == null){
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
-        if (encoder.matches(userEntity.getPassword(), passwordold)){
+        if (!encoder.matches(passwordold, userEntity.getPassword())){
             throw new RuntimeException("Wrong password: " + passwordold);
         }
         userEntity.setPassword(encoder.encode(passwordnew));
