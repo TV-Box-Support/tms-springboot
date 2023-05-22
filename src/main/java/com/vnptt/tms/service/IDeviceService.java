@@ -21,7 +21,7 @@ public interface IDeviceService {
 
     List<DeviceDTO> findAll();
 
-    DeviceDTO findOneBySn(String serialnumber);
+    DeviceDTO findOneBySn(String ip, String serialnumber);
 
     List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer);
 

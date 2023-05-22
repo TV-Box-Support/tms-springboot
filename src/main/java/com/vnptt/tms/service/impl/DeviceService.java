@@ -113,8 +113,12 @@ public class DeviceService implements IDeviceService {
      * @return
      */
     @Override
-    public DeviceDTO findOneBySn(String serialnumber) {
+    public DeviceDTO findOneBySn(String ip, String serialnumber) {
         DeviceEntity entity = deviceRepository.findOneBySn(serialnumber);
+        if (!Objects.equals(entity.getIp(), ip)){
+            entity.setIp(ip);
+            deviceRepository.save(entity);
+        }
         if (entity == null) {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }

@@ -116,9 +116,10 @@ public class DeviceApi {
      * @return device DTO
      */
     @GetMapping(value = "/device/serialnumber")
-    public DeviceDTO showDeviceWithSn(@RequestParam(value = "serialnumber") String serialnumber) {
+    public DeviceDTO showDeviceWithSn(HttpServletRequest request,
+                                      @RequestParam(value = "serialnumber") String serialnumber) {
         DeviceDTO result = new DeviceDTO();
-        result = deviceService.findOneBySn(serialnumber);
+        result = deviceService.findOneBySn(request.getRemoteAddr(), serialnumber);
         return result;
     }
 
@@ -234,10 +235,8 @@ public class DeviceApi {
      * @return
      */
     @PutMapping(value = "/device/{id}")
-    public DeviceDTO updateDevice(HttpServletRequest request,
-                                  @RequestBody DeviceDTO model,
+    public DeviceDTO updateDevice(@RequestBody DeviceDTO model,
                                   @PathVariable("id") Long id) {
-        model.setIp(request.getRemoteAddr());
         model.setId(id);
         return deviceService.save(model);
     }
