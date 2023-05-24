@@ -22,6 +22,8 @@ public class DeviceEntity extends BaseEntity {
     private Integer hdmi;
     @Column(name = "IP")
     private String ip;
+    @Column(name = "rom")
+    private double rom;
     @Column(name = "dateOfManufacture", nullable = false)
     private Date date;
     @Column(name = "location")
@@ -115,6 +117,14 @@ public class DeviceEntity extends BaseEntity {
 
     public Date getDate() {
         return date;
+    }
+
+    public double getRom() {
+        return rom;
+    }
+
+    public void setRom(double rom) {
+        this.rom = rom;
     }
 
     public void setDate(Date date) {

@@ -2,7 +2,7 @@ package com.vnptt.tms.dto;
 
 import java.sql.Date;
 
-public class DeviceDTO extends AbstractDTO{
+public class DeviceDTO extends AbstractDTO {
     private String sn;
     private String mac;
     private String product;
@@ -10,6 +10,7 @@ public class DeviceDTO extends AbstractDTO{
     private String firmwareVer;
     private Integer hdmi;
     private String ip;
+    private double rom;
     private Date date;
     private String location;
     private String desciption;
@@ -68,6 +69,14 @@ public class DeviceDTO extends AbstractDTO{
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public double getRom() {
+        return rom;
+    }
+
+    public void setRom(double rom) {
+        this.rom = rom;
     }
 
     public Date getDate() {
