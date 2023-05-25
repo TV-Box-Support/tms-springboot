@@ -23,7 +23,7 @@ public class DeviceEntity extends BaseEntity {
     @Column(name = "IP")
     private String ip;
     @Column(name = "rom")
-    private double rom;
+    private Long rom;
     @Column(name = "dateOfManufacture", nullable = false)
     private Date date;
     @Column(name = "location")
@@ -119,16 +119,16 @@ public class DeviceEntity extends BaseEntity {
         return date;
     }
 
-    public double getRom() {
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Long getRom() {
         return rom;
     }
 
-    public void setRom(double rom) {
+    public void setRom(Long rom) {
         this.rom = rom;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public String getLocation() {

@@ -75,6 +75,8 @@ public class UserApi {
     /**
      * Show list User with rule for web
      *
+     * todo: update this api
+     *
      * @param ruleId
      * @return
      */

@@ -10,7 +10,7 @@ public class DeviceDTO extends AbstractDTO {
     private String firmwareVer;
     private Integer hdmi;
     private String ip;
-    private double rom;
+    private Long rom;
     private Date date;
     private String location;
     private String desciption;
@@ -71,11 +71,11 @@ public class DeviceDTO extends AbstractDTO {
         this.ip = ip;
     }
 
-    public double getRom() {
+    public Long getRom() {
         return rom;
     }
 
-    public void setRom(double rom) {
+    public void setRom(Long rom) {
         this.rom = rom;
     }
 
