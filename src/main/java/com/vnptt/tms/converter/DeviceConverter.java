@@ -51,12 +51,27 @@ public class DeviceConverter {
      * @return
      */
     public DeviceEntity toEntity(DeviceDTO dto, DeviceEntity entity) {
-        entity.setDesciption(dto.getDesciption());
-        entity.setHdmi(dto.getHdmi());
-        entity.setModel(dto.getModel());
-        entity.setFirmwareVer(dto.getFirmwareVer());
-        entity.setLocation(dto.getLocation());
-        entity.setProduct(dto.getProduct());
+        if(dto.getDesciption() != null){
+            entity.setDesciption(dto.getDesciption());
+        }
+        if(dto.getHdmi() != null){
+            entity.setHdmi(dto.getHdmi());
+        }
+        if(dto.getModel() != null){
+            entity.setModel(dto.getModel());
+        }
+        if(dto.getFirmwareVer() != null){
+            entity.setFirmwareVer(dto.getFirmwareVer());
+        }
+        if(dto.getLocation() != null){
+            entity.setLocation(dto.getLocation());
+        }
+        if(dto.getProduct() != null){
+            entity.setProduct(dto.getProduct());
+        }
+        if(dto.getRom() != null){
+            entity.setRom(dto.getRom());
+        }
 //        unnecessary remove to reduce error
 //        entity.setIp(dto.getIp());
 //        entity.setDate(dto.getDate());
