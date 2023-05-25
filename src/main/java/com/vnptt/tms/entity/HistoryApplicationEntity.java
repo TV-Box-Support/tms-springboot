@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name = "historyapplication")
 public class HistoryApplicationEntity extends BaseEntity {
     @Column(name = "cpu")
-    private double cpu;
+    private Double cpu;
     @Column(name = "memory")
-    private double memory;
+    private Double memory;
     @Column(name = "status", nullable = false)
     private boolean status;
 
@@ -20,19 +20,19 @@ public class HistoryApplicationEntity extends BaseEntity {
     @JoinColumn(name = "deviceId", nullable = false)
     private DeviceEntity deviceEntityAppHistory;
 
-    public double getCpu() {
+    public Double getCpu() {
         return cpu;
     }
 
-    public void setCpu(double cpu) {
+    public void setCpu(Double cpu) {
         this.cpu = cpu;
     }
 
-    public double getMemory() {
+    public Double getMemory() {
         return memory;
     }
 
-    public void setMemory(double memory) {
+    public void setMemory(Double memory) {
         this.memory = memory;
     }
 

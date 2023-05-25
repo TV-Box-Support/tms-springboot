@@ -55,10 +55,10 @@ public class DeviceConverter {
         entity.setHdmi(dto.getHdmi());
         entity.setModel(dto.getModel());
         entity.setFirmwareVer(dto.getFirmwareVer());
-        entity.setIp(dto.getIp());
         entity.setLocation(dto.getLocation());
         entity.setProduct(dto.getProduct());
 //        unnecessary remove to reduce error
+//        entity.setIp(dto.getIp());
 //        entity.setDate(dto.getDate());
 //        entity.setSn(dto.getSn());
 //        entity.setMac(dto.getMac());
