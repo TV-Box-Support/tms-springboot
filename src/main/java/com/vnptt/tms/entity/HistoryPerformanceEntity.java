@@ -11,7 +11,7 @@ public class HistoryPerformanceEntity extends BaseEntity {
     @Column(name = "memory")
     private Double memory;
     @Column(name = "network")
-    private String network;
+    private Double network;
 
     @ManyToOne
     @JoinColumn(name = "deviceId", nullable = false)
@@ -33,11 +33,11 @@ public class HistoryPerformanceEntity extends BaseEntity {
         this.memory = memory;
     }
 
-    public String getNetwork() {
+    public Double getNetwork() {
         return network;
     }
 
-    public void setNetwork(String network) {
+    public void setNetwork(Double network) {
         this.network = network;
     }
 
