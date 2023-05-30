@@ -1,9 +1,10 @@
 package com.vnptt.tms.dto;
 
-public class ApplicationDTO extends AbstractDTO{
+public class ApplicationDTO extends AbstractDTO {
     private String packagename;
     private String name;
     private String version;
+    private boolean issystem;
 
     public String getName() {
         return name;
@@ -27,5 +28,13 @@ public class ApplicationDTO extends AbstractDTO{
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public boolean isIssystem() {
+        return issystem;
+    }
+
+    public void setIssystem(boolean issystem) {
+        this.issystem = issystem;
     }
 }

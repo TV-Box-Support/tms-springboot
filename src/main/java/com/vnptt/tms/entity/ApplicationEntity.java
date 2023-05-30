@@ -13,6 +13,8 @@ public class ApplicationEntity extends BaseEntity {
     private String name;
     @Column(name = "version", nullable = false)
     private String version;
+    @Column(name = "isSystem", nullable = false)
+    private boolean issystem;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -66,5 +68,13 @@ public class ApplicationEntity extends BaseEntity {
 
     public void setHistoryApplicationEntities(List<HistoryApplicationEntity> historyApplicationEntities) {
         this.historyApplicationEntities = historyApplicationEntities;
+    }
+
+    public boolean isIssystem() {
+        return issystem;
+    }
+
+    public void setIssystem(boolean issystem) {
+        this.issystem = issystem;
     }
 }
