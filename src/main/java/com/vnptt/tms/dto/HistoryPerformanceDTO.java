@@ -6,7 +6,6 @@ public class HistoryPerformanceDTO extends AbstractDTO {
     private String devicesn;
     private Double cpu;
     private Double memory;
-    private Double network;
 
     public String getDevicesn() {
         return devicesn;
@@ -32,11 +31,4 @@ public class HistoryPerformanceDTO extends AbstractDTO {
         this.memory = memory;
     }
 
-    public Double getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(Double network) {
-        this.network = network;
-    }
 }

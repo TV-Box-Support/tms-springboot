@@ -10,6 +10,7 @@ public class DeviceDTO extends AbstractDTO {
     private String firmwareVer;
     private Integer hdmi;
     private String ip;
+    private String network;
     private Long rom;
     private Date date;
     private String location;
@@ -103,4 +104,11 @@ public class DeviceDTO extends AbstractDTO {
         this.desciption = desciption;
     }
 
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
 }

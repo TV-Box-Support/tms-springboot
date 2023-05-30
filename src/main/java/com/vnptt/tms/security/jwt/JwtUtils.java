@@ -34,6 +34,9 @@ public class JwtUtils {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
+        logger.debug(String.valueOf(now));
+        logger.debug(String.valueOf(expiryDate));
+
         // Generate web token json string from user Username.
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))

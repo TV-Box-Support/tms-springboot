@@ -22,6 +22,8 @@ public class DeviceEntity extends BaseEntity {
     private Integer hdmi;
     @Column(name = "IP")
     private String ip;
+    @Column(name = "network")
+    private String network;
     @Column(name = "rom")
     private Long rom;
     @Column(name = "dateOfManufacture", nullable = false)
@@ -129,6 +131,14 @@ public class DeviceEntity extends BaseEntity {
 
     public void setRom(Long rom) {
         this.rom = rom;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
     }
 
     public String getLocation() {

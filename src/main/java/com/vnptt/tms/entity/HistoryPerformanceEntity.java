@@ -10,8 +10,6 @@ public class HistoryPerformanceEntity extends BaseEntity {
     private Double cpu;
     @Column(name = "memory")
     private Double memory;
-    @Column(name = "network")
-    private Double network;
 
     @ManyToOne
     @JoinColumn(name = "deviceId", nullable = false)
@@ -31,14 +29,6 @@ public class HistoryPerformanceEntity extends BaseEntity {
 
     public void setMemory(Double memory) {
         this.memory = memory;
-    }
-
-    public Double getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(Double network) {
-        this.network = network;
     }
 
     public DeviceEntity getDeviceEntityHistory() {

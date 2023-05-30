@@ -53,7 +53,6 @@ public class HistoryPerformanceConverter {
     public HistoryPerformanceEntity toEntity(HistoryPerformanceDTO dto, HistoryPerformanceEntity entity) {
         entity.setCpu(dto.getCpu());
         entity.setMemory((dto.getMemory()));
-        entity.setNetwork(dto.getNetwork());
         return entity;
     }
 }

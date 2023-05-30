@@ -72,6 +72,9 @@ public class DeviceConverter {
         if(dto.getRom() != null){
             entity.setRom(dto.getRom());
         }
+        if(dto.getNetwork() != null){
+            entity.setNetwork(dto.getNetwork());
+        }
 //        unnecessary remove to reduce error
 //        entity.setIp(dto.getIp());
 //        entity.setDate(dto.getDate());
