@@ -2,7 +2,16 @@ package com.vnptt.tms.dto;
 
 public class ApplicationDTO extends AbstractDTO{
     private String packagename;
-    private int version;
+    private String name;
+    private String version;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getPackagename() {
         return packagename;
@@ -12,11 +21,11 @@ public class ApplicationDTO extends AbstractDTO{
         this.packagename = packagename;
     }
 
-    public int getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 }

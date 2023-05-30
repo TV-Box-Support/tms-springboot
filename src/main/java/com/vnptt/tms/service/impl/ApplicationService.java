@@ -149,7 +149,7 @@ public class ApplicationService implements IApplicationService {
 
         ApplicationEntity applicationEntity = deviceRepository.findById(deviceId).map(Device -> {
             String packagename = model.getPackagename();
-            int version = model.getVersion();
+            String version = model.getVersion();
             ApplicationEntity app = applicationRepository.findByPackagenameAndVersion(packagename, version);
             if (app != null) {
                 //check if exist

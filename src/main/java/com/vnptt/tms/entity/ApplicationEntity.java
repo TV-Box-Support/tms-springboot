@@ -9,8 +9,10 @@ import java.util.List;
 public class ApplicationEntity extends BaseEntity {
     @Column(name = "packagename", nullable = false)
     private String packagename;
+    @Column(name = "name", nullable = false)
+    private String name;
     @Column(name = "version", nullable = false)
-    private int version;
+    private String version;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -34,11 +36,19 @@ public class ApplicationEntity extends BaseEntity {
         this.packagename = packagename;
     }
 
-    public int getVersion() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
