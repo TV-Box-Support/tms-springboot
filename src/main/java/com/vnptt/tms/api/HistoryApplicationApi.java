@@ -53,20 +53,19 @@ public class HistoryApplicationApi {
     /**
      * find all history application of device
      *
-     * @param deviceId
+     * @param deviceApplicationId
      * @param day
      * @param hour
      * @param minutes
      * @return
      */
-    @GetMapping(value = "/device/{deviceId}/application/{applicationId}/historyApplication")
-    public HistoryApplicationOutput showHistoryApplicationDevice(@PathVariable("deviceId") Long deviceId,
-                                                                 @PathVariable("applicationId") Long applicationId,
+    @GetMapping(value = "/deviceApplication/{deviceApplicationId}/historyApplication")
+    public HistoryApplicationOutput showHistoryApplicationDevice(@PathVariable("deviceApplicationId") Long deviceApplicationId,
                                                                  @RequestParam(value = "day") int day,
                                                                  @RequestParam(value = "hour") long hour,
                                                                  @RequestParam(value = "minutes") int minutes) {
         HistoryApplicationOutput result = new HistoryApplicationOutput();
-        result.setListResult(historyApplicationService.findHistoryAppDeviceLater(deviceId, applicationId, day, hour, minutes));
+        result.setListResult(historyApplicationService.findHistoryAppDeviceLater(deviceApplicationId, day, hour, minutes));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -80,17 +79,14 @@ public class HistoryApplicationApi {
     /**
      * Add new history application
      *
-     * @param deviceId
-     * @param applicationId
+     * @param deviceApplicationId
      * @param model         (cpu, memory, status)
      * @return
      */
-    @PostMapping(value = "/device/{deviceId}/application/{applicationId}/historyApplication")
-    public HistoryApplicationDTO createHistoryApplication(@PathVariable(value = "deviceId") Long deviceId,
-                                                          @PathVariable(value = "applicationId") Long applicationId,
+    @PostMapping(value = "/deviceApplication/{deviceApplicationId}/historyApplication")
+    public HistoryApplicationDTO createHistoryApplication(@PathVariable(value = "deviceApplicationId") Long deviceApplicationId,
                                                           @RequestBody HistoryApplicationDTO model) {
-        model.setApplicationId(applicationId);
-        model.setDeviceId(deviceId);
+        model.setDeviceApplicationId(deviceApplicationId);
         return historyApplicationService.save(model);
     }
 

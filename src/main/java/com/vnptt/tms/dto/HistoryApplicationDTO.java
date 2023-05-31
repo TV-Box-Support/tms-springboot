@@ -2,26 +2,17 @@ package com.vnptt.tms.dto;
 
 public class HistoryApplicationDTO extends AbstractDTO{
 
-    private Long applicationId;
-    private Long deviceId;
+    private Long deviceApplicationId;
     private Double cpu;
     private Double memory;
     private boolean status;
 
-    public Long getApplicationId() {
-        return applicationId;
+    public Long getDeviceApplicationId() {
+        return deviceApplicationId;
     }
 
-    public void setApplicationId(Long applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    public Long getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
+    public void setDeviceApplicationId(Long deviceApplicationId) {
+        this.deviceApplicationId = deviceApplicationId;
     }
 
     public Double getCpu() {

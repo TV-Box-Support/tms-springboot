@@ -18,13 +18,17 @@ public interface IApplicationService {
 
     List<ApplicationDTO> findAll();
 
-    List<ApplicationDTO> findAllOnDevice(Long deviceId);
-
-    ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model);
-
-    void removeAppOnDevice(Long deviceId, Long ApplicationId);
-
     List<ApplicationDTO> findByPackagename(String packagename);
 
     List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable);
+
+    List<ApplicationDTO> findAllOnDevice(Long deviceId);
+
+    List<ApplicationDTO> findAllOnDevice(Long deviceId, String name);
+
+    List<ApplicationDTO> findAllOnDevice(Long deviceId, Boolean isSystem);
+
+    List<ApplicationDTO> findAllOnDevice(Long deviceId, String name, Boolean isSystem);
+
+    ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model);
 }

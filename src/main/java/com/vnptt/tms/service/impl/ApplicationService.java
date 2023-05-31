@@ -3,9 +3,12 @@ package com.vnptt.tms.service.impl;
 import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
+import com.vnptt.tms.entity.DeviceApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.exception.FileStorageException;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
+import com.vnptt.tms.repository.DeviceApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class ApplicationService implements IApplicationService {
 
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private DeviceApplicationRepository deviceApplicationRepository;
 
 
     @Autowired
@@ -117,25 +123,6 @@ public class ApplicationService implements IApplicationService {
         return result;
     }
 
-    /**
-     * find all app on a device
-     *
-     * @param deviceId
-     * @return
-     */
-    @Override
-    public List<ApplicationDTO> findAllOnDevice(Long deviceId) {
-        if (!deviceRepository.existsById(deviceId)) {
-            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
-        }
-        List<ApplicationEntity> applicationEntities = applicationRepository.findApplicationEntitiesByDeviceEntitiesApplicationId(deviceId);
-        List<ApplicationDTO> result = new ArrayList<>();
-        for (ApplicationEntity entity : applicationEntities) {
-            ApplicationDTO applicationDTO = applicationConverter.toDTO(entity);
-            result.add(applicationDTO);
-        }
-        return result;
-    }
 
     /**
      * add app to device if app not found create new app
@@ -147,48 +134,25 @@ public class ApplicationService implements IApplicationService {
     @Override
     public ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model) {
 
-        ApplicationEntity applicationEntity = deviceRepository.findById(deviceId).map(Device -> {
-            String packagename = model.getPackagename();
-            String version = model.getVersion();
-            ApplicationEntity app = applicationRepository.findByPackagenameAndVersion(packagename, version);
-            if (app != null) {
-                //check if exist
-                List<ApplicationEntity> applicationEntities = Device.getApplicationEntities();
-                for (ApplicationEntity item : applicationEntities) {
-                    if (item.equals(app)) {
-                        return app;
-                    }
-                }
-                //add
-                Device.addApplication(app);
-                deviceRepository.save(Device);
-            } else {
-                // add and create new App
-                ApplicationEntity entity = applicationConverter.toEntity(model);
-                entity = applicationRepository.save(entity);
-                Device.addApplication(entity);
-                return entity;
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+        }
+        ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion())
+        if (applicationEntity != null) {
+            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(deviceId, applicationEntity.getId());
+            if (deviceApplicationEntity != null){
+                throw new FileStorageException(" Application had map in device ");
             }
-
-            return app;
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found Device with id = " + deviceId));
+            deviceApplicationEntity = new DeviceApplicationEntity();
+            deviceApplicationEntity.setDeviceAppEntityDetail(deviceRepository.findOneById(deviceId));
+            deviceApplicationEntity.setApplicationEntityDetail(applicationEntity);
+            deviceApplicationEntity.setIsalive(true);
+            deviceApplicationRepository.save(deviceApplicationEntity);
+        } else {
+            applicationEntity = applicationConverter.toEntity(model);
+        }
 
         return applicationConverter.toDTO(applicationEntity);
-    }
-
-    /**
-     * remove app on device in database
-     *
-     * @param deviceId
-     * @param applicationId
-     */
-    @Override
-    public void removeAppOnDevice(Long deviceId, Long applicationId) {
-        DeviceEntity deviceEntity = deviceRepository.findById(deviceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Device with id = " + deviceId));
-
-        deviceEntity.removeApplication(applicationId);
-        deviceRepository.save(deviceEntity);
     }
 
     /**
@@ -217,6 +181,74 @@ public class ApplicationService implements IApplicationService {
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllOnDevice(Long deviceId) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailId(deviceId);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+            result.add(applicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllOnDevice(Long deviceId, String name) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailId(deviceId);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            if (item.getName().contains(name)) {
+                ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+                result.add(applicationDTO);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllOnDevice(Long deviceId, Boolean isSystem) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsalive(deviceId, isSystem);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+            result.add(applicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllOnDevice(Long deviceId, String name, Boolean isSystem) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsalive(deviceId, isSystem);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            if (item.getName().contains(name)) {
+                ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+                result.add(applicationDTO);
+            }
         }
         return result;
     }

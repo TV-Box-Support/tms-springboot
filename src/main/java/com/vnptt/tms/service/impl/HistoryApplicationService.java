@@ -2,12 +2,10 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.HistoryApplicationConverter;
 import com.vnptt.tms.dto.HistoryApplicationDTO;
-import com.vnptt.tms.entity.ApplicationEntity;
-import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.DeviceApplicationEntity;
 import com.vnptt.tms.entity.HistoryApplicationEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
-import com.vnptt.tms.repository.ApplicationRepository;
-import com.vnptt.tms.repository.DeviceRepository;
+import com.vnptt.tms.repository.DeviceApplicationRepository;
 import com.vnptt.tms.repository.HistoryApplicationRepository;
 import com.vnptt.tms.service.IHistoryApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -27,10 +24,7 @@ public class HistoryApplicationService implements IHistoryApplicationService {
     private HistoryApplicationRepository historyApplicationRepository;
 
     @Autowired
-    private DeviceRepository deviceRepository;
-
-    @Autowired
-    private ApplicationRepository applicationRepository;
+    private DeviceApplicationRepository deviceApplicationRepository;
 
     @Autowired
     private HistoryApplicationConverter historyApplicationConverter;
@@ -45,24 +39,13 @@ public class HistoryApplicationService implements IHistoryApplicationService {
     public HistoryApplicationDTO save(HistoryApplicationDTO historyApplicationDTO) {
         HistoryApplicationEntity historyApplicationEntity = historyApplicationConverter.toEntity(historyApplicationDTO);
 
-        DeviceEntity deviceEntity = deviceRepository.findOneById(historyApplicationDTO.getDeviceId());
-        historyApplicationEntity.setDeviceEntityAppHistory(deviceEntity);
+        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneById(historyApplicationDTO.getDeviceApplicationId());
 
-        List<ApplicationEntity> applicationEntities = deviceEntity.getApplicationEntities();
-        ApplicationEntity applicationDevice = new ApplicationEntity();
-
-        //check app already exists in the listApp of device
-        for (ApplicationEntity iteam : applicationEntities) {
-            if (Objects.equals(iteam.getId(), historyApplicationDTO.getApplicationId())) {
-                applicationDevice = iteam;
-            }
+        if (deviceApplicationEntity == null) {
+            throw new ResourceNotFoundException("not found device-application info with id " + historyApplicationDTO.getDeviceApplicationId());
         }
 
-        if (applicationDevice.getPackagename() == null) {
-            throw new ResourceNotFoundException("not found application infor with id " + historyApplicationDTO.getApplicationId() + " in device, must map application to device");
-        }
-
-        historyApplicationEntity.setApplicationEntityHistory(applicationDevice);
+        historyApplicationEntity.setHistoryDeviceApplicationEntity(deviceApplicationEntity);
         historyApplicationEntity = historyApplicationRepository.save(historyApplicationEntity);
         return historyApplicationConverter.toDTO(historyApplicationEntity);
     }
@@ -105,7 +88,7 @@ public class HistoryApplicationService implements IHistoryApplicationService {
     /**
      * find history off application on device
      *
-     * @param deviceId
+     * @param deviceApplicationId
      * @param applicationId
      * @param day
      * @param hour
@@ -113,17 +96,14 @@ public class HistoryApplicationService implements IHistoryApplicationService {
      * @return
      */
     @Override
-    public List<HistoryApplicationDTO> findHistoryAppDeviceLater(Long deviceId, Long applicationId, int day, long hour, int minutes) {
-        if (!deviceRepository.existsById(deviceId)) {
-            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
-        }
-        if (!applicationRepository.existsById(applicationId)) {
-            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
+    public List<HistoryApplicationDTO> findHistoryAppDeviceLater(Long deviceApplicationId, int day, long hour, int minutes) {
+        if (!deviceApplicationRepository.existsById(deviceApplicationId)) {
+            throw new ResourceNotFoundException("Not found device-application with id = " + deviceApplicationId);
         }
         List<HistoryApplicationDTO> result = new ArrayList<>();
         List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyApplicationEntities = historyApplicationRepository.findAllByDeviceEntityAppHistoryIdAndApplicationEntityHistoryIdAndCreatedDateBetween(deviceId, applicationId, time, LocalDateTime.now());
+        historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween( deviceApplicationId, time, LocalDateTime.now());
         for (HistoryApplicationEntity iteam : historyApplicationEntities) {
             HistoryApplicationDTO historyApplicationDTO = historyApplicationConverter.toDTO(iteam);
             result.add(historyApplicationDTO);

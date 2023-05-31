@@ -34,8 +34,7 @@ public class HistoryApplicationConverter {
             dto.setId(entity.getId());
         }
         dto = mapper.map(entity, HistoryApplicationDTO.class);
-        dto.setApplicationId(entity.getApplicationEntityHistory().getId());
-        dto.setDeviceId(entity.getDeviceEntityAppHistory().getId());
+        dto.setDeviceApplicationId(entity.getHistoryDeviceApplicationEntity().getId());
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setModifiedDate(entity.getModifiedDate());

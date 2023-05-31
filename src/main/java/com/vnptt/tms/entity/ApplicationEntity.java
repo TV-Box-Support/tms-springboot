@@ -16,18 +16,12 @@ public class ApplicationEntity extends BaseEntity {
     @Column(name = "isSystem", nullable = false)
     private boolean issystem;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @OneToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            })
-    @JoinTable(name = "device_application",
-            joinColumns = @JoinColumn(name = "application_id"),
-            inverseJoinColumns = @JoinColumn(name = "device_id"))
-    private List<DeviceEntity> deviceEntitiesApplication = new ArrayList<>();
-
-    @OneToMany(mappedBy = "applicationEntityHistory")
-    private List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
+            }, mappedBy = "applicationEntityDetail")
+    private List<DeviceApplicationEntity> deviceApplicationEntities = new ArrayList<>();
 
 
     public String getPackagename() {
@@ -54,20 +48,12 @@ public class ApplicationEntity extends BaseEntity {
         this.version = version;
     }
 
-    public List<DeviceEntity> getDeviceEntitiesApplication() {
-        return deviceEntitiesApplication;
+    public List<DeviceApplicationEntity> getDeviceApplications() {
+        return deviceApplicationEntities;
     }
 
-    public void setDeviceEntitiesApplication(List<DeviceEntity> deviceEntitiesApplication) {
-        this.deviceEntitiesApplication = deviceEntitiesApplication;
-    }
-
-    public List<HistoryApplicationEntity> getHistoryApplicationEntities() {
-        return historyApplicationEntities;
-    }
-
-    public void setHistoryApplicationEntities(List<HistoryApplicationEntity> historyApplicationEntities) {
-        this.historyApplicationEntities = historyApplicationEntities;
+    public void setDeviceApplications(List<DeviceApplicationEntity> deviceApplicationEntities) {
+        this.deviceApplicationEntities = deviceApplicationEntities;
     }
 
     public boolean isIssystem() {

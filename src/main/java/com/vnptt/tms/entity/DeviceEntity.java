@@ -33,12 +33,12 @@ public class DeviceEntity extends BaseEntity {
     @Column(name = "desciption", length = 2000)
     private String desciption;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @OneToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }, mappedBy = "deviceEntitiesApplication")
-    private List<ApplicationEntity> applicationEntities = new ArrayList<>();
+            }, mappedBy = "deviceAppEntityDetail")
+    private List<DeviceApplicationEntity> deviceApplicationEntities;
 
     @OneToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -50,16 +50,6 @@ public class DeviceEntity extends BaseEntity {
     @OneToMany(mappedBy = "deviceEntityHistory")
     private List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "deviceEntityAppHistory")
-    private List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
-
-    public List<HistoryApplicationEntity> getHistoryApplicationEntities() {
-        return historyApplicationEntities;
-    }
-
-    public void setHistoryApplicationEntities(List<HistoryApplicationEntity> historyApplicationEntities) {
-        this.historyApplicationEntities = historyApplicationEntities;
-    }
 
     public String getProduct() {
         return product;
@@ -157,12 +147,12 @@ public class DeviceEntity extends BaseEntity {
         this.desciption = desciption;
     }
 
-    public List<ApplicationEntity> getApplicationEntities() {
-        return applicationEntities;
+    public List<DeviceApplicationEntity> getDeviceApplicationEntities() {
+        return deviceApplicationEntities;
     }
 
-    public void setApplicationEntities(List<ApplicationEntity> applicationEntities) {
-        this.applicationEntities = applicationEntities;
+    public void setDeviceApplicationEntities(List<DeviceApplicationEntity> deviceApplicationEntities) {
+        this.deviceApplicationEntities = deviceApplicationEntities;
     }
 
     public List<DevicePolicyDetailEntity> getDevicePolicyDetailEntities() {
@@ -181,16 +171,5 @@ public class DeviceEntity extends BaseEntity {
         this.historyPerformanceEntities = historyPerformanceEntities;
     }
 
-    public void addApplication(ApplicationEntity applicationEntity) {
-        this.applicationEntities.add(applicationEntity);
-        applicationEntity.getDeviceEntitiesApplication().add(this);
-    }
 
-    public void removeApplication(long applicationId) {
-        ApplicationEntity applicationEntity = this.applicationEntities.stream().filter(app -> app.getId() == applicationId).findFirst().orElse(null);
-        if (applicationEntity != null) {
-            this.applicationEntities.remove(applicationEntity);
-            applicationEntity.getDeviceEntitiesApplication().remove(this);
-        }
-    }
 }

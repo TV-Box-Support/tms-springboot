@@ -13,6 +13,6 @@ public interface IHistoryApplicationService {
     List<HistoryApplicationDTO> findAll(Pageable pageable);
     List<HistoryApplicationDTO> findAll();
 
-    List<HistoryApplicationDTO> findHistoryAppDeviceLater(Long deviceId, Long applicationId, int day, long hour, int minutes);
+    List<HistoryApplicationDTO> findHistoryAppDeviceLater(Long deviceApplicationId, int day, long hour, int minutes);
 
 }

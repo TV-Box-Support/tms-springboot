@@ -21,5 +21,5 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     List<DeviceEntity> findAllByDate(Date date);
 
-    List<DeviceEntity> findDeviceEntitiesByApplicationEntitiesId(Long applicationEntitiesId);
+//    List<DeviceEntity> findDeviceEntitiesByApplicationEntitiesId(Long applicationEntitiesId);
 }

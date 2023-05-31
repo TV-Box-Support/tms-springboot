@@ -34,7 +34,7 @@ public class ApplicationApi {
     private IApplicationService applicationService;
 
     /**
-     * Get List application for web
+     * Get List application with any version for web
      *
      * @param page        desired page to display
      * @param limit       number of elements 1 page
@@ -82,16 +82,33 @@ public class ApplicationApi {
         return applicationService.findOne(id);
     }
 
+
     /**
      * see the apps available on the device for box and web
      *
      * @param deviceId device want to search
+     * @param isSystem true/false/null
+     * @param name name of application want to search
      * @return List application DTO
      */
     @GetMapping("/device/{deviceId}/application")
-    public ApplicationOutput getAllApplicationByDeviceEntityId(@PathVariable(value = "deviceId") Long deviceId) {
+    public ApplicationOutput getAllApplicationByDeviceEntityId(@PathVariable(value = "deviceId") Long deviceId,
+                                                               @RequestParam(value = "isSystem", required = false) Boolean isSystem,
+                                                               @RequestParam(value = "name", required = false) String name) {
         ApplicationOutput result = new ApplicationOutput();
-        result.setListResult(applicationService.findAllOnDevice(deviceId));
+        if (isSystem == null) {
+            if (name == null) {
+                result.setListResult(applicationService.findAllOnDevice(deviceId));
+            } else {
+                result.setListResult(applicationService.findAllOnDevice(deviceId, name));
+            }
+        } else {
+            if (name == null) {
+                result.setListResult(applicationService.findAllOnDevice(deviceId, isSystem));
+            } else {
+                result.setListResult(applicationService.findAllOnDevice(deviceId, name, isSystem));
+            }
+        }
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -140,17 +157,17 @@ public class ApplicationApi {
         applicationService.delete(ids);
     }
 
-    /**
-     * remove app no longer on the device
-     *
-     * @param deviceId      id of device need modify app list
-     * @param applicationId id of application need remove
-     * @return http status 204
-     */
-    @DeleteMapping(value = "/device/{deviceId}/application/{applicationId}")
-    public ResponseEntity<HttpStatus> removeApplicationOnDevice(@PathVariable(value = "deviceId") Long deviceId,
-                                                                @PathVariable(value = "applicationId") Long applicationId) {
-        applicationService.removeAppOnDevice(deviceId, applicationId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    /**
+//     * remove app no longer on the device
+//     *
+//     * @param deviceId      id of device need modify app list
+//     * @param applicationId id of application need remove
+//     * @return http status 204
+//     */
+//    @DeleteMapping(value = "/device/{deviceId}/application/{applicationId}")
+//    public ResponseEntity<HttpStatus> removeApplicationOnDevice(@PathVariable(value = "deviceId") Long deviceId,
+//                                                                @PathVariable(value = "applicationId") Long applicationId) {
+//        applicationService.removeAppOnDevice(deviceId, applicationId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

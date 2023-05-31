@@ -31,9 +31,9 @@ public interface IDeviceService {
 
     List<DeviceDTO> findByDate(Date date);
 
-    List<DeviceDTO> findAllWithApplication(Long applicationId);
+//    List<DeviceDTO> findAllWithApplication(Long applicationId);
 
-    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
+//    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
 
     List<DeviceDTO> findAllDeviceRunNow();
 

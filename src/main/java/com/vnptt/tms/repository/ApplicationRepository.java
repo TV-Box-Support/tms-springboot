@@ -11,11 +11,10 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     ApplicationEntity findOneById(Long id);
 
-    List<ApplicationEntity> findApplicationEntitiesByDeviceEntitiesApplicationId(Long deviceEntitiesApplicationId);
-
     List<ApplicationEntity> findByPackagenameContaining(String packagename);
+
+    ApplicationEntity findOneByPackagenameAndVersion(String packagename, String version);
 
     List<ApplicationEntity> findByPackagenameContaining(String packagename, Pageable pageable);
 
-    ApplicationEntity findByPackagenameAndVersion(String packagename, String version);
 }
