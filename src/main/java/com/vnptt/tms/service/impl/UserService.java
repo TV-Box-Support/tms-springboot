@@ -151,6 +151,15 @@ public class UserService implements IUserService {//, UserDetailsService {
     }
 
     @Override
+    public Long totalItemWithActive(Integer active) {
+        boolean activeConvert = true;
+        if (active == 0) {
+            activeConvert = false;
+        }
+        return userRepository.countAllByActive(activeConvert);
+    }
+
+    @Override
     public void remove(Long id) {
         UserEntity userEntity = userRepository.findOneById(id);
         if (userEntity == null) {

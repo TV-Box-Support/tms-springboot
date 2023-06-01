@@ -40,4 +40,6 @@ public interface IUserService {
     List<UserDTO> findAllWithNameOrEmailOrUsernameOrCompany(Pageable pageable, Integer active, String name, String email, String username, String company);
 
     Long totalItemWithNameOrEmailOrUsernameOrCompany(Integer active, String name, String email, String username, String company);
+
+    Long totalItemWithActive(Integer active);
 }

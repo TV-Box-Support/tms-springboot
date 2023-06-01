@@ -46,7 +46,7 @@ public class UserApi {
                     result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(active, string, string, string, string) / limit));
                 } else {
                     result.setListResult((userService.findAllWithActive(pageable, active)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(active, string, string, string, string) / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithActive(active) / limit));
                 }
             } else {
                 result.setPage(page);
@@ -56,7 +56,7 @@ public class UserApi {
                     result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(1, string, string, string, string) / limit));
                 } else {
                     result.setListResult((userService.findAll(pageable)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(1, string, string, string, string) / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
                 }
             }
         } else {
