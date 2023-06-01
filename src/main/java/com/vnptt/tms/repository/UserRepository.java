@@ -14,7 +14,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByUsername(String username);
 
-    List<UserEntity> findAllByActive(Pageable pageable, boolean active);
+    List<UserEntity> findAllByActiveOrderByModifiedDateDesc(Pageable pageable, boolean active);
 
-    List<UserEntity> findAllByActive(boolean active);
+    List<UserEntity> findAllByActiveOrderByModifiedDateDesc(boolean active);
+
 }

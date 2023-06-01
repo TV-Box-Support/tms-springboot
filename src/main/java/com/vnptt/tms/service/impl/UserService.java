@@ -97,10 +97,10 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public UserDTO updatePassword(Long id, String passwordold, String passwordnew) {
         UserEntity userEntity = userRepository.findOneById(id);
-        if (userEntity == null){
+        if (userEntity == null) {
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
-        if (!encoder.matches(passwordold, userEntity.getPassword())){
+        if (!encoder.matches(passwordold, userEntity.getPassword())) {
             throw new RuntimeException("Wrong password: " + passwordold);
         }
         userEntity.setPassword(encoder.encode(passwordnew));
@@ -118,7 +118,7 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public UserDTO forcedUpdatePassword(Long id, String passwordnew) {
         UserEntity userEntity = userRepository.findOneById(id);
-        if (userEntity == null){
+        if (userEntity == null) {
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
         userEntity.setPassword(encoder.encode(passwordnew));
@@ -129,7 +129,7 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public void remove(Long id) {
         UserEntity userEntity = userRepository.findOneById(id);
-        if (userEntity == null){
+        if (userEntity == null) {
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
         userEntity.setActive(false);
@@ -139,10 +139,10 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public List<UserDTO> findAllWithActive(Pageable pageable, Integer active) {
         boolean activeConvert = true;
-        if (active == 0){
+        if (active == 0) {
             activeConvert = false;
         }
-        List<UserEntity> entities = userRepository.findAllByActive(pageable, activeConvert);
+        List<UserEntity> entities = userRepository.findAllByActiveOrderByModifiedDateDesc(pageable, activeConvert);
         List<UserDTO> result = new ArrayList<>();
         for (UserEntity item : entities) {
             UserDTO userDTO = userConverter.toDTO(item);
@@ -154,10 +154,10 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public List<UserDTO> findAllWithActive(Integer active) {
         boolean activeConvert = true;
-        if (active == 0){
+        if (active == 0) {
             activeConvert = false;
         }
-        List<UserEntity> entities = userRepository.findAllByActive(activeConvert);
+        List<UserEntity> entities = userRepository.findAllByActiveOrderByModifiedDateDesc(activeConvert);
         List<UserDTO> result = new ArrayList<>();
         for (UserEntity item : entities) {
             UserDTO userDTO = userConverter.toDTO(item);
@@ -170,7 +170,7 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public UserDTO findOne(Long id) {
         UserEntity entity = userRepository.findOneById(id);
-        if (entity == null){
+        if (entity == null) {
             throw new ResourceNotFoundException("not found user with id = " + id);
         }
         return userConverter.toDTO(entity);
@@ -204,12 +204,19 @@ public class UserService implements IUserService {//, UserDetailsService {
         return result;
     }
 
+    /**
+     * todo modify
+     * @param ruleIds
+     * @return
+     */
     @Override
-    public List<UserDTO> findAllWithRule(Long ruleId) {
-//        if (!ruleRepository.existsById(ruleId)) {
-//            throw new ResourceNotFoundException("Not found rule with id = " + ruleId);
+    public List<UserDTO> findAllWithRule(Long[] ruleIds) {
+//        List<RuleEntity> ruleEntities = new ArrayList<>();
+//        for (Long id : ruleIds) {
+//            RuleEntity ruleEntity = ruleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found rule with id = " + id));
+//            ruleEntities.add(ruleEntity);
 //        }
-//        List<UserEntity> userEntities = userRepository.findUserEntitiesByRuleEntityId(ruleId);
+//        List<UserEntity> userEntities = userRepository.findAllByRuleEntities(ruleEntities);
 //        List<UserDTO> result = new ArrayList<>();
 //        for (UserEntity entity : userEntities) {
 //            UserDTO userDTO = userConverter.toDTO(entity);

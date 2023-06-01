@@ -11,10 +11,10 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
 
     PolicyEntity findOneByPolicyname(String policyname);
 
-    List<PolicyEntity> findAllByCommandEntityId(Long commandId);
+    List<PolicyEntity> findAllByCommandEntityIdOrderByModifiedDateDesc(Long commandId);
 
-    List<PolicyEntity> findPolicyEntitiesByApkEntitiesPolicyId(Long apkId);
+    List<PolicyEntity> findPolicyEntitiesByApkEntitiesPolicyIdOrderByModifiedDateDesc(Long apkId);
 
-    List<PolicyEntity> findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailId(Long deviceId);
+    List<PolicyEntity> findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId);
 
 }

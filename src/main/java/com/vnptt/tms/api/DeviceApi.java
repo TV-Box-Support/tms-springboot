@@ -142,45 +142,46 @@ public class DeviceApi {
         return result;
     }
 
-//    /**
-//     * show device own the application
-//     * todo modify
-//     * @param applicationId
-//     * @return
-//     */
-//    @GetMapping("/application/{applicationId}/device")
-//    public DeviceOutput getAllDeviceByApplicationId(@PathVariable(value = "applicationId") Long applicationId) {
-//        DeviceOutput result = new DeviceOutput();
-//        result.setListResult(deviceService.findAllWithApplication(applicationId));
-//
-//        if (result.getListResult().size() >= 1) {
-//            result.setMessage("Request Success");
-//            result.setTotalElement(result.getListResult().size());
-//        } else {
-//            result.setMessage("no matching element found");
-//        }
-//        return result;
-//    }
+    /**
+     * show device own the application
+     *
+     * @param applicationId
+     * @return
+     */
+    @GetMapping("/application/{applicationId}/device")
+    public DeviceOutput getAllDeviceByApplicationId(@PathVariable(value = "applicationId") Long applicationId) {
+        DeviceOutput result = new DeviceOutput();
 
-//    /**
-//     * Show list device play application now
-//     * todo modify
-//     * @param applicationId
-//     * @return
-//     */
-//    @GetMapping(value = "/application/{applicationId}/device/now")
-//    public DeviceOutput showAppRunNow(@PathVariable(value = "applicationId") Long applicationId) {
-//        DeviceOutput result = new DeviceOutput();
-//        result.setListResult(deviceService.findAllDeviceRunApp(applicationId));
-//
-//        if (result.getListResult().size() >= 1) {
-//            result.setMessage("Request Success");
-//            result.setTotalElement(result.getListResult().size());
-//        } else {
-//            throw new ResourceNotFoundException("no matching element found");
-//        }
-//        return result;
-//    }
+        result.setListResult(deviceService.findAllWithApplication(applicationId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * Show list device play application now
+     *
+     * @param applicationId
+     * @return
+     */
+    @GetMapping(value = "/application/{applicationId}/device/now")
+    public DeviceOutput showAppRunNow(@PathVariable(value = "applicationId") Long applicationId) {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.findAllDeviceRunApp(applicationId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            throw new ResourceNotFoundException("no matching element found");
+        }
+        return result;
+    }
 
     /**
      * Show list device active now
@@ -247,7 +248,6 @@ public class DeviceApi {
      */
     @PostMapping(value = "/device")
     public DeviceDTO createDevice(@RequestBody DeviceDTO model) {
-        //TODO modify to create a list of device
         return deviceService.save(model);
     }
 

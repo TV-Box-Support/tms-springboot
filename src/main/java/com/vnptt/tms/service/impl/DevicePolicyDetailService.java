@@ -106,7 +106,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         if (!deviceRepository.existsById(deviceId)) {
             throw new ResourceNotFoundException("Not found device with id = " + deviceId);
         }
-        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailId(deviceId);
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId);
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
@@ -142,7 +142,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         if (!policyRepository.existsById(policyId)) {
             throw new ResourceNotFoundException("Not found policy with id = " + policyId);
         }
-        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailId(policyId);
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailIdOrderByModifiedDateDesc(policyId);
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);

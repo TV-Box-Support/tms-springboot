@@ -111,7 +111,7 @@ public class PolicyService implements IPolicyService {
         if (!commandRepository.existsById(commandId)) {
             throw new ResourceNotFoundException("Not found command with id = " + commandId);
         }
-        List<PolicyEntity> policyEntities = policyRepository.findAllByCommandEntityId(commandId);
+        List<PolicyEntity> policyEntities = policyRepository.findAllByCommandEntityIdOrderByModifiedDateDesc(commandId);
         List<PolicyDTO> result = new ArrayList<>();
         for (PolicyEntity entity : policyEntities) {
             PolicyDTO policyDTO = policyConverter.toDTO(entity);
@@ -132,7 +132,7 @@ public class PolicyService implements IPolicyService {
             throw new ResourceNotFoundException("Not found apk with id = " + apkId);
         }
         List<PolicyDTO> result = new ArrayList<>();
-        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByApkEntitiesPolicyId(apkId);
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByApkEntitiesPolicyIdOrderByModifiedDateDesc(apkId);
         for (PolicyEntity entity : policyEntities) {
             PolicyDTO policyDTO = policyConverter.toDTO(entity);
             result.add(policyDTO);
@@ -152,7 +152,7 @@ public class PolicyService implements IPolicyService {
             throw new ResourceNotFoundException("Not found apk device id = " + deviceId);
         }
         List<PolicyDTO> result = new ArrayList<>();
-        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailId(deviceId);
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId);
         for (PolicyEntity entity : policyEntities) {
             PolicyDTO policyDTO = policyConverter.toDTO(entity);
             result.add(policyDTO);

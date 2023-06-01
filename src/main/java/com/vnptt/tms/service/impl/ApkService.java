@@ -117,7 +117,7 @@ public class ApkService implements IApkService {
         if (!apkRepository.existsById(policyId)) {
             throw new ResourceNotFoundException("Not found policy with id = " + policyId);
         }
-        List<ApkEntity> apkEntities = apkRepository.findApkEntitiesByPolicyEntitiesId(policyId);
+        List<ApkEntity> apkEntities = apkRepository.findApkEntitiesByPolicyEntitiesIdOrderByModifiedDateDesc(policyId);
         List<ApkDTO> result = new ArrayList<>();
         for (ApkEntity entity : apkEntities) {
             ApkDTO apkDTO = apkConverter.toDTO(entity);

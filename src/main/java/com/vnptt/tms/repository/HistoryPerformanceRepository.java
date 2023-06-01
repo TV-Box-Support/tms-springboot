@@ -10,8 +10,8 @@ public interface HistoryPerformanceRepository extends JpaRepository<HistoryPerfo
 
     HistoryPerformanceEntity findOneById(Long id);
 
-    List<HistoryPerformanceEntity> findAllByCreatedDateBetween(LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
+    List<HistoryPerformanceEntity> findAllByCreatedDateBetweenOrderByModifiedDateDesc(LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
-    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetween(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
+    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByModifiedDateDesc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
 }

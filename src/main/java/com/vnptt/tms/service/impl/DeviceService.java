@@ -2,13 +2,12 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.DeviceDTO;
+import com.vnptt.tms.entity.DeviceApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.HistoryApplicationEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
-import com.vnptt.tms.repository.ApplicationRepository;
-import com.vnptt.tms.repository.DeviceRepository;
-import com.vnptt.tms.repository.HistoryApplicationRepository;
-import com.vnptt.tms.repository.HistoryPerformanceRepository;
+import com.vnptt.tms.repository.*;
 import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.security.responce.JwtBoxResponse;
 import com.vnptt.tms.service.IDeviceService;
@@ -33,6 +32,9 @@ public class DeviceService implements IDeviceService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private DeviceApplicationRepository deviceApplicationRepository;
 
     @Autowired
     private HistoryApplicationRepository historyApplicationRepository;
@@ -117,7 +119,7 @@ public class DeviceService implements IDeviceService {
         if (entity == null) {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }
-        if (!Objects.equals(entity.getIp(), ip)){
+        if (!Objects.equals(entity.getIp(), ip)) {
             entity.setIp(ip);
             deviceRepository.save(entity);
         }
@@ -137,7 +139,7 @@ public class DeviceService implements IDeviceService {
         List<DeviceDTO> result = new ArrayList<>();
         if (model == null) model = "";
         if (firmwareVer == null) firmwareVer = "";
-        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer);
+        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(model, firmwareVer);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -159,7 +161,7 @@ public class DeviceService implements IDeviceService {
         List<DeviceDTO> result = new ArrayList<>();
         if (model == null) model = "";
         if (firmwareVer == null) firmwareVer = "";
-        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContaining(model, firmwareVer, pageable);
+        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(model, firmwareVer, pageable);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -171,7 +173,7 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findByLocation(String location) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByLocationContaining(location);
+        deviceEntities = deviceRepository.findAllByLocationContainingOrderByModifiedDateDesc(location);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -183,7 +185,7 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findByDate(Date date) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByDate(date);
+        deviceEntities = deviceRepository.findAllByDateOrderByModifiedDateDesc(date);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -191,25 +193,32 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
-//    /**
-//     * find all device with application id
-//     * todo modify
-//     * @param applicationId
-//     * @return
-//     */
-//    @Override
-//    public List<DeviceDTO> findAllWithApplication(Long applicationId) {
-//        if (!applicationRepository.existsById(applicationId)) {
-//            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
-//        }
-//        List<DeviceEntity> deviceEntities = deviceRepository.findDeviceEntitiesByApplicationEntitiesId(applicationId);
-//        List<DeviceDTO> result = new ArrayList<>();
-//        for (DeviceEntity entity : deviceEntities) {
-//            DeviceDTO deviceDTO = deviceConverter.toDTO(entity);
-//            result.add(deviceDTO);
-//        }
-//        return result;
-//    }
+    /**
+     * find all device with application id
+     *
+     * @param applicationId
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findAllWithApplication(Long applicationId) {
+        if (!applicationRepository.existsById(applicationId)) {
+            throw new ResourceNotFoundException("Not found application with id = " + applicationId);
+        }
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findAllByApplicationEntityDetailIdOrderByModifiedDateDesc(applicationId);
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(item.getDeviceAppEntityDetail().getId());
+            if (deviceEntity != null) {
+                deviceEntities.add(deviceEntity);
+            }
+        }
+        List<DeviceDTO> result = new ArrayList<>();
+        for (DeviceEntity entity : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(entity);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
 
     /**
      * find all device are running 3 minute later to now
@@ -221,7 +230,7 @@ public class DeviceService implements IDeviceService {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByModifiedDateDesc(time, LocalDateTime.now());
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
@@ -232,8 +241,6 @@ public class DeviceService implements IDeviceService {
     }
 
     /**
-     * todo: modify
-     *
      * @param serialnumber
      * @param mac
      * @return
@@ -271,7 +278,7 @@ public class DeviceService implements IDeviceService {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByModifiedDateDesc(time, LocalDateTime.now());
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
@@ -281,26 +288,34 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
-//    /**
-//     * find all device are running app 3 minute later to now
-//     * todo modify
-//     * @param id
-//     * @return
-//     */
-//    @Override
-//    public List<DeviceDTO> findAllDeviceRunApp(Long id) {
-//        List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
-//        List<DeviceDTO> result = new ArrayList<>();
-//        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
-//        historyApplicationEntities = historyApplicationRepository.findAllByApplicationEntityHistoryIdAndCreatedDateBetween(id, time, LocalDateTime.now());
-//        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
-//            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityAppHistory().getId());
-//            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
-//                result.add(deviceConverter.toDTO(deviceEntity));
-//            }
-//        }
-//        return result;
-//    }
+    /**
+     * find all device are running app 3 minute later to now
+     *
+     * @param applicationId
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findAllDeviceRunApp(Long applicationId) {
+        List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
+        List<DeviceApplicationEntity> deviceApplicationEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+
+        historyApplicationEntities = historyApplicationRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
+            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneById(iteam.getHistoryDeviceApplicationEntity().getId());
+            if (deviceApplicationEntity != null && result.stream().noneMatch(deviceApplication -> deviceApplication.getId().equals(deviceApplicationEntity.getId()))) {
+                deviceApplicationEntities.add(deviceApplicationEntity);
+            }
+        }
+        for (DeviceApplicationEntity iteam : deviceApplicationEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceAppEntityDetail().getId());
+            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
+                result.add(deviceConverter.toDTO(deviceEntity));
+            }
+        }
+        return result;
+    }
 
 
     @Override

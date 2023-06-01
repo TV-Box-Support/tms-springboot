@@ -19,7 +19,7 @@ public interface IUserService {
 
     List<UserDTO> findAll();
 
-    List<UserDTO> findAllWithRule(Long ruleId);
+    List<UserDTO> findAllWithRule(Long[] ruleIds);
 
     UserDTO signup(UserDTO model);
 

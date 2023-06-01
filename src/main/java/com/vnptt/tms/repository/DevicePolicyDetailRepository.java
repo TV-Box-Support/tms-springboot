@@ -9,8 +9,8 @@ public interface DevicePolicyDetailRepository extends JpaRepository<DevicePolicy
 
     DevicePolicyDetailEntity findOneById(Long id);
 
-    List<DevicePolicyDetailEntity> findAllByDeviceEntityDetailId(Long deviceId);
+    List<DevicePolicyDetailEntity> findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId);
 
-    List<DevicePolicyDetailEntity> findAllByPolicyEntityDetailId(Long policyId);
+    List<DevicePolicyDetailEntity> findAllByPolicyEntityDetailIdOrderByModifiedDateDesc(Long policyId);
 
 }

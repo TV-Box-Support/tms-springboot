@@ -164,7 +164,7 @@ public class ApplicationService implements IApplicationService {
     public List<ApplicationDTO> findByPackagename(String packagename) {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContaining(packagename).forEach(applicationEntities::add);
+        applicationRepository.findByPackagenameContainingOrderByModifiedDateDesc(packagename).forEach(applicationEntities::add);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
@@ -176,7 +176,7 @@ public class ApplicationService implements IApplicationService {
     public List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable) {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContaining(packagename, pageable).forEach(applicationEntities::add);
+        applicationRepository.findByPackagenameContainingOrderByModifiedDateDesc(packagename, pageable).forEach(applicationEntities::add);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
@@ -189,7 +189,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
 
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailId(deviceId);
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(deviceId);
         for (DeviceApplicationEntity item : deviceApplicationEntities) {
             applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
         }
@@ -205,7 +205,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
 
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailId(deviceId);
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(deviceId);
         for (DeviceApplicationEntity item : deviceApplicationEntities) {
             applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
         }
@@ -223,7 +223,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
 
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsalive(deviceId, isSystem);
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveOrderByModifiedDateDesc(deviceId, isSystem);
         for (DeviceApplicationEntity item : deviceApplicationEntities) {
             applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
         }
@@ -239,7 +239,7 @@ public class ApplicationService implements IApplicationService {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
 
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsalive(deviceId, isSystem);
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveOrderByModifiedDateDesc(deviceId, isSystem);
         for (DeviceApplicationEntity item : deviceApplicationEntities) {
             applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
         }

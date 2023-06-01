@@ -75,16 +75,15 @@ public class UserApi {
     /**
      * Show list User with rule for web
      *
-     * todo: update this api
      *
-     * @param ruleId
+     * @param ids
      * @return
      */
-    @GetMapping(value = "/rule/{ruleId}/user")
+    @GetMapping(value = "/user/rule")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public UserOutput showUserWithRule(@PathVariable(value = "ruleId") Long ruleId) {
+    public UserOutput showUserWithRule(@RequestBody Long[] ids) {
         UserOutput result = new UserOutput();
-        result.setListResult(userService.findAllWithRule(ruleId));
+        result.setListResult(userService.findAllWithRule(ids));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");

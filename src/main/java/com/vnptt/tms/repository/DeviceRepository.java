@@ -13,13 +13,12 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     DeviceEntity findOneBySn(String sn);
 
-    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContaining(String model, String firmwareVer);
+    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(String model, String firmwareVer);
 
-    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContaining(String model, String firmwareVer, Pageable pageable);
+    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(String model, String firmwareVer, Pageable pageable);
 
-    List<DeviceEntity> findAllByLocationContaining(String location);
+    List<DeviceEntity> findAllByLocationContainingOrderByModifiedDateDesc(String location);
 
-    List<DeviceEntity> findAllByDate(Date date);
+    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date);
 
-//    List<DeviceEntity> findDeviceEntitiesByApplicationEntitiesId(Long applicationEntitiesId);
 }

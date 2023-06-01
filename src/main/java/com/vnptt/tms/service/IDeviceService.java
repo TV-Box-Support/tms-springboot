@@ -31,13 +31,13 @@ public interface IDeviceService {
 
     List<DeviceDTO> findByDate(Date date);
 
-//    List<DeviceDTO> findAllWithApplication(Long applicationId);
-
-//    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
-
     List<DeviceDTO> findAllDeviceRunNow();
 
     ResponseEntity<?> authenticateDevice(String serialnumber, String mac);
 
     List<DeviceDTO> findDeviceActive(int day, long hour, int minutes);
+
+    List<DeviceDTO> findAllWithApplication(Long applicationId);
+
+    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
 }

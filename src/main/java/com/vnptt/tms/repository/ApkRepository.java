@@ -9,5 +9,5 @@ public interface ApkRepository extends JpaRepository<ApkEntity, Long> {
 
     ApkEntity findOneById(Long id);
 
-    List<ApkEntity> findApkEntitiesByPolicyEntitiesId(Long policyId);
+    List<ApkEntity> findApkEntitiesByPolicyEntitiesIdOrderByModifiedDateDesc(Long policyId);
 }

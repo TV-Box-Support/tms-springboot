@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
  * - show (get method) all apps available on the box
  * - post application to database
  * - Map (post method) app to device if database don't have app, create and add app to database
- * - delete map app no longer on the device
- * - remove (delete method) apk out of database
  * <p>
  * ...
  */
@@ -129,7 +127,6 @@ public class ApplicationApi {
      */
     @PostMapping(value = "/application")
     public ResponseEntity<ApplicationDTO> createApplication(@RequestBody ApplicationDTO model) {
-//        return applicationService.save(model);
         return new ResponseEntity<>(applicationService.save(model), HttpStatus.OK);
     }
 
@@ -157,17 +154,4 @@ public class ApplicationApi {
         applicationService.delete(ids);
     }
 
-//    /**
-//     * remove app no longer on the device
-//     *
-//     * @param deviceId      id of device need modify app list
-//     * @param applicationId id of application need remove
-//     * @return http status 204
-//     */
-//    @DeleteMapping(value = "/device/{deviceId}/application/{applicationId}")
-//    public ResponseEntity<HttpStatus> removeApplicationOnDevice(@PathVariable(value = "deviceId") Long deviceId,
-//                                                                @PathVariable(value = "applicationId") Long applicationId) {
-//        applicationService.removeAppOnDevice(deviceId, applicationId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 }
