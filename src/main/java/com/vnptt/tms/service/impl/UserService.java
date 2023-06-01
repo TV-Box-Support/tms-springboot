@@ -142,6 +142,15 @@ public class UserService implements IUserService {//, UserDetailsService {
     }
 
     @Override
+    public Long totalItemWithNameOrEmailOrUsernameOrCompany(Integer active, String name, String email, String username, String company) {
+        boolean activeConvert = true;
+        if (active == 0) {
+            activeConvert = false;
+        }
+        return userRepository.countAllByActiveOrNameContainingOrEmailContainingOrUsernameContainingOrCompanyContaining(activeConvert, name, email, username, company);
+    }
+
+    @Override
     public void remove(Long id) {
         UserEntity userEntity = userRepository.findOneById(id);
         if (userEntity == null) {

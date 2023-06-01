@@ -38,4 +38,6 @@ public interface IUserService {
     UserDTO forcedUpdatePassword(Long id, String passwordnew);
 
     List<UserDTO> findAllWithNameOrEmailOrUsernameOrCompany(Pageable pageable, Integer active, String name, String email, String username, String company);
+
+    Long totalItemWithNameOrEmailOrUsernameOrCompany(Integer active, String name, String email, String username, String company);
 }

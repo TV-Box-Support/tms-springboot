@@ -43,20 +43,20 @@ public class UserApi {
                 Pageable pageable = PageRequest.of(page - 1, limit);
                 if (string != null) {
                     result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(pageable, active, string, string, string, string)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(active, string, string, string, string) / limit));
                 } else {
                     result.setListResult((userService.findAllWithActive(pageable, active)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(active, string, string, string, string) / limit));
                 }
             } else {
                 result.setPage(page);
                 Pageable pageable = PageRequest.of(page - 1, limit);
                 if (string != null) {
                     result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(pageable, 1, string, string, string, string)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(1, string, string, string, string) / limit));
                 } else {
                     result.setListResult((userService.findAll(pageable)));
-                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItemWithNameOrEmailOrUsernameOrCompany(1, string, string, string, string) / limit));
                 }
             }
         } else {
