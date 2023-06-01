@@ -36,4 +36,6 @@ public interface IUserService {
     UserDTO updatePassword(Long id, String passwordold, String passwordnew);
 
     UserDTO forcedUpdatePassword(Long id, String passwordnew);
+
+    List<UserDTO> findAllWithNameOrEmailOrUsernameOrCompany(Pageable pageable, Integer active, String name, String email, String username, String company);
 }

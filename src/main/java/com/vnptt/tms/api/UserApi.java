@@ -29,26 +29,49 @@ public class UserApi {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page,
                                @RequestParam(value = "limit", required = false) Integer limit,
-                               @RequestParam(value = "active", required = false) Integer active) {
+                               @RequestParam(value = "active", required = false) Integer active,
+                               @RequestParam(value = "search", required = false) String string) {
         UserOutput result = new UserOutput();
 
+        if (active != null && active != 1 && active != 0) {
+            throw new ResourceNotFoundException("active must be 0 or 1");
+        }
+
         if (page != null && limit != null) {
-            if (active != null){
+            if (active != null) {
                 result.setPage(page);
                 Pageable pageable = PageRequest.of(page - 1, limit);
-                result.setListResult((userService.findAllWithActive(pageable, active)));
-                result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                if (string != null) {
+                    result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(pageable, active, string, string, string, string)));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                } else {
+                    result.setListResult((userService.findAllWithActive(pageable, active)));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                }
             } else {
                 result.setPage(page);
                 Pageable pageable = PageRequest.of(page - 1, limit);
-                result.setListResult((userService.findAll(pageable)));
-                result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                if (string != null) {
+                    result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(pageable, 1, string, string, string, string)));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                } else {
+                    result.setListResult((userService.findAll(pageable)));
+                    result.setTotalPage((int) Math.ceil((double) userService.totalItem() / limit));
+                }
             }
         } else {
-            if (active != null){
-                result.setListResult(userService.findAllWithActive(active));
+            if (active != null) {
+                if (string != null) {
+                    result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(null, active, string, string, string, string)));
+                } else {
+                    result.setListResult(userService.findAllWithActive(active));
+                }
             } else {
-                result.setListResult(userService.findAll());
+                if (string != null) {
+                    result.setListResult((userService.findAllWithNameOrEmailOrUsernameOrCompany(null, 1, string, string, string, string)));
+                } else {
+                    result.setListResult(userService.findAll());
+                }
             }
         }
 
@@ -60,6 +83,7 @@ public class UserApi {
         }
         return result;
     }
+
 
     /**
      * find user by id
@@ -74,7 +98,6 @@ public class UserApi {
 
     /**
      * Show list User with rule for web
-     *
      *
      * @param ids
      * @return
@@ -112,9 +135,9 @@ public class UserApi {
      * @return
      */
     @PutMapping(value = "/user/password/{id}")
-    public UserDTO updatePassword (@PathVariable("id") Long id,
-                                   @RequestParam(name = "passwordold") String passwordold,
-                                   @RequestParam(name = "passwordnew") String passwordnew) {
+    public UserDTO updatePassword(@PathVariable("id") Long id,
+                                  @RequestParam(name = "passwordold") String passwordold,
+                                  @RequestParam(name = "passwordnew") String passwordnew) {
         return userService.updatePassword(id, passwordold, passwordnew);
     }
 
@@ -127,7 +150,7 @@ public class UserApi {
     @PutMapping(value = "/user/admin/password/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDTO forcedUpdatePassword(@PathVariable("id") Long id,
-                                         @RequestParam(name = "passwordnew") String passwordnew) {
+                                        @RequestParam(name = "passwordnew") String passwordnew) {
         return userService.forcedUpdatePassword(id, passwordnew);
     }
 

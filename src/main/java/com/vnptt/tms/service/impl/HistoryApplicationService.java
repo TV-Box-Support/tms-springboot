@@ -89,7 +89,6 @@ public class HistoryApplicationService implements IHistoryApplicationService {
      * find history off application on device
      *
      * @param deviceApplicationId
-     * @param applicationId
      * @param day
      * @param hour
      * @param minutes

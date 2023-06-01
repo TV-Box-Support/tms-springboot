@@ -13,4 +13,5 @@ public interface HistoryApplicationRepository extends JpaRepository<HistoryAppli
     List<HistoryApplicationEntity> findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween(Long deviceApplicationId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
     List<HistoryApplicationEntity> findAllByCreatedDateBetween(LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
+
 }

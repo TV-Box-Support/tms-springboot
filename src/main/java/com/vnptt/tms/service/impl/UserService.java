@@ -127,6 +127,21 @@ public class UserService implements IUserService {//, UserDetailsService {
     }
 
     @Override
+    public List<UserDTO> findAllWithNameOrEmailOrUsernameOrCompany(Pageable pageable, Integer active, String name, String email, String username, String company) {
+        boolean activeConvert = true;
+        if (active == 0) {
+            activeConvert = false;
+        }
+        List<UserEntity> entities = userRepository.findAllByActiveOrNameContainingOrEmailContainingOrUsernameContainingOrCompanyContainingOrderByModifiedDateDesc(pageable, activeConvert, name, email, username, company);
+        List<UserDTO> result = new ArrayList<>();
+        for (UserEntity item : entities) {
+            UserDTO userDTO = userConverter.toDTO(item);
+            result.add(userDTO);
+        }
+        return result;
+    }
+
+    @Override
     public void remove(Long id) {
         UserEntity userEntity = userRepository.findOneById(id);
         if (userEntity == null) {
