@@ -4,7 +4,6 @@ import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceApplicationEntity;
-import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.exception.FileStorageException;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
@@ -137,7 +136,7 @@ public class ApplicationService implements IApplicationService {
         if (!deviceRepository.existsById(deviceId)) {
             throw new ResourceNotFoundException("Not found device with id = " + deviceId);
         }
-        ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion())
+        ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion());
         if (applicationEntity != null) {
             DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(deviceId, applicationEntity.getId());
             if (deviceApplicationEntity != null){
