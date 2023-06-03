@@ -3,7 +3,7 @@ package com.vnptt.tms.config;
 /**
  * rule default
  */
-public enum ERole {
+public enum ERoleFunction {
     ROLE_USER,
     ROLE_MODERATOR,
     ROLE_ADMIN

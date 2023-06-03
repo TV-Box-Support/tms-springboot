@@ -30,8 +30,8 @@ public class DeviceEntity extends BaseEntity {
     private Date date;
     @Column(name = "location")
     private String location;
-    @Column(name = "desciption", length = 2000)
-    private String desciption;
+    @Column(name = "description", length = 2000)
+    private String description;
 
     @OneToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -49,6 +49,13 @@ public class DeviceEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "deviceEntityHistory")
     private List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }, mappedBy = "listDeviceDetail")
+    private List<ListDeviceEntity> listDeviceDetail = new ArrayList<>();
 
 
     public String getProduct() {
@@ -139,12 +146,12 @@ public class DeviceEntity extends BaseEntity {
         this.location = location;
     }
 
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<DeviceApplicationEntity> getDeviceApplicationEntities() {
@@ -171,5 +178,11 @@ public class DeviceEntity extends BaseEntity {
         this.historyPerformanceEntities = historyPerformanceEntities;
     }
 
+    public List<ListDeviceEntity> getListDeviceDetail() {
+        return listDeviceDetail;
+    }
 
+    public void setListDeviceDetail(List<ListDeviceEntity> listDeviceDetail) {
+        this.listDeviceDetail = listDeviceDetail;
+    }
 }

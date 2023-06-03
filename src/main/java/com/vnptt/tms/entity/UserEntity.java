@@ -26,10 +26,14 @@ public class UserEntity extends BaseEntity {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JoinTable(name = "rule_user",
+    @JoinTable(name = "rolefunction_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "rule_id"))
-    private List<RuleEntity> ruleEntities = new ArrayList<>();
+    private List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "role_management_id", nullable = false)
+    private RoleFunctionEntity roleFunctionEntity;
 
     public String getName() {
         return name;
@@ -87,11 +91,19 @@ public class UserEntity extends BaseEntity {
         this.active = active;
     }
 
-    public List<RuleEntity> getRuleEntities() {
+    public List<RoleFunctionEntity> getRuleEntities() {
         return ruleEntities;
     }
 
-    public void setRuleEntities(List<RuleEntity> ruleEntities) {
+    public void setRuleEntities(List<RoleFunctionEntity> ruleEntities) {
         this.ruleEntities = ruleEntities;
+    }
+
+    public RoleFunctionEntity getRoleFunctionEntity() {
+        return roleFunctionEntity;
+    }
+
+    public void setRoleFunctionEntity(RoleFunctionEntity roleFunctionEntity) {
+        this.roleFunctionEntity = roleFunctionEntity;
     }
 }

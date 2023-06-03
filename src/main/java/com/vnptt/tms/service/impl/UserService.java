@@ -1,13 +1,13 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.api.input.LoginRequest;
-import com.vnptt.tms.config.ERole;
+import com.vnptt.tms.config.ERoleFunction;
 import com.vnptt.tms.converter.UserConverter;
 import com.vnptt.tms.dto.UserDTO;
-import com.vnptt.tms.entity.RuleEntity;
+import com.vnptt.tms.entity.RoleFunctionEntity;
 import com.vnptt.tms.entity.UserEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
-import com.vnptt.tms.repository.RuleRepository;
+import com.vnptt.tms.repository.RoleFunctionRepository;
 import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.security.responce.JwtResponse;
@@ -36,7 +36,7 @@ public class UserService implements IUserService {//, UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private RuleRepository ruleRepository;
+    private RoleFunctionRepository roleFunctionRepository;
 
     @Autowired
     private UserConverter userConverter;
@@ -63,15 +63,15 @@ public class UserService implements IUserService {//, UserDetailsService {
         Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
         userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
 
-        List<RuleEntity> ruleEntities = new ArrayList<>();
+        List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
         List<String> rules = userDTO.getRuleName();
         if (rules != null) {
             for (String iteam : rules) {
-                RuleEntity ruleEntity = ruleRepository.findOneByName(iteam);
-                if (ruleEntity == null) {
+                RoleFunctionEntity roleFunctionEntity = roleFunctionRepository.findOneByName(iteam);
+                if (roleFunctionEntity == null) {
                     throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
                 }
-                ruleEntities.add(ruleEntity);
+                ruleEntities.add(roleFunctionEntity);
             }
 
             userEntity.setRuleEntities(ruleEntities);
@@ -278,10 +278,10 @@ public class UserService implements IUserService {//, UserDetailsService {
         userEntity.setPassword(encoder.encode(model.getPassword()));
 
         List<String> strRoles = model.getRuleName();
-        List<RuleEntity> roles = new ArrayList<>();
+        List<RoleFunctionEntity> roles = new ArrayList<>();
 
         if (strRoles == null) {
-            RuleEntity userRole = ruleRepository.findByName(ERole.ROLE_USER);
+            RoleFunctionEntity userRole = roleFunctionRepository.findByName(ERoleFunction.ROLE_USER);
             if (userRole == null) {
                 throw new RuntimeException("Error: Role is not found.");
             }
@@ -290,14 +290,14 @@ public class UserService implements IUserService {//, UserDetailsService {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        RuleEntity adminRole = ruleRepository.findByName(ERole.ROLE_ADMIN);
+                        RoleFunctionEntity adminRole = roleFunctionRepository.findByName(ERoleFunction.ROLE_ADMIN);
                         if (adminRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }
                         roles.add(adminRole);
                         break;
                     case "mod":
-                        RuleEntity modRole = ruleRepository.findByName(ERole.ROLE_MODERATOR);
+                        RoleFunctionEntity modRole = roleFunctionRepository.findByName(ERoleFunction.ROLE_MODERATOR);
                         if (modRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }
@@ -305,7 +305,7 @@ public class UserService implements IUserService {//, UserDetailsService {
 
                         break;
                     default:
-                        RuleEntity userRole = ruleRepository.findByName(ERole.ROLE_USER);
+                        RoleFunctionEntity userRole = roleFunctionRepository.findByName(ERoleFunction.ROLE_USER);
                         if (userRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }

@@ -60,14 +60,14 @@ mvn spring-boot:run
 ```
 ## Run following SQL insert statements
 ```
-INSERT INTO rule(name) VALUES('ROLE_USER');
-INSERT INTO rule(name) VALUES('ROLE_MODERATOR');
-INSERT INTO rule(name) VALUES('ROLE_ADMIN');
+INSERT INTO roles(name) VALUES('ROLE_USER');
+INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
 INSERT INTO user(name, username, password, company, email, contact) VALUES ("MODERATOR","root","$2a$10$icvl6beFqq9A9yL8Th5xGuhaM8dRkAFQOLgLXwJv.6SUX3lqOPWXu","none","none",0);
-INSERT INTO rule_user(user_id, rule_id) VALUES (1, 1); 
-INSERT INTO rule_user(user_id, rule_id) VALUES (1, 2); 
-INSERT INTO rule_user(user_id, rule_id) VALUES (1, 3); 
+INSERT INTO role_user(user_id, rule_id) VALUES (1, 1); 
+INSERT INTO role_user(user_id, rule_id) VALUES (1, 2); 
+INSERT INTO role_user(user_id, rule_id) VALUES (1, 3); 
 ```
 ## Moderator account
 ```

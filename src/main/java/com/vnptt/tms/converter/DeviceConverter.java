@@ -51,8 +51,8 @@ public class DeviceConverter {
      * @return
      */
     public DeviceEntity toEntity(DeviceDTO dto, DeviceEntity entity) {
-        if(dto.getDesciption() != null){
-            entity.setDesciption(dto.getDesciption());
+        if(dto.getDescription() != null){
+            entity.setDescription(dto.getDescription());
         }
         if(dto.getHdmi() != null){
             entity.setHdmi(dto.getHdmi());

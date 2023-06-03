@@ -14,7 +14,7 @@ public class DeviceDTO extends AbstractDTO {
     private Long rom;
     private Date date;
     private String location;
-    private String desciption;
+    private String description;
 
     public String getSn() {
         return sn;
@@ -96,12 +96,12 @@ public class DeviceDTO extends AbstractDTO {
         this.location = location;
     }
 
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNetwork() {

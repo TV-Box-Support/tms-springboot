@@ -1,14 +1,14 @@
 package com.vnptt.tms.entity;
 
-import com.vnptt.tms.config.ERole;
+import com.vnptt.tms.config.ERoleFunction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "rule")
-public class RuleEntity {
+@Table(name = "rolefunction")
+public class RoleFunctionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class RuleEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false, unique = true)
-    private ERole name;
+    private ERoleFunction name;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -29,11 +29,11 @@ public class RuleEntity {
         return id;
     }
 
-    public ERole getName() {
+    public ERoleFunction getName() {
         return name;
     }
 
-    public void setName(ERole name) {
+    public void setName(ERoleFunction name) {
         this.name = name;
     }
 
