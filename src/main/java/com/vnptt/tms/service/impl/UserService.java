@@ -275,14 +275,15 @@ public class UserService implements IUserService {//, UserDetailsService {
         if (userRepository.existsByUsername(model.getUsername())) {
             throw new RuntimeException("Username is already taken!");
         }
-
-        RoleManagementEntity roleManagementEntity = roleManagementRepository.findByName(model.getRuleManagement());
-        if (roleManagementEntity == null){
-            throw new ResourceNotFoundException("Not found role management!");
-        }
         UserEntity userEntity = userConverter.toEntity(model);
         userEntity.setActive(true);
-        userEntity.setRoleManagementEntityUser(roleManagementEntity);
+        if (model.getRuleManagement() != null){
+            RoleManagementEntity roleManagementEntity = roleManagementRepository.findByName(model.getRuleManagement());
+            if (roleManagementEntity == null){
+                throw new ResourceNotFoundException("Not found role management!");
+            }
+            userEntity.setRoleManagementEntityUser(roleManagementEntity);
+        }
 
         // Create new user's account
         userEntity.setPassword(encoder.encode(model.getPassword()));
