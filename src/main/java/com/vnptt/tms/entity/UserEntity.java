@@ -32,8 +32,8 @@ public class UserEntity extends BaseEntity {
     private List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "role_management_id", nullable = false)
-    private RoleFunctionEntity roleFunctionEntity;
+    @JoinColumn(name = "roleManId", nullable = false)
+    private RoleManagementEntity roleManagementEntityUser;
 
     public String getName() {
         return name;
@@ -99,11 +99,11 @@ public class UserEntity extends BaseEntity {
         this.ruleEntities = ruleEntities;
     }
 
-    public RoleFunctionEntity getRoleFunctionEntity() {
-        return roleFunctionEntity;
+    public RoleManagementEntity getRoleManagementEntityUser() {
+        return roleManagementEntityUser;
     }
 
-    public void setRoleFunctionEntity(RoleFunctionEntity roleFunctionEntity) {
-        this.roleFunctionEntity = roleFunctionEntity;
+    public void setRoleManagementEntityUser(RoleManagementEntity roleManagementEntityUser) {
+        this.roleManagementEntityUser = roleManagementEntityUser;
     }
 }

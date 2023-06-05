@@ -15,18 +15,14 @@ public class RoleManagementEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "location", nullable = false, unique = true)
+    @Column(name = "location")
     private String location;
 
     @Column(name = "description", length = 2000)
     private String description;
 
-    @OneToMany(mappedBy = "roleFunctionEntity",
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.REMOVE
-            })
-    private List<UserEntity> userEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "roleManagementEntityUser")
+    private List<UserEntity> userEntitiesMana = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -43,13 +39,12 @@ public class RoleManagementEntity {
         this.id = id;
     }
 
-
-    public List<UserEntity> getUserEntities() {
-        return userEntities;
+    public List<UserEntity> getUserEntitiesMana() {
+        return userEntitiesMana;
     }
 
-    public void setUserEntities(List<UserEntity> userEntities) {
-        this.userEntities = userEntities;
+    public void setUserEntitiesMana(List<UserEntity> userEntitiesMana) {
+        this.userEntitiesMana = userEntitiesMana;
     }
 
     public List<ListDeviceEntity> getDeviceEntities() {
@@ -83,4 +78,5 @@ public class RoleManagementEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }
