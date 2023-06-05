@@ -8,6 +8,8 @@ public interface ListDeviceRepository extends JpaRepository<ListDeviceEntity, Lo
 
     ListDeviceEntity findOneById(Long id);
 
+    ListDeviceEntity findOneByName(String all);
+
 //    ListDeviceEntity findListDeviceEntityByDeviceEntityListDeviceIdAndUserEntityListDeviceId(Long deviceId, Long userId);
 //
 //    List<ListDeviceEntity> findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(Long deviceId);

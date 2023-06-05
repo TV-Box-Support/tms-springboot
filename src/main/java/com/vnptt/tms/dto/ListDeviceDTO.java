@@ -3,7 +3,6 @@ package com.vnptt.tms.dto;
 public class ListDeviceDTO extends AbstractDTO {
     private String name;
     private String description;
-
     private String location;
 
     public String getName() {

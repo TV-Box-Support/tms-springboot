@@ -17,4 +17,10 @@ public interface IListDeviceService {
     List<ListDeviceDTO> findAll(Pageable pageable);
 
     List<ListDeviceDTO> findAll();
+
+    ListDeviceDTO addListDeviceToRolesManagement(Long roleManagementId, Long listDeviceId);
+
+    void removeListDeviceInManagement(Long roleManagementId, Long listDeviceId);
+
+    List<ListDeviceDTO> findListDeviceInRoleManagement(Long roleManagementId);
 }

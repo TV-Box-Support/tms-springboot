@@ -40,4 +40,10 @@ public interface IDeviceService {
     List<DeviceDTO> findAllWithApplication(Long applicationId);
 
     List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
+
+    List<DeviceDTO> mapDeviceToListDevice(Long listDeviceId, Long[] deviceIds);
+
+    void removeDeviceinListDevice(Long listDeviceId, Long deviceId);
+
+    List<DeviceDTO> findDeviceInListDevice(Long listDeviceId);
 }

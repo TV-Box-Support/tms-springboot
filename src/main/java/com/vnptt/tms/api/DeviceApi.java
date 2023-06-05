@@ -8,6 +8,7 @@ import com.vnptt.tms.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -241,6 +242,26 @@ public class DeviceApi {
     }
 
     /**
+     * get all device in list Device
+     *
+     * @param listDeviceId
+     * @return
+     */
+    @GetMapping(value = "/listDevice/{listDeviceId}/device")
+    public DeviceOutput showDeviceInListDevice(@PathVariable(name = "listDeviceId") Long listDeviceId) {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.findDeviceInListDevice(listDeviceId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * Create new device for production batch
      *
      * @param model serialNumber, dateOfManufacture, mac have required
@@ -250,6 +271,43 @@ public class DeviceApi {
     public DeviceDTO createDevice(@RequestBody DeviceDTO model) {
         return deviceService.save(model);
     }
+
+    /**
+     * add device to list to management
+     *
+     * @param listDeviceId id of List Device want to add
+     * @param deviceIds    list id of device add
+     * @return listDevice had add
+     */
+    @PostMapping(value = "/listDevice/{listDeviceId}/device")
+    public DeviceOutput addDeviceToListDevice(@PathVariable(value = "listDeviceId") Long listDeviceId,
+                                              @RequestBody Long[] deviceIds) {
+        DeviceOutput result = new DeviceOutput();
+        result.setListResult(deviceService.mapDeviceToListDevice(listDeviceId, deviceIds));
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Get List ListDevice success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+
+        return result;
+    }
+
+    /**
+     * Remove device in List Device
+     *
+     * @param listDeviceId list Device Id
+     * @param deviceId     device Id
+     * @return
+     */
+    @DeleteMapping(value = "/listDevice/{listDeviceId}/device/{deviceId}")
+    public ResponseEntity<HttpStatus> removeDeviceInListDevice(@PathVariable(value = "listDeviceId") Long listDeviceId,
+                                                               @PathVariable(value = "deviceId") Long deviceId) {
+        deviceService.removeDeviceinListDevice(listDeviceId, deviceId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     /**
      * update device info for Box

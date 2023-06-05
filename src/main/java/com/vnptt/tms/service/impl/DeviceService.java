@@ -2,10 +2,7 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.DeviceDTO;
-import com.vnptt.tms.entity.DeviceApplicationEntity;
-import com.vnptt.tms.entity.DeviceEntity;
-import com.vnptt.tms.entity.HistoryApplicationEntity;
-import com.vnptt.tms.entity.HistoryPerformanceEntity;
+import com.vnptt.tms.entity.*;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.*;
 import com.vnptt.tms.security.jwt.JwtUtils;
@@ -43,6 +40,9 @@ public class DeviceService implements IDeviceService {
     private HistoryPerformanceRepository historyPerformanceRepository;
 
     @Autowired
+    private ListDeviceRepository listDeviceRepository;
+
+    @Autowired
     private DeviceConverter deviceConverter;
 
     @Autowired
@@ -63,10 +63,18 @@ public class DeviceService implements IDeviceService {
         if (deviceDTO.getId() != null) {
             Optional<DeviceEntity> oldDeviceEntity = deviceRepository.findById(deviceDTO.getId());
             deviceEntity = deviceConverter.toEntity(deviceDTO, oldDeviceEntity.get());
+            deviceEntity = deviceRepository.save(deviceEntity);
         } else {
             deviceEntity = deviceConverter.toEntity(deviceDTO);
+            deviceEntity = deviceRepository.save(deviceEntity);
+            // add all device to list "all"
+            ListDeviceEntity listDeviceEntity = listDeviceRepository.findOneByName("all");
+            if (listDeviceEntity == null) {
+                throw new ResourceNotFoundException("miss list device all device!");
+            }
+            listDeviceEntity.addDevice(deviceEntity);
+            listDeviceRepository.save(listDeviceEntity);
         }
-        deviceEntity = deviceRepository.save(deviceEntity);
         return deviceConverter.toDTO(deviceEntity);
     }
 
@@ -313,6 +321,85 @@ public class DeviceService implements IDeviceService {
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
                 result.add(deviceConverter.toDTO(deviceEntity));
             }
+        }
+        return result;
+    }
+
+    /**
+     * add device to list
+     *
+     * @param listDeviceId
+     * @param deviceIds
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> mapDeviceToListDevice(Long listDeviceId, Long[] deviceIds) {
+        List<DeviceDTO> result = new ArrayList<>();
+        for (Long deviceId : deviceIds) {
+            DeviceEntity deviceEntity = listDeviceRepository.findById(listDeviceId).map(listDevice -> {
+                DeviceEntity device = deviceRepository.findById(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found device with id = " + deviceId));
+
+                // check if apk has still
+                List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
+                for (DeviceEntity item : deviceEntities) {
+                    if (item.equals(device)) {
+                        return device;
+                    }
+                }
+                //map and add apk to policy
+                listDevice.addDevice(device);
+                listDeviceRepository.save(listDevice);
+                return device;
+            }).orElseThrow(() -> new ResourceNotFoundException("Not found listDeavice with id = " + listDeviceId));
+
+            result.add(deviceConverter.toDTO(deviceEntity));
+        }
+        return result;
+    }
+
+    /**
+     * remove device out of list
+     *
+     * @param listDeviceId
+     * @param deviceId
+     */
+    @Override
+    public void removeDeviceinListDevice(Long listDeviceId, Long deviceId) {
+        ListDeviceEntity listDeviceEntity = listDeviceRepository.findById(listDeviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found list Device with id = " + listDeviceId));
+
+        List<DeviceEntity> deviceEntities = listDeviceEntity.getListDeviceDetail();
+        boolean remove = false;
+        for (DeviceEntity entity : deviceEntities) {
+            if (Objects.equals(entity.getId(), deviceId)) {
+                remove = true;
+            }
+        }
+        if (remove) {
+            listDeviceEntity.removeDevice(deviceId);
+            listDeviceRepository.save(listDeviceEntity);
+        } else {
+            throw new ResourceNotFoundException("policy don't have device with id = " + deviceId);
+        }
+    }
+
+    /**
+     * find all device in list
+     *
+     * @param listDeviceId id of list device
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findDeviceInListDevice(Long listDeviceId) {
+        List<DeviceDTO> result = new ArrayList<>();
+        ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
+        if (listDevice == null) {
+            throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
+        }
+        List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
+        for (DeviceEntity entity : deviceEntities) {
+            result.add(deviceConverter.toDTO(entity));
         }
         return result;
     }

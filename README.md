@@ -65,6 +65,8 @@ INSERT INTO rolefunction(name) VALUES('ROLE_MODERATOR');
 INSERT INTO rolefunction(name) VALUES('ROLE_ADMIN');
 
 INSERT INTO rolesmanagement(name) VALUES('all');
+INSERT INTO listdevice(name, location) VALUES('all', 'all');
+INSERT INTO listdevice_rolemanagement(device_id, role_management_id) VALUES("1","1");
 
 INSERT INTO user(name, username, password, company, email, contact, role_man_id) VALUES ("MODERATOR","root","$2a$10$icvl6beFqq9A9yL8Th5xGuhaM8dRkAFQOLgLXwJv.6SUX3lqOPWXu","none","none",0,1);
 INSERT INTO rolefunction_user(user_id, rule_id) VALUES (1, 1); 

@@ -5,9 +5,11 @@ import com.vnptt.tms.config.ERoleFunction;
 import com.vnptt.tms.converter.UserConverter;
 import com.vnptt.tms.dto.UserDTO;
 import com.vnptt.tms.entity.RoleFunctionEntity;
+import com.vnptt.tms.entity.RoleManagementEntity;
 import com.vnptt.tms.entity.UserEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.RoleFunctionRepository;
+import com.vnptt.tms.repository.RoleManagementRepository;
 import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.security.responce.JwtResponse;
@@ -37,6 +39,9 @@ public class UserService implements IUserService {//, UserDetailsService {
 
     @Autowired
     private RoleFunctionRepository roleFunctionRepository;
+
+    @Autowired
+    private RoleManagementRepository roleManagementRepository;
 
     @Autowired
     private UserConverter userConverter;
@@ -268,11 +273,16 @@ public class UserService implements IUserService {//, UserDetailsService {
     @Override
     public UserDTO signup(UserDTO model) {
         if (userRepository.existsByUsername(model.getUsername())) {
-            throw new RuntimeException("Error: Username is already taken!");
+            throw new RuntimeException("Username is already taken!");
         }
 
+        RoleManagementEntity roleManagementEntity = roleManagementRepository.findByName(model.getRuleManagement());
+        if (roleManagementEntity == null){
+            throw new ResourceNotFoundException("Not found role management!");
+        }
         UserEntity userEntity = userConverter.toEntity(model);
         userEntity.setActive(true);
+        userEntity.setRoleManagementEntityUser(roleManagementEntity);
 
         // Create new user's account
         userEntity.setPassword(encoder.encode(model.getPassword()));
@@ -313,6 +323,8 @@ public class UserService implements IUserService {//, UserDetailsService {
                 }
             });
         }
+
+
 
         userEntity.setRuleEntities(roles);
         userRepository.save(userEntity);

@@ -31,17 +31,14 @@ public class RoleManagementService implements IRoleManagementService {
     }
 
     /**
-     * unnecessary (only use to test)
-     *
      * @param model
      * @return
      */
     @Override
     public RoleManagementDTO save(RoleManagementDTO model) {
-//        RuleEntity ruleEntity = ruleConverter.toEntity(model);
-//        ruleEntity = ruleRepository.save(ruleEntity);
-//        return ruleConverter.toDTO(ruleEntity);
-        return null;
+        RoleManagementEntity roleManagementEntity = roleManagementConverter.toEntity(model);
+        roleManagementEntity = roleManagementRepository.save(roleManagementEntity);
+        return roleManagementConverter.toDTO(roleManagementEntity);
     }
 
     /**

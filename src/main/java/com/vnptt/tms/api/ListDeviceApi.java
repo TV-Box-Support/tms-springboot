@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 
+import com.vnptt.tms.api.output.DeviceOutput;
 import com.vnptt.tms.api.output.ListDeviceOutput;
 import com.vnptt.tms.dto.ListDeviceDTO;
 import com.vnptt.tms.service.IListDeviceService;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class ListDeviceApi {
 
     @Autowired
-    private IListDeviceService ListDeviceService;
+    private IListDeviceService listDeviceService;
 
     /**
-     * Get List device application for web
+     * Get List device for web
      *
      * @param page  desired page to display
      * @param limit number of elements 1 page
@@ -34,10 +35,10 @@ public class ListDeviceApi {
         if (page != null && limit != null) {
             result.setPage(page);
             Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult((ListDeviceService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) ListDeviceService.totalItem() / limit));
+            result.setListResult((listDeviceService.findAll(pageable)));
+            result.setTotalPage((int) Math.ceil((double) listDeviceService.totalItem() / limit));
         } else {
-            result.setListResult(ListDeviceService.findAll());
+            result.setListResult(listDeviceService.findAll());
         }
 
         if (result.getListResult().size() >= 1) {
@@ -58,13 +59,29 @@ public class ListDeviceApi {
      */
     @GetMapping(value = "/listDevice/{id}")
     public ListDeviceDTO showListDevice(@PathVariable("id") Long id) {
-        return ListDeviceService.findOne(id);
+        return listDeviceService.findOne(id);
     }
 
     /**
-     * unnecessary (only use to test)
-     * because used better api in ApplicationAPI folder
-     * and device only use thí addApplicationToDevice api to
+     * get list device in roles management
+     *
+     * @return
+     */
+    @GetMapping(value = "/roleManagement/{roleManagementId}/listDevice")
+    public ListDeviceOutput showListDeviceInRoles(@PathVariable(name = "roleManagementId") Long roleManagementId) {
+        ListDeviceOutput result = new ListDeviceOutput();
+        result.setListResult(listDeviceService.findListDeviceInRoleManagement(roleManagementId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * add new app to database
      *
      * @return http status ok 200
@@ -72,14 +89,50 @@ public class ListDeviceApi {
     @PostMapping(value = "listDevice")
     public ResponseEntity<ListDeviceDTO> createListDevice(@RequestBody ListDeviceDTO listDeviceDTO) {
 
-        return new ResponseEntity<>(ListDeviceService.save(listDeviceDTO), HttpStatus.OK);
+        return new ResponseEntity<>(listDeviceService.save(listDeviceDTO), HttpStatus.OK);
     }
 
+
+    /**
+     * Map List Device to roles Management
+     *
+     * @param roleManagementId id of role
+     * @param listDeviceId     id of list Device
+     * @return
+     */
+    @PostMapping(value = "/roleManagement/{roleManagementId}/listDevice/{listDeviceId}")
+    public ListDeviceDTO addListDeviceToRoleManagement(@PathVariable(value = "roleManagementId") Long roleManagementId,
+                                                       @PathVariable(value = "listDeviceId") Long listDeviceId) {
+        return listDeviceService.addListDeviceToRolesManagement(roleManagementId, listDeviceId);
+    }
+
+
+    /**
+     * Edit list device info
+     *
+     * @param listDeviceId
+     * @param listDeviceDTO
+     * @return
+     */
     @PutMapping(value = "/listDevice/{listDeviceId}")
     public ResponseEntity<ListDeviceDTO> updateListDevice(@PathVariable(name = "listDeviceId") Long listDeviceId,
                                                           @RequestBody ListDeviceDTO listDeviceDTO) {
         listDeviceDTO.setId(listDeviceId);
-        return new ResponseEntity<>(ListDeviceService.save(listDeviceDTO), HttpStatus.OK);
+        return new ResponseEntity<>(listDeviceService.save(listDeviceDTO), HttpStatus.OK);
+    }
+
+    /**
+     * remove map list device of roles management
+     *
+     * @param roleManagementId
+     * @param listDeviceId
+     * @return
+     */
+    @DeleteMapping(value = "/roleManagement/{roleManagementId}/listDevice/{listDeviceId}")
+    public ResponseEntity<HttpStatus> removeListDeviceInManagement(@PathVariable(value = "roleManagementId") Long roleManagementId,
+                                                                   @PathVariable(value = "listDeviceId") Long listDeviceId) {
+        listDeviceService.removeListDeviceInManagement(roleManagementId, listDeviceId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -90,6 +143,6 @@ public class ListDeviceApi {
     @DeleteMapping(value = "/ListDevice")
     @PreAuthorize("hasRole('MODERATOR')")
     public void deleteListDevice(@RequestBody Long[] ids) {
-        ListDeviceService.delete(ids);
+        listDeviceService.delete(ids);
     }
 }

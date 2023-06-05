@@ -6,17 +6,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "rolesmanagement")
-public class RoleManagementEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoleManagementEntity extends BaseEntity{
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "location")
-    private String location;
 
     @Column(name = "description", length = 2000)
     private String description;
@@ -30,14 +23,6 @@ public class RoleManagementEntity {
                     CascadeType.MERGE
             }, mappedBy = "listDeviceRoleManagement")
     private List<ListDeviceEntity> deviceEntities = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public List<UserEntity> getUserEntitiesMana() {
         return userEntitiesMana;
@@ -63,20 +48,25 @@ public class RoleManagementEntity {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addListDevice(ListDeviceEntity listDeviceEntity) {
+        this.deviceEntities.add(listDeviceEntity);
+        listDeviceEntity.getListDeviceRoleManagement().add(this);
+    }
+
+    public void removeListDevice(long listDeviceId) {
+        ListDeviceEntity listDevice = this.deviceEntities.stream().filter(listDeviceEntity -> listDeviceEntity.getId() == listDeviceId).findFirst().orElse(null);
+        if (listDevice != null) {
+            this.deviceEntities.remove(listDevice);
+            listDevice.getListDeviceDetail().remove(this);
+        }
     }
 
 }
