@@ -32,7 +32,7 @@ public class UserEntity extends BaseEntity {
     private List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "roleManId", nullable = false)
+    @JoinColumn(name = "roleManId")
     private RoleManagementEntity roleManagementEntityUser;
 
     public String getName() {
