@@ -1,6 +1,6 @@
 package com.vnptt.tms.dto;
 
-public class RoleFunctionDTO extends AbstractDTO{
+public class RolesDTO extends AbstractDTO{
 
     private String name;
 

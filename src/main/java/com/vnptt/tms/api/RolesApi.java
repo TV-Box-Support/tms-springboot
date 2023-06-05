@@ -1,7 +1,7 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.dto.RoleFunctionDTO;
-import com.vnptt.tms.service.IRoleFunctionService;
+import com.vnptt.tms.dto.RolesDTO;
+import com.vnptt.tms.service.IRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,19 +10,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("TMS/api")
-public class RoleFunctionApi {
+public class RolesApi {
 
     @Autowired
-    private IRoleFunctionService roleFunctionService;
+    private IRolesService roleFunctionService;
 
     @GetMapping(value = "/roleFunction")
-    public List<RoleFunctionDTO> showAllRoleFunction() {
+    public List<RolesDTO> showAllRoleFunction() {
         return roleFunctionService.findAll();
     }
 
     @PostMapping(value = "/roleFunction")
     @PreAuthorize("hasRole('MODERATOR')")
-    public RoleFunctionDTO createRoleFunction(@RequestBody RoleFunctionDTO model) {
+    public RolesDTO createRoleFunction(@RequestBody RolesDTO model) {
         return roleFunctionService.save(model);
     }
 

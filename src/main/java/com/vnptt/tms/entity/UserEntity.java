@@ -26,10 +26,10 @@ public class UserEntity extends BaseEntity {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JoinTable(name = "rolefunction_user",
+    @JoinTable(name = "role_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "rule_id"))
-    private List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
+    private List<RolesEntity> ruleEntities = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -94,11 +94,11 @@ public class UserEntity extends BaseEntity {
         this.active = active;
     }
 
-    public List<RoleFunctionEntity> getRuleEntities() {
+    public List<RolesEntity> getRuleEntities() {
         return ruleEntities;
     }
 
-    public void setRuleEntities(List<RoleFunctionEntity> ruleEntities) {
+    public void setRuleEntities(List<RolesEntity> ruleEntities) {
         this.ruleEntities = ruleEntities;
     }
 

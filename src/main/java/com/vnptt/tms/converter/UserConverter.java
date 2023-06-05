@@ -1,7 +1,7 @@
 package com.vnptt.tms.converter;
 
 import com.vnptt.tms.dto.UserDTO;
-import com.vnptt.tms.entity.RoleFunctionEntity;
+import com.vnptt.tms.entity.RolesEntity;
 import com.vnptt.tms.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +43,8 @@ public class UserConverter {
 
         // handle out put rule name
         List<String> rules = new ArrayList<>();
-        List<RoleFunctionEntity> ruleEntities = entity.getRuleEntities();
-        for (RoleFunctionEntity iteam : ruleEntities) {
+        List<RolesEntity> ruleEntities = entity.getRuleEntities();
+        for (RolesEntity iteam : ruleEntities) {
             rules.add(iteam.getName().name());
         }
 
