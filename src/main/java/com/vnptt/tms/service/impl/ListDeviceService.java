@@ -3,11 +3,10 @@ package com.vnptt.tms.service.impl;
 import com.vnptt.tms.converter.ListDeviceConverter;
 import com.vnptt.tms.dto.ListDeviceDTO;
 import com.vnptt.tms.entity.ListDeviceEntity;
-import com.vnptt.tms.entity.RoleManagementEntity;
+import com.vnptt.tms.entity.UserEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.ListDeviceRepository;
-import com.vnptt.tms.repository.RoleManagementRepository;
 import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.service.IListDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ public class ListDeviceService implements IListDeviceService {
     @Autowired
     private ListDeviceRepository listDeviceRepository;
 
-    @Autowired
-    private RoleManagementRepository roleManagementRepository;
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
@@ -125,37 +122,37 @@ public class ListDeviceService implements IListDeviceService {
     /**
      * Add listDevice to Role Management
      *
-     * @param roleManagementId
+     * @param userId
      * @param listDeviceId
      * @return
      */
     @Override
-    public ListDeviceDTO addListDeviceToRolesManagement(Long roleManagementId, Long listDeviceId) {
-        ListDeviceEntity listDeviceEntity = roleManagementRepository.findById(roleManagementId).map(roleManagement -> {
+    public ListDeviceDTO addListDeviceToUser(Long userId, Long listDeviceId) {
+        ListDeviceEntity listDeviceEntity = userRepository.findById(userId).map(user -> {
             ListDeviceEntity listDevice = listDeviceRepository.findById(listDeviceId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found list device with id = " + listDeviceId));
 
             // check if device has still
-            List<ListDeviceEntity> deviceEntities = roleManagement.getDeviceEntities();
+            List<ListDeviceEntity> deviceEntities = user.getDeviceEntities();
             for (ListDeviceEntity item : deviceEntities) {
                 if (item.equals(listDevice)) {
                     return listDevice;
                 }
             }
             //map and add device to policy
-            roleManagement.addListDevice(listDevice);
-            roleManagementRepository.save(roleManagement);
+            user.addListDevice(listDevice);
+            userRepository.save(user);
             return listDevice;
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found roles management with id = " + roleManagementId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found roles management with id = " + userId));
         return listDeviceConverter.toDTO(listDeviceEntity);
     }
 
     @Override
-    public void removeListDeviceInManagement(Long roleManagementId, Long listDeviceId) {
-        RoleManagementEntity roleManagementEntity = roleManagementRepository.findById(roleManagementId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found roles Management with id = " + roleManagementId));
+    public void removeListDeviceInUser(Long userId, Long listDeviceId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found roles Management with id = " + userId));
 
-        List<ListDeviceEntity> entities = roleManagementEntity.getDeviceEntities();
+        List<ListDeviceEntity> entities = userEntity.getDeviceEntities();
         boolean remove = false;
         for (ListDeviceEntity entity : entities) {
             if (Objects.equals(entity.getId(), listDeviceId)) {
@@ -163,26 +160,27 @@ public class ListDeviceService implements IListDeviceService {
             }
         }
         if (remove) {
-            roleManagementEntity.removeListDevice(listDeviceId);
-            roleManagementRepository.save(roleManagementEntity);
+            userEntity.removeListDevice(listDeviceId);
+            userRepository.save(userEntity);
         } else {
             throw new ResourceNotFoundException("policy don't have List Device with id = " + listDeviceId);
         }
     }
 
     /**
+     * find all list device user management
      *
-     * @param roleManagementId
+     * @param userId
      * @return
      */
     @Override
-    public List<ListDeviceDTO> findListDeviceInRoleManagement(Long roleManagementId) {
+    public List<ListDeviceDTO> findListDeviceManagementByUser(Long userId) {
         List<ListDeviceDTO> result = new ArrayList<>();
-        RoleManagementEntity roleManagement = roleManagementRepository.findOneById(roleManagementId);
-        if (roleManagement == null) {
-            throw new ResourceNotFoundException("not found list device with Id = " + roleManagementId);
+        UserEntity user = userRepository.findOneById(userId);
+        if (user == null) {
+            throw new ResourceNotFoundException("not found list device with Id = " + userId);
         }
-        List<ListDeviceEntity> deviceEntities = roleManagement.getDeviceEntities();
+        List<ListDeviceEntity> deviceEntities = user.getDeviceEntities();
         for (ListDeviceEntity entity : deviceEntities) {
             result.add(listDeviceConverter.toDTO(entity));
         }

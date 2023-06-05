@@ -118,6 +118,25 @@ public class UserApi {
     }
 
     /**
+     * get list User management List device
+     *
+     * @return
+     */
+    @GetMapping(value = "/listDevice/{listDeviceId}/user")
+    public UserOutput showListDeviceInRoles(@PathVariable(name = "listDeviceId") Long listDeviceId) {
+        UserOutput result = new UserOutput();
+        result.setListResult(userService.findUserManagementListDevice(listDeviceId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * create new user (only use to test before token
      *
      * @param model

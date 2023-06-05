@@ -87,7 +87,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
      * @param request
      * @return
      */
-    private String parseJwtTMS(HttpServletRequest request) {
+    public String parseJwtTMS(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("TMS ")) {

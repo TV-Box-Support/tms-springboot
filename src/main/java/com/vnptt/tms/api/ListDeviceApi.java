@@ -1,7 +1,6 @@
 package com.vnptt.tms.api;
 
 
-import com.vnptt.tms.api.output.DeviceOutput;
 import com.vnptt.tms.api.output.ListDeviceOutput;
 import com.vnptt.tms.dto.ListDeviceDTO;
 import com.vnptt.tms.service.IListDeviceService;
@@ -63,14 +62,14 @@ public class ListDeviceApi {
     }
 
     /**
-     * get list device in roles management
+     * get list device in of User management
      *
      * @return
      */
-    @GetMapping(value = "/roleManagement/{roleManagementId}/listDevice")
-    public ListDeviceOutput showListDeviceInRoles(@PathVariable(name = "roleManagementId") Long roleManagementId) {
+    @GetMapping(value = "/user/{userId}/listDevice")
+    public ListDeviceOutput showListDeviceInRoles(@PathVariable(name = "userId") Long userId) {
         ListDeviceOutput result = new ListDeviceOutput();
-        result.setListResult(listDeviceService.findListDeviceInRoleManagement(roleManagementId));
+        result.setListResult(listDeviceService.findListDeviceManagementByUser(userId));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -96,14 +95,14 @@ public class ListDeviceApi {
     /**
      * Map List Device to roles Management
      *
-     * @param roleManagementId id of role
-     * @param listDeviceId     id of list Device
+     * @param userId       id of role
+     * @param listDeviceId id of list Device
      * @return
      */
-    @PostMapping(value = "/roleManagement/{roleManagementId}/listDevice/{listDeviceId}")
-    public ListDeviceDTO addListDeviceToRoleManagement(@PathVariable(value = "roleManagementId") Long roleManagementId,
-                                                       @PathVariable(value = "listDeviceId") Long listDeviceId) {
-        return listDeviceService.addListDeviceToRolesManagement(roleManagementId, listDeviceId);
+    @PostMapping(value = "/user/{userId}/listDevice/{listDeviceId}")
+    public ListDeviceDTO addListDeviceToUser(@PathVariable(value = "userId") Long userId,
+                                             @PathVariable(value = "listDeviceId") Long listDeviceId) {
+        return listDeviceService.addListDeviceToUser(userId, listDeviceId);
     }
 
 
@@ -124,14 +123,14 @@ public class ListDeviceApi {
     /**
      * remove map list device of roles management
      *
-     * @param roleManagementId
+     * @param userId
      * @param listDeviceId
      * @return
      */
-    @DeleteMapping(value = "/roleManagement/{roleManagementId}/listDevice/{listDeviceId}")
-    public ResponseEntity<HttpStatus> removeListDeviceInManagement(@PathVariable(value = "roleManagementId") Long roleManagementId,
+    @DeleteMapping(value = "/user/{userId}/listDevice/{listDeviceId}")
+    public ResponseEntity<HttpStatus> removeListDeviceInManagement(@PathVariable(value = "userId") Long userId,
                                                                    @PathVariable(value = "listDeviceId") Long listDeviceId) {
-        listDeviceService.removeListDeviceInManagement(roleManagementId, listDeviceId);
+        listDeviceService.removeListDeviceInUser(userId, listDeviceId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

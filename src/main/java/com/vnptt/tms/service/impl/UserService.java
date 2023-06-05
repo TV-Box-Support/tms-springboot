@@ -5,11 +5,9 @@ import com.vnptt.tms.config.ERoleFunction;
 import com.vnptt.tms.converter.UserConverter;
 import com.vnptt.tms.dto.UserDTO;
 import com.vnptt.tms.entity.RoleFunctionEntity;
-import com.vnptt.tms.entity.RoleManagementEntity;
 import com.vnptt.tms.entity.UserEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.RoleFunctionRepository;
-import com.vnptt.tms.repository.RoleManagementRepository;
 import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.security.responce.JwtResponse;
@@ -39,9 +37,6 @@ public class UserService implements IUserService {//, UserDetailsService {
 
     @Autowired
     private RoleFunctionRepository roleFunctionRepository;
-
-    @Autowired
-    private RoleManagementRepository roleManagementRepository;
 
     @Autowired
     private UserConverter userConverter;
@@ -165,6 +160,21 @@ public class UserService implements IUserService {//, UserDetailsService {
     }
 
     @Override
+    public List<UserDTO> findUserManagementListDevice(Long listDeviceId) {
+//        List<UserDTO> result = new ArrayList<>();
+//        UserEntity user = userRepository.findOneById(userId);
+//        if (user == null) {
+//            throw new ResourceNotFoundException("not found list device with Id = " + userId);
+//        }
+//        List<ListDeviceEntity> deviceEntities = user.getDeviceEntities();
+//        for (ListDeviceEntity entity : deviceEntities) {
+//            result.add(listDeviceConverter.toDTO(entity));
+//        }
+//        return result;
+        return null;
+    }
+
+    @Override
     public void remove(Long id) {
         UserEntity userEntity = userRepository.findOneById(id);
         if (userEntity == null) {
@@ -275,15 +285,9 @@ public class UserService implements IUserService {//, UserDetailsService {
         if (userRepository.existsByUsername(model.getUsername())) {
             throw new RuntimeException("Username is already taken!");
         }
+
         UserEntity userEntity = userConverter.toEntity(model);
         userEntity.setActive(true);
-        if (model.getRuleManagement() != null){
-            RoleManagementEntity roleManagementEntity = roleManagementRepository.findByName(model.getRuleManagement());
-            if (roleManagementEntity == null){
-                throw new ResourceNotFoundException("Not found role management!");
-            }
-            userEntity.setRoleManagementEntityUser(roleManagementEntity);
-        }
 
         // Create new user's account
         userEntity.setPassword(encoder.encode(model.getPassword()));

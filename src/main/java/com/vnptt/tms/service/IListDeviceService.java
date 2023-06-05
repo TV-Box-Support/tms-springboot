@@ -18,9 +18,9 @@ public interface IListDeviceService {
 
     List<ListDeviceDTO> findAll();
 
-    ListDeviceDTO addListDeviceToRolesManagement(Long roleManagementId, Long listDeviceId);
+    ListDeviceDTO addListDeviceToUser(Long userId, Long listDeviceId);
 
-    void removeListDeviceInManagement(Long roleManagementId, Long listDeviceId);
+    void removeListDeviceInUser(Long userId, Long listDeviceId);
 
-    List<ListDeviceDTO> findListDeviceInRoleManagement(Long roleManagementId);
+    List<ListDeviceDTO> findListDeviceManagementByUser(Long userId);
 }

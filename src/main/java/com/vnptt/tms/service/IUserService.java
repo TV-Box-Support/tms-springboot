@@ -42,4 +42,6 @@ public interface IUserService {
     Long totalItemWithNameOrEmailOrUsernameOrCompany(Integer active, String name, String email, String username, String company);
 
     Long totalItemWithActive(Integer active);
+
+    List<UserDTO> findUserManagementListDevice(Long listDeviceId);
 }

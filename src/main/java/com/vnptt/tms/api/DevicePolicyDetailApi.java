@@ -2,10 +2,14 @@ package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.security.jwt.AuthTokenFilter;
+import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @CrossOrigin
 @RestController
@@ -14,6 +18,12 @@ public class DevicePolicyDetailApi {
 
     @Autowired
     private IDevicePolicyDetailnService devicePolicyDetailService;
+
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     /**
      * unnecessary (Only use to test)
@@ -104,15 +114,19 @@ public class DevicePolicyDetailApi {
      * status of policy detail
      * status = 0 not run
      *
-     * @param policyId id of policy
-     * @param ids      list id device
+     * @param policyId  id of policy
+     * @param deviceIds list id device
      * @return
      */
     @PostMapping(value = "/policy/{policyId}/devicePolicyDetail")
-    public DevicePolicyDetailOutput createDevicePolicyDetail(@PathVariable(value = "policyId") Long policyId,
-                                                             @RequestBody Long[] ids) {
+    public DevicePolicyDetailOutput createDevicePolicyDetail(HttpServletRequest request,
+                                                             @PathVariable(value = "policyId") Long policyId,
+                                                             @RequestBody Long[] deviceIds) {
+        String jwt = authTokenFilter.parseJwtTMS(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
         DevicePolicyDetailOutput output = new DevicePolicyDetailOutput();
-        output.setListResult(devicePolicyDetailService.save(ids, policyId));
+        output.setListResult(devicePolicyDetailService.save(username, deviceIds, policyId));
 
         if (output.getListResult().size() >= 1) {
             output.setMessage("Request Success");

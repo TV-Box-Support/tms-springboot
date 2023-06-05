@@ -2,13 +2,9 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DevicePolicyDetailConverter;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
-import com.vnptt.tms.entity.DeviceEntity;
-import com.vnptt.tms.entity.DevicePolicyDetailEntity;
-import com.vnptt.tms.entity.PolicyEntity;
+import com.vnptt.tms.entity.*;
 import com.vnptt.tms.exception.ResourceNotFoundException;
-import com.vnptt.tms.repository.DevicePolicyDetailRepository;
-import com.vnptt.tms.repository.DeviceRepository;
-import com.vnptt.tms.repository.PolicyRepository;
+import com.vnptt.tms.repository.*;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +27,12 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     private DeviceRepository deviceRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ListDeviceRepository listDeviceRepository;
+
+    @Autowired
     private DevicePolicyDetailConverter devicePolicyDetailConverter;
 
     /**
@@ -40,10 +42,13 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
      * @return
      */
     @Override
-    public List<DevicePolicyDetailDTO> save(Long[] ids, Long policyId) {
+    public List<DevicePolicyDetailDTO> save(String username, Long[] ids, Long policyId) {
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
         PolicyEntity entity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
+
+        UserEntity userEntity = userRepository.findByUsername(username);
+        List<ListDeviceEntity> entities = userEntity.getDeviceEntities();
 
         for (Long id : ids) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(id);
@@ -125,7 +130,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     @Override
     public DevicePolicyDetailDTO update(Long id, int status) {
         DevicePolicyDetailEntity devicePolicyDetailEntity = devicePolicyDetailRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found devicePolicyDEtail with id = " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found devicePolicyDetail with id = " + id));
         devicePolicyDetailEntity.setStatus(status);
         devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
         return devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity);

@@ -31,10 +31,10 @@ public class ListDeviceEntity extends BaseEntity {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JoinTable(name = "ListdeviceRolemanagement",
+    @JoinTable(name = "ListdeviceUser",
             joinColumns = @JoinColumn(name = "device_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_management_id"))
-    private List<RoleManagementEntity> listDeviceRoleManagement;
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<UserEntity> userEntitiesListDevice;
 
     public String getName() {
         return name;
@@ -68,12 +68,12 @@ public class ListDeviceEntity extends BaseEntity {
         this.listDeviceDetail = listDeviceDetail;
     }
 
-    public List<RoleManagementEntity> getListDeviceRoleManagement() {
-        return listDeviceRoleManagement;
+    public List<UserEntity> getUserEntitiesListDevice() {
+        return userEntitiesListDevice;
     }
 
-    public void setListDeviceRoleManagement(List<RoleManagementEntity> listDeviceRoleManagement) {
-        this.listDeviceRoleManagement = listDeviceRoleManagement;
+    public void setUserEntitiesListDevice(List<UserEntity> userEntitiesListDevice) {
+        this.userEntitiesListDevice = userEntitiesListDevice;
     }
 
     public void addDevice(DeviceEntity deviceEntity) {

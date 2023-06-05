@@ -31,9 +31,12 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "rule_id"))
     private List<RoleFunctionEntity> ruleEntities = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "roleManId")
-    private RoleManagementEntity roleManagementEntityUser;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }, mappedBy = "userEntitiesListDevice")
+    private List<ListDeviceEntity> deviceEntities = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -99,11 +102,24 @@ public class UserEntity extends BaseEntity {
         this.ruleEntities = ruleEntities;
     }
 
-    public RoleManagementEntity getRoleManagementEntityUser() {
-        return roleManagementEntityUser;
+    public List<ListDeviceEntity> getDeviceEntities() {
+        return deviceEntities;
     }
 
-    public void setRoleManagementEntityUser(RoleManagementEntity roleManagementEntityUser) {
-        this.roleManagementEntityUser = roleManagementEntityUser;
+    public void setDeviceEntities(List<ListDeviceEntity> deviceEntities) {
+        this.deviceEntities = deviceEntities;
+    }
+
+    public void addListDevice(ListDeviceEntity listDeviceEntity) {
+        this.deviceEntities.add(listDeviceEntity);
+        listDeviceEntity.getUserEntitiesListDevice().add(this);
+    }
+
+    public void removeListDevice(long listDeviceId) {
+        ListDeviceEntity listDevice = this.deviceEntities.stream().filter(listDeviceEntity -> listDeviceEntity.getId() == listDeviceId).findFirst().orElse(null);
+        if (listDevice != null) {
+            this.deviceEntities.remove(listDevice);
+            listDevice.getUserEntitiesListDevice().remove(this);
+        }
     }
 }
