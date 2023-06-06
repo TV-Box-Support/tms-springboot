@@ -165,4 +165,20 @@ public class DeviceApplicationService implements IDeviceApplicationService {
         return deviceApplicationConverter.toDTO(deviceApplication);
     }
 
+    @Override
+    public List<DeviceApplicationDTO> findAllWithName(String name, Pageable pageable) {
+        List<DeviceApplicationEntity> entities = deviceApplicationRepository.findAllByApplicationEntityDetailNameOrderByModifiedDateDesc(name, pageable);
+        List<DeviceApplicationDTO> result = new ArrayList<>();
+        for (DeviceApplicationEntity item : entities) {
+            DeviceApplicationDTO deviceApplicationDTO = deviceApplicationConverter.toDTO(item);
+            result.add(deviceApplicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAllWithName(String name) {
+        return deviceApplicationRepository.countByApplicationEntityDetailNameContaining(name);
+    }
+
 }

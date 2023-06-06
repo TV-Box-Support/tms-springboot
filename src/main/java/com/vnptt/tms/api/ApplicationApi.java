@@ -49,10 +49,11 @@ public class ApplicationApi {
             Pageable pageable = PageRequest.of(page - 1, limit);
             if (packagename != null) {
                 result.setListResult(applicationService.findByPackagename(packagename, pageable));
+                result.setTotalPage((int) Math.ceil((double) applicationService.countByPackagename(packagename) / limit));
             } else {
                 result.setListResult((applicationService.findAll(pageable)));
+                result.setTotalPage((int) Math.ceil((double) applicationService.totalItem() / limit));
             }
-            result.setTotalPage((int) Math.ceil((double) applicationService.totalItem() / limit));
         } else if (packagename != null) {
             result.setListResult(applicationService.findByPackagename(packagename));
         } else {
@@ -86,26 +87,28 @@ public class ApplicationApi {
      *
      * @param deviceId device want to search
      * @param isSystem true/false/null
-     * @param name name of application want to search
+     * @param name     name of application want to search
      * @return List application DTO
      */
     @GetMapping("/device/{deviceId}/application")
-    public ApplicationOutput getAllApplicationByDeviceEntityId(@PathVariable(value = "deviceId") Long deviceId,
+    public ApplicationOutput getAllApplicationByDeviceEntityId(@RequestParam(value = "page") Integer page,
+                                                               @RequestParam(value = "limit") Integer limit,
+                                                               @PathVariable(value = "deviceId") Long deviceId,
                                                                @RequestParam(value = "isSystem", required = false) Boolean isSystem,
                                                                @RequestParam(value = "name", required = false) String name) {
         ApplicationOutput result = new ApplicationOutput();
-        if (isSystem == null) {
-            if (name == null) {
-                result.setListResult(applicationService.findAllOnDevice(deviceId));
-            } else {
-                result.setListResult(applicationService.findAllOnDevice(deviceId, name));
-            }
+
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (isSystem == null && name == null) {
+            result.setListResult(applicationService.findAllOnDevice(deviceId, pageable));
+            result.setTotalPage((int) Math.ceil((double) applicationService.countByDeviceId(deviceId) / limit));
         } else {
-            if (name == null) {
-                result.setListResult(applicationService.findAllOnDevice(deviceId, isSystem));
-            } else {
-                result.setListResult(applicationService.findAllOnDevice(deviceId, name, isSystem));
+            if (isSystem == null){
+                isSystem = false;
             }
+            result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isSystem, pageable));
+            result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isSystem) / limit));
         }
 
         if (result.getListResult().size() >= 1) {

@@ -139,7 +139,7 @@ public class ApplicationService implements IApplicationService {
         ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion());
         if (applicationEntity != null) {
             DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(deviceId, applicationEntity.getId());
-            if (deviceApplicationEntity != null){
+            if (deviceApplicationEntity != null) {
                 throw new FileStorageException(" Application had map in device ");
             }
             deviceApplicationEntity = new DeviceApplicationEntity();
@@ -152,6 +152,53 @@ public class ApplicationService implements IApplicationService {
         }
 
         return applicationConverter.toDTO(applicationEntity);
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllOnDevice(Long deviceId, Pageable pageable) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(deviceId, pageable);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+            result.add(applicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countByDeviceId(Long deviceId) {
+        return deviceApplicationRepository.countByDeviceAppEntityDetailId(deviceId);
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Pageable pageable) {
+        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingOrderByModifiedDateDesc(deviceId, isSystem, name, pageable);
+        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+        }
+        for (ApplicationEntity item : applicationEntities) {
+            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+            result.add(applicationDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem) {
+        return deviceApplicationRepository.countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContaining(deviceId, isSystem, name);
+    }
+
+    @Override
+    public Long countByPackagename(String packagename) {
+        return applicationRepository.countByPackagenameContaining(packagename);
     }
 
     /**
@@ -180,74 +227,6 @@ public class ApplicationService implements IApplicationService {
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
-        }
-        return result;
-    }
-
-    @Override
-    public List<ApplicationDTO> findAllOnDevice(Long deviceId) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
-        List<ApplicationDTO> result = new ArrayList<>();
-
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(deviceId);
-        for (DeviceApplicationEntity item : deviceApplicationEntities) {
-            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
-        }
-        for (ApplicationEntity item : applicationEntities) {
-            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
-            result.add(applicationDTO);
-        }
-        return result;
-    }
-
-    @Override
-    public List<ApplicationDTO> findAllOnDevice(Long deviceId, String name) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
-        List<ApplicationDTO> result = new ArrayList<>();
-
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(deviceId);
-        for (DeviceApplicationEntity item : deviceApplicationEntities) {
-            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
-        }
-        for (ApplicationEntity item : applicationEntities) {
-            if (item.getName().contains(name)) {
-                ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
-                result.add(applicationDTO);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public List<ApplicationDTO> findAllOnDevice(Long deviceId, Boolean isSystem) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
-        List<ApplicationDTO> result = new ArrayList<>();
-
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveOrderByModifiedDateDesc(deviceId, isSystem);
-        for (DeviceApplicationEntity item : deviceApplicationEntities) {
-            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
-        }
-        for (ApplicationEntity item : applicationEntities) {
-            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
-            result.add(applicationDTO);
-        }
-        return result;
-    }
-
-    @Override
-    public List<ApplicationDTO> findAllOnDevice(Long deviceId, String name, Boolean isSystem) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
-        List<ApplicationDTO> result = new ArrayList<>();
-
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveOrderByModifiedDateDesc(deviceId, isSystem);
-        for (DeviceApplicationEntity item : deviceApplicationEntities) {
-            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
-        }
-        for (ApplicationEntity item : applicationEntities) {
-            if (item.getName().contains(name)) {
-                ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
-                result.add(applicationDTO);
-            }
         }
         return result;
     }

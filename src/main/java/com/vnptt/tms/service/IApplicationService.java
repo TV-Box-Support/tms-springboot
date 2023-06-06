@@ -22,13 +22,15 @@ public interface IApplicationService {
 
     List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable);
 
-    List<ApplicationDTO> findAllOnDevice(Long deviceId);
-
-    List<ApplicationDTO> findAllOnDevice(Long deviceId, String name);
-
-    List<ApplicationDTO> findAllOnDevice(Long deviceId, Boolean isSystem);
-
-    List<ApplicationDTO> findAllOnDevice(Long deviceId, String name, Boolean isSystem);
-
     ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model);
+
+    List<ApplicationDTO> findAllOnDevice(Long deviceId, Pageable pageable);
+
+    Long countByDeviceId(Long deviceId);
+
+    List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Pageable pageable);
+
+    Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem);
+
+    Long countByPackagename(String packagename);
 }

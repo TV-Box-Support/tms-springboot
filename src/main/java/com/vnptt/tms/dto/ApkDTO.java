@@ -3,7 +3,7 @@ package com.vnptt.tms.dto;
 public class ApkDTO extends AbstractDTO{
     private String packagename;
     private String apkfileUrl;
-    private long version;
+    private String version;
     private String md5;
     private Long packagesize;
 
@@ -23,11 +23,11 @@ public class ApkDTO extends AbstractDTO{
         this.apkfileUrl = apkfileUrl;
     }
 
-    public long getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 

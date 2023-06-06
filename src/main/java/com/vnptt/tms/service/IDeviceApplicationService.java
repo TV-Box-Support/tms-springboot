@@ -21,4 +21,8 @@ public interface IDeviceApplicationService {
     void removeAppOnDevice(Long deviceId, Long applicationId);
 
     DeviceApplicationDTO update(Long deviceId, Long applicationId);
+
+    List<DeviceApplicationDTO> findAllWithName(String name, Pageable pageable);
+
+    Long countAllWithName(String name);
 }

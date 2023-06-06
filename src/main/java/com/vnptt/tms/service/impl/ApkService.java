@@ -211,7 +211,7 @@ public class ApkService implements IApkService {
         try {
             ApkFile apkFile = new ApkFile(filePath);
             ApkMeta apkMeta = apkFile.getApkMeta();
-            apkEntity.setVersion(apkMeta.getVersionCode());
+            apkEntity.setVersion(String.valueOf(apkMeta.getVersionCode()));
         } catch (IOException e) {
             throw new RuntimeException("the file you use is not apk");
         }
@@ -277,6 +277,22 @@ public class ApkService implements IApkService {
         } catch (MalformedURLException ex) {
             throw new FileNotFoundException("File not found " + fileName + " Cause: " + ex);
         }
+    }
+
+    @Override
+    public List<ApkDTO> findAllWithPackageAndVersion(String packagename, String version, Pageable pageable) {
+        List<ApkEntity> entities = apkRepository.findAllByPackagenameContainingAndVersionContainingOrderByModifiedDateDesc(packagename, version, pageable);
+        List<ApkDTO> result = new ArrayList<>();
+        for (ApkEntity item : entities) {
+            ApkDTO apkDTO = apkConverter.toDTO(item);
+            result.add(apkDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAllWithPackageAndVersion(String packagename, String version) {
+        return apkRepository.countByPackagenameContainingAndVersionContainingOrderByModifiedDateDesc(packagename, version);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.vnptt.tms.repository;
 
 import com.vnptt.tms.entity.DeviceApplicationEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,10 +13,18 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     DeviceApplicationEntity findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(Long deviceId, Long applicationId);
 
-    List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(Long deviceId);
+    List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(Long deviceId, Pageable pageable);
 
-    List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdAndIsaliveOrderByModifiedDateDesc(Long deviceId, boolean isAlive);
+    List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingOrderByModifiedDateDesc(Long deviceId, boolean isAlive, String name, Pageable pageable);
 
-    List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdOrderByModifiedDateDesc (Long applicationId);
+    Long countByDeviceAppEntityDetailId(Long deviceId);
+
+    Long countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContaining(Long deviceId, boolean isAlive, String name);
+
+    List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdOrderByModifiedDateDesc(Long applicationId);
+
+    List<DeviceApplicationEntity> findAllByApplicationEntityDetailNameOrderByModifiedDateDesc(String name, Pageable pageable);
+
+    Long countByApplicationEntityDetailNameContaining(String name);
 
 }

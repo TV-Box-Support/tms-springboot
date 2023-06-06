@@ -29,14 +29,25 @@ public class DeviceApplicationApi {
      */
     @GetMapping(value = "/deviceApplication")
     public DeviceApplicationOutput showDeviceApplication(@RequestParam(value = "page", required = false) Integer page,
-                                                         @RequestParam(value = "limit", required = false) Integer limit) {
+                                                         @RequestParam(value = "limit", required = false) Integer limit,
+                                                         @RequestParam(value = "name", required = false) String name) {
         DeviceApplicationOutput result = new DeviceApplicationOutput();
         if (page != null && limit != null) {
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult((deviceApplicationService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) deviceApplicationService.totalItem() / limit));
+            if (name == null) {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((deviceApplicationService.findAll(pageable)));
+                result.setTotalPage((int) Math.ceil((double) deviceApplicationService.totalItem() / limit));
+            } else {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((deviceApplicationService.findAllWithName(name, pageable)));
+                result.setTotalPage((int) Math.ceil((double) deviceApplicationService.countAllWithName(name) / limit));
+            }
         } else {
+            if(name != null){
+                throw new RuntimeException("search must be had page value and limit value!");
+            }
             result.setListResult(deviceApplicationService.findAll());
         }
 

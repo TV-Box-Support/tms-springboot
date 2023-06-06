@@ -12,7 +12,7 @@ public class ApkEntity extends BaseEntity {
     @Column(name = "apkfileUrl", nullable = false)
     private String apkfileUrl;
     @Column(name = "version", nullable = false)
-    private long version;
+    private String version;
     @Column(name = "md5", nullable = false)
     private String md5;
     @Column(name = "packagesize", nullable = false)
@@ -41,11 +41,11 @@ public class ApkEntity extends BaseEntity {
         this.apkfileUrl = apkfileUrl;
     }
 
-    public long getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 

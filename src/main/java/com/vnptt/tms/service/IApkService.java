@@ -29,4 +29,8 @@ public interface IApkService {
     ApkDTO saveFile(MultipartFile file);
 
     Resource loadFileAsResource(String fileName);
+
+    List<ApkDTO> findAllWithPackageAndVersion(String packagename, String version, Pageable pageable);
+
+    Long countAllWithPackageAndVersion(String packagename, String version);
 }

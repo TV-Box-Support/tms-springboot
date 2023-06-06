@@ -67,6 +67,7 @@ public class ListDeviceApi {
      * @return
      */
     @GetMapping(value = "/user/{userId}/listDevice")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ListDeviceOutput showListDeviceInRoles(@PathVariable(name = "userId") Long userId) {
         ListDeviceOutput result = new ListDeviceOutput();
         result.setListResult(listDeviceService.findListDeviceManagementByUser(userId));
@@ -86,6 +87,7 @@ public class ListDeviceApi {
      * @return http status ok 200
      */
     @PostMapping(value = "listDevice")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ListDeviceDTO> createListDevice(@RequestBody ListDeviceDTO listDeviceDTO) {
 
         return new ResponseEntity<>(listDeviceService.save(listDeviceDTO), HttpStatus.OK);
@@ -100,6 +102,7 @@ public class ListDeviceApi {
      * @return
      */
     @PostMapping(value = "/user/{userId}/listDevice/{listDeviceId}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ListDeviceDTO addListDeviceToUser(@PathVariable(value = "userId") Long userId,
                                              @PathVariable(value = "listDeviceId") Long listDeviceId) {
         return listDeviceService.addListDeviceToUser(userId, listDeviceId);
@@ -114,6 +117,7 @@ public class ListDeviceApi {
      * @return
      */
     @PutMapping(value = "/listDevice/{listDeviceId}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ListDeviceDTO> updateListDevice(@PathVariable(name = "listDeviceId") Long listDeviceId,
                                                           @RequestBody ListDeviceDTO listDeviceDTO) {
         listDeviceDTO.setId(listDeviceId);
@@ -128,6 +132,7 @@ public class ListDeviceApi {
      * @return
      */
     @DeleteMapping(value = "/user/{userId}/listDevice/{listDeviceId}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> removeListDeviceInManagement(@PathVariable(value = "userId") Long userId,
                                                                    @PathVariable(value = "listDeviceId") Long listDeviceId) {
         listDeviceService.removeListDeviceInUser(userId, listDeviceId);

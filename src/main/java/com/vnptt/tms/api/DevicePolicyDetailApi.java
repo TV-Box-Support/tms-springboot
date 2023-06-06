@@ -79,7 +79,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * get list PolicyDetail math with device to check policies unfinished for box
+     * get list PolicyDetail math for Web
      * <p>
      * status of PolicyDetail
      * status 0 = not run

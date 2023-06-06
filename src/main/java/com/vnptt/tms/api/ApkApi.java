@@ -51,14 +51,26 @@ public class ApkApi {
      */
     @GetMapping(value = "/apk")
     public ApkOutput showApk(@RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "limit", required = false) Integer limit) {
+                             @RequestParam(value = "limit", required = false) Integer limit,
+                             @RequestParam(value = "packagename", required = false) String packagename,
+                             @RequestParam(value = "version", required = false) String version) {
         ApkOutput result = new ApkOutput();
         if (page != null && limit != null) {
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult(apkService.findAll(pageable));
-            result.setTotalPage((int) Math.ceil((double) apkService.totalItem() / limit));
+            if (packagename == null && version == null) {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult(apkService.findAll(pageable));
+                result.setTotalPage((int) Math.ceil((double) apkService.totalItem() / limit));
+            } else {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult(apkService.findAllWithPackageAndVersion(packagename, version, pageable));
+                result.setTotalPage((int) Math.ceil((double) apkService.countAllWithPackageAndVersion(packagename, version) / limit));
+            }
         } else {
+            if (packagename != null || version != null) {
+                throw new RuntimeException("search need page value and limit value!");
+            }
             result.setListResult(apkService.findAll());
         }
 

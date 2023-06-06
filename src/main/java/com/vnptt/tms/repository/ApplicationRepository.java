@@ -13,8 +13,11 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     List<ApplicationEntity> findByPackagenameContainingOrderByModifiedDateDesc(String packagename);
 
+    long countByPackagenameContaining(String packagename);
+
     ApplicationEntity findOneByPackagenameAndVersion(String packagename, String version);
 
     List<ApplicationEntity> findByPackagenameContainingOrderByModifiedDateDesc(String packagename, Pageable pageable);
+
 
 }
