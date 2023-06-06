@@ -4,9 +4,11 @@ import com.vnptt.tms.api.input.LoginRequest;
 import com.vnptt.tms.config.ERoleFunction;
 import com.vnptt.tms.converter.UserConverter;
 import com.vnptt.tms.dto.UserDTO;
+import com.vnptt.tms.entity.ListDeviceEntity;
 import com.vnptt.tms.entity.RolesEntity;
 import com.vnptt.tms.entity.UserEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.repository.ListDeviceRepository;
 import com.vnptt.tms.repository.RolesRepository;
 import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.security.jwt.JwtUtils;
@@ -37,6 +39,9 @@ public class UserService implements IUserService {//, UserDetailsService {
 
     @Autowired
     private RolesRepository rolesRepository;
+
+    @Autowired
+    private ListDeviceRepository listDeviceRepository;
 
     @Autowired
     private UserConverter userConverter;
@@ -159,19 +164,24 @@ public class UserService implements IUserService {//, UserDetailsService {
         return userRepository.countAllByActive(activeConvert);
     }
 
+    /**
+     * get all user manager list
+     *
+     * @param listDeviceId
+     * @return
+     */
     @Override
     public List<UserDTO> findUserManagementListDevice(Long listDeviceId) {
-//        List<UserDTO> result = new ArrayList<>();
-//        UserEntity user = userRepository.findOneById(userId);
-//        if (user == null) {
-//            throw new ResourceNotFoundException("not found list device with Id = " + userId);
-//        }
-//        List<ListDeviceEntity> deviceEntities = user.getDeviceEntities();
-//        for (ListDeviceEntity entity : deviceEntities) {
-//            result.add(listDeviceConverter.toDTO(entity));
-//        }
-//        return result;
-        return null;
+        List<UserDTO> result = new ArrayList<>();
+        ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
+        if (listDevice == null) {
+            throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
+        }
+        List<UserEntity> userEntities = listDevice.getUserEntitiesListDevice();
+        for (UserEntity entity : userEntities) {
+            result.add(userConverter.toDTO(entity));
+        }
+        return result;
     }
 
     @Override
@@ -254,6 +264,7 @@ public class UserService implements IUserService {//, UserDetailsService {
 
     /**
      * todo modify
+     *
      * @param ruleIds
      * @return
      */
@@ -328,7 +339,6 @@ public class UserService implements IUserService {//, UserDetailsService {
                 }
             });
         }
-
 
 
         userEntity.setRuleEntities(roles);

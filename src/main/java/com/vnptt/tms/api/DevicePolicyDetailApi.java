@@ -2,6 +2,11 @@ package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.ListDeviceEntity;
+import com.vnptt.tms.entity.UserEntity;
+import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.repository.UserRepository;
 import com.vnptt.tms.security.jwt.AuthTokenFilter;
 import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
@@ -10,6 +15,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -18,6 +27,9 @@ public class DevicePolicyDetailApi {
 
     @Autowired
     private IDevicePolicyDetailnService devicePolicyDetailService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AuthTokenFilter authTokenFilter;
@@ -124,6 +136,30 @@ public class DevicePolicyDetailApi {
                                                              @RequestBody Long[] deviceIds) {
         String jwt = authTokenFilter.parseJwtTMS(request);
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        UserEntity userEntity = userRepository.findByUsername(username);
+        List<ListDeviceEntity> listDeviceEntities = userEntity.getDeviceEntities();
+
+        Set<DeviceEntity> deviceEntitiesCheck = new HashSet<>();
+        for (ListDeviceEntity entity : listDeviceEntities) {
+            List<DeviceEntity> devices = entity.getListDeviceDetail();
+            deviceEntitiesCheck.addAll(devices);
+        }
+
+        List<DeviceEntity> finalDeviceEntitiesCheck = new ArrayList<>(deviceEntitiesCheck);
+        // Check if the elements in deviceIds are the same as geviceEntity.getId() in the finalDeviceEntitiesCheck list
+        for (Long deviceId : deviceIds) {
+            boolean found = false;
+            for (DeviceEntity deviceEntity : finalDeviceEntitiesCheck) {
+                if (deviceId.equals(deviceEntity.getId())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new ResourceNotFoundException("you do not have permission to operate the device with id = " + deviceId);
+            }
+        }
 
         DevicePolicyDetailOutput output = new DevicePolicyDetailOutput();
         output.setListResult(devicePolicyDetailService.save(username, deviceIds, policyId));

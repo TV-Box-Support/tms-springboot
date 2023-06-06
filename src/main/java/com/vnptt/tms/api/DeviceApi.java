@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DeviceOutput;
+import com.vnptt.tms.api.output.TerminalStudioOutput;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.security.jwt.JwtUtils;
@@ -258,6 +259,18 @@ public class DeviceApi {
         } else {
             result.setMessage("no matching element found");
         }
+        return result;
+    }
+
+    /**
+     * get terminal studio info
+     *
+     * @return
+     */
+    @GetMapping(value = "/terminalStudio/device")
+    public TerminalStudioOutput showTerminalStudioInfo() {
+        TerminalStudioOutput result = deviceService.updateTerminalStudioInfo();
+
         return result;
     }
 

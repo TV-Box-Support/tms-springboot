@@ -1,5 +1,6 @@
 package com.vnptt.tms.service;
 
+import com.vnptt.tms.api.output.TerminalStudioOutput;
 import com.vnptt.tms.dto.DeviceDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -46,4 +47,6 @@ public interface IDeviceService {
     void removeDeviceinListDevice(Long listDeviceId, Long deviceId);
 
     List<DeviceDTO> findDeviceInListDevice(Long listDeviceId);
+
+    TerminalStudioOutput updateTerminalStudioInfo();
 }

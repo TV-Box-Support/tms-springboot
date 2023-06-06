@@ -1,5 +1,6 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.TerminalStudioOutput;
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.entity.*;
@@ -402,6 +403,22 @@ public class DeviceService implements IDeviceService {
             result.add(deviceConverter.toDTO(entity));
         }
         return result;
+    }
+
+    @Override
+    public TerminalStudioOutput updateTerminalStudioInfo() {
+        TerminalStudioOutput terminalStudioOutput = new TerminalStudioOutput();
+        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime timeLast7day = LocalDateTime.now().plusDays(7);
+        LocalDateTime timeLast30day = LocalDateTime.now().plusDays(30);
+        Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
+        Long last7day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast7day, LocalDateTime.now());
+        Long last30day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast30day, LocalDateTime.now());
+        terminalStudioOutput.setOnline(deviceOnline);
+        terminalStudioOutput.setLast7day(deviceOnline);
+        terminalStudioOutput.setLast30day(last30day);
+        terminalStudioOutput.setTotal(deviceRepository.count());
+        return terminalStudioOutput;
     }
 
 
