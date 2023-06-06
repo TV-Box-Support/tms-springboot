@@ -180,6 +180,20 @@ public class UserApi {
      * @param id
      * @return
      */
+    @PutMapping(value = "/user/admin/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public UserDTO forceUpdateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
+        model.setId(id);
+        return userService.forceUpdate(model);
+    }
+
+    /**
+     * update info user for user
+     *
+     * @param model
+     * @param id
+     * @return
+     */
     @PutMapping(value = "/user/{id}")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);

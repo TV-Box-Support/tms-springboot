@@ -44,4 +44,6 @@ public interface IUserService {
     Long totalItemWithActive(Integer active);
 
     List<UserDTO> findUserManagementListDevice(Long listDeviceId);
+
+    UserDTO forceUpdate(UserDTO model);
 }

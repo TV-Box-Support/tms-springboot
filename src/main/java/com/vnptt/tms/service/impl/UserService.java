@@ -68,24 +68,10 @@ public class UserService implements IUserService {//, UserDetailsService {
         Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
         userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
 
-        List<RolesEntity> ruleEntities = new ArrayList<>();
-        List<String> rules = userDTO.getRuleName();
-        if (rules != null) {
-            for (String iteam : rules) {
-                RolesEntity rolesEntity = rolesRepository.findOneByName(iteam);
-                if (rolesEntity == null) {
-                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
-                }
-                ruleEntities.add(rolesEntity);
-            }
-
-            userEntity.setRuleEntities(ruleEntities);
-        }
-
         try {
             userEntity = userRepository.save(userEntity);
         } catch (Exception e) {
-            throw new ResourceNotFoundException("have the same Username of account alive: " + userDTO.getUsername());
+            throw new RuntimeException(e);
         }
 
         return userConverter.toDTO(userEntity);
@@ -182,6 +168,42 @@ public class UserService implements IUserService {//, UserDetailsService {
             result.add(userConverter.toDTO(entity));
         }
         return result;
+    }
+
+    @Override
+    public UserDTO forceUpdate(UserDTO userDTO) {
+        UserEntity userEntity = new UserEntity();
+
+        Optional<UserEntity> oldUserEntity = userRepository.findById(userDTO.getId());
+        userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
+
+        List<RolesEntity> ruleEntities = new ArrayList<>();
+        List<String> rules = userDTO.getRuleName();
+        if (rules != null) {
+            for (String iteam : rules) {
+                RolesEntity rolesEntity = rolesRepository.findOneByName(iteam);
+                if (rolesEntity == null) {
+                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
+                }
+                ruleEntities.add(rolesEntity);
+            }
+
+            userEntity.removeRoleDevice(1);
+            userEntity.removeRoleDevice(2);
+            userEntity.removeRoleDevice(3);
+
+            for (RolesEntity entity : ruleEntities) {
+                userEntity.addRole(entity);
+            }
+        }
+
+        try {
+            userEntity = userRepository.save(userEntity);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return userConverter.toDTO(userEntity);
     }
 
     @Override
