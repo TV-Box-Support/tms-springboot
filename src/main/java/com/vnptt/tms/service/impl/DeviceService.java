@@ -1,5 +1,8 @@
 package com.vnptt.tms.service.impl;
 
+import com.maxmind.geoip2.WebServiceClient;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.City;
 import com.vnptt.tms.api.output.TerminalStudioOutput;
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.DeviceDTO;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -125,9 +129,28 @@ public class DeviceService implements IDeviceService {
     @Override
     public DeviceDTO findOneBySn(String ip, String serialnumber) {
         DeviceEntity entity = deviceRepository.findOneBySn(serialnumber);
+
         if (entity == null) {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }
+
+        WebServiceClient client = new WebServiceClient.Builder(874837, "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")
+                .build();
+
+
+        InetAddress ipAddress = null;
+        try {
+            ipAddress = InetAddress.getByName(ip);
+            // Do the lookup
+            CityResponse response = client.city(ipAddress);
+
+            City city = response.getCity();
+            System.out.println(city.getName());       // 'HaNoi'
+            entity.setLocation(city.getName());
+        } catch (Exception e) {
+            System.out.print("ip can check " + ip + " error: " + e);
+        }
+
         if (!Objects.equals(entity.getIp(), ip)) {
             entity.setIp(ip);
             deviceRepository.save(entity);
