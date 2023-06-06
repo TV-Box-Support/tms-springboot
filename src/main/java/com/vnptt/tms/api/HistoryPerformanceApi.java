@@ -36,7 +36,15 @@ public class HistoryPerformanceApi {
         } else {
             result.setListResult(historyPerformanceService.findAll());
         }
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
         return result;
+
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.DevicePolicyDetailConverter;
+import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.*;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.*;
@@ -39,6 +41,9 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
 
     @Autowired
     private DevicePolicyDetailConverter devicePolicyDetailConverter;
+
+    @Autowired
+    private PolicyConverter policyConverter;
 
     @Autowired
     private AuthTokenFilter authTokenFilter;
@@ -176,20 +181,26 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
      * find all policy of device
      *
      * @param policyId
+     * @param pageable
      * @return
      */
     @Override
-    public List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId) {
+    public List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId, Pageable pageable) {
         if (!policyRepository.existsById(policyId)) {
             throw new ResourceNotFoundException("Not found policy with id = " + policyId);
         }
-        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailIdOrderByModifiedDateDesc(policyId);
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailIdOrderByModifiedDateDesc(policyId, pageable);
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
             result.add(devicePolicyDetailDTO);
         }
         return result;
+    }
+
+    @Override
+    public Long countAllWithPolicy(Long policyId) {
+        return devicePolicyDetailRepository.countAllByPolicyEntityDetailId(policyId);
     }
 
     /**
@@ -240,6 +251,40 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
             devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
             result.add(devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity));
 
+        }
+        return result;
+    }
+
+    @Override
+    public List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId, Integer status, Pageable pageable) {
+        if (!policyRepository.existsById(policyId)) {
+            throw new ResourceNotFoundException("Not found policy with id = " + policyId);
+        }
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByPolicyEntityDetailIdAndStatusOrderByModifiedDateDesc(policyId, status, pageable);
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
+            DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
+            result.add(devicePolicyDetailDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAllWithPolicyStatus(Long policyId, Integer status) {
+        return devicePolicyDetailRepository.countAllByPolicyEntityDetailIdAndStatus(policyId, status);
+    }
+
+    @Override
+    public List<PolicyDTO> findAllWithDeviceAndStatusRun(Long deviceId) {
+        if (!policyRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+        }
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntitiesRun = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdAndStatusOrderByModifiedDateAsc(deviceId, 1);
+        List<PolicyDTO> result = new ArrayList<>();
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntitiesRun) {
+            PolicyEntity policyEntity = entity.getPolicyEntityDetail();
+
+            result.add(policyConverter.toDTO(policyEntity));
         }
         return result;
     }

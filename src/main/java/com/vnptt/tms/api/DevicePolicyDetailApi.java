@@ -1,9 +1,12 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
+import com.vnptt.tms.api.output.PolicyOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +19,6 @@ public class DevicePolicyDetailApi {
 
     @Autowired
     private IDevicePolicyDetailnService devicePolicyDetailService;
-
 
 
     /**
@@ -62,6 +64,32 @@ public class DevicePolicyDetailApi {
      * @param deviceId
      * @return
      */
+    @GetMapping(value = "/box/{deviceId}/devicePolicyDetail")
+    public PolicyOutput showAllPolicyDetailOfDeviceRunOrError(@PathVariable(value = "deviceId") Long deviceId) {
+        PolicyOutput result = new PolicyOutput();
+        result.setListResult(devicePolicyDetailService.findAllWithDeviceAndStatusRun(deviceId));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * get list PolicyDetail math with device to check policies unfinished for box
+     * <p>
+     * status of PolicyDetail
+     * status 0 = not run
+     * status 1 = run
+     * status 2 = success
+     * status 3 = error
+     *
+     * @param deviceId
+     * @return
+     */
     @GetMapping(value = "/device/{deviceId}/devicePolicyDetail")
     public DevicePolicyDetailOutput showAllPolicyDetailOfDevice(@PathVariable(value = "deviceId") Long deviceId) {
         DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
@@ -89,9 +117,26 @@ public class DevicePolicyDetailApi {
      * @return
      */
     @GetMapping(value = "/policy/{policyId}/devicePolicyDetail")
-    public DevicePolicyDetailOutput showAllPolicyDetailOfPolicy(@PathVariable(value = "policyId") Long policyId) {
+    public DevicePolicyDetailOutput showAllPolicyDetailOfPolicy(@PathVariable(value = "policyId") Long policyId,
+                                                                @RequestParam(value = "status", required = false) Integer status,
+                                                                @RequestParam(value = "page") Integer page,
+                                                                @RequestParam(value = "limit") Integer limit) {
+
         DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
-        result.setListResult(devicePolicyDetailService.findAllWithPolicy(policyId));
+
+        if (status == null) {
+            result.setPage(page);
+            Pageable pageable = PageRequest.of(page - 1, limit);
+            result.setListResult(devicePolicyDetailService.findAllWithPolicy(policyId, pageable));
+            result.setTotalPage((int) Math.ceil((double) devicePolicyDetailService.countAllWithPolicy(policyId) / limit));
+        } else if (status == 1 || status == 2 || status == 3 || status == 0) {
+            result.setPage(page);
+            Pageable pageable = PageRequest.of(page - 1, limit);
+            result.setListResult(devicePolicyDetailService.findAllWithPolicy(policyId, status, pageable));
+            result.setTotalPage((int) Math.ceil((double) devicePolicyDetailService.countAllWithPolicyStatus(policyId, status) / limit));
+        } else {
+            throw new RuntimeException("status must be 1, 2, 3, 0");
+        }
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -103,7 +148,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * create policy detail for device web
+     * create policy detail for devices web
      * <p>
      * status of policy detail
      * status = 0 not run
@@ -134,7 +179,7 @@ public class DevicePolicyDetailApi {
      * status of policy detail
      * status = 0 not run
      *
-     * @param policyId  id of policy
+     * @param policyId     id of policy
      * @param listDeviceId id device of List Device
      * @return
      */

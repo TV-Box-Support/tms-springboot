@@ -1,6 +1,7 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,15 @@ public interface IDevicePolicyDetailnService {
 
     DevicePolicyDetailDTO update(Long id, int status);
 
-    List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId);
+    List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId, Pageable pageable);
+    
+    Long countAllWithPolicy(Long policyId);
 
     List<DevicePolicyDetailDTO> save(HttpServletRequest request, Long listDeviceId, Long policyId);
+
+    List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId, Integer status, Pageable pageable);
+
+    Long countAllWithPolicyStatus(Long policyId, Integer status);
+
+    List<PolicyDTO> findAllWithDeviceAndStatusRun(Long deviceId);
 }
