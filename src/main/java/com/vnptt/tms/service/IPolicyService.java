@@ -25,4 +25,8 @@ public interface IPolicyService {
     List<PolicyDTO> findAllWithDeviceId(Long deviceId);
 
     PolicyDTO updateStatus(Long id, int status);
+
+    List<PolicyDTO> findwithPolicyname(String policyname, Pageable pageable);
+
+    Long totalCountByPolicynameContain(String packagename);
 }

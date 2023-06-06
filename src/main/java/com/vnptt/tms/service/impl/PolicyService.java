@@ -187,6 +187,22 @@ public class PolicyService implements IPolicyService {
     }
 
     @Override
+    public List<PolicyDTO> findwithPolicyname(String policyname, Pageable pageable) {
+        List<PolicyEntity> entities = policyRepository.findAllByPolicynameContaining(policyname, pageable);
+        List<PolicyDTO> result = new ArrayList<>();
+        for (PolicyEntity item : entities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(item);
+            result.add(policyDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long totalCountByPolicynameContain(String policyname) {
+        return  (Long) policyRepository.countAllByPolicynameContaining(policyname);
+    }
+
+    @Override
     public int totalItem() {
         return (int) policyRepository.count();
     }

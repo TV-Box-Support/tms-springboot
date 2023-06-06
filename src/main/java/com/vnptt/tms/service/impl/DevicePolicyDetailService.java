@@ -5,13 +5,18 @@ import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import com.vnptt.tms.entity.*;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.*;
+import com.vnptt.tms.security.jwt.AuthTokenFilter;
+import com.vnptt.tms.security.jwt.JwtUtils;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -35,22 +40,53 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     @Autowired
     private DevicePolicyDetailConverter devicePolicyDetailConverter;
 
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
     /**
      * create list policy detail with list deviceId math
      *
-     * @param ids list deviceId
      * @return
      */
     @Override
-    public List<DevicePolicyDetailDTO> save(String username, Long[] ids, Long policyId) {
-        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+    public List<DevicePolicyDetailDTO> save(HttpServletRequest request, Long[] deviceIds, Long policyId) {
         PolicyEntity entity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
 
-        UserEntity userEntity = userRepository.findByUsername(username);
-        List<ListDeviceEntity> entities = userEntity.getDeviceEntities();
+        String jwt = authTokenFilter.parseJwtTMS(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-        for (Long id : ids) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+
+        List<ListDeviceEntity> listDeviceEntities = userEntity.getDeviceEntities();
+
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+
+        Set<DeviceEntity> deviceEntitiesCheck = new HashSet<>();
+        for (ListDeviceEntity list : listDeviceEntities) {
+            List<DeviceEntity> devices = list.getListDeviceDetail();
+            deviceEntitiesCheck.addAll(devices);
+        }
+
+        List<DeviceEntity> finalDeviceEntitiesCheck = new ArrayList<>(deviceEntitiesCheck);
+        // Check if the elements in deviceIds are the same as geviceEntity.getId() in the finalDeviceEntitiesCheck list
+        for (Long deviceId : deviceIds) {
+            boolean found = false;
+            for (DeviceEntity deviceEntity : finalDeviceEntitiesCheck) {
+                if (deviceId.equals(deviceEntity.getId())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new RuntimeException("you do not have permission to operate the device with id = " + deviceId);
+            }
+        }
+
+        for (Long id : deviceIds) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(id);
             if (deviceEntity != null) {
                 DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
@@ -152,6 +188,58 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
             result.add(devicePolicyDetailDTO);
+        }
+        return result;
+    }
+
+    /**
+     * Create list policy detail for device
+     * Box will be checked and know what to do
+     *
+     * @param request
+     * @param listDeviceId
+     * @param policyId
+     * @return
+     */
+    @Override
+    public List<DevicePolicyDetailDTO> save(HttpServletRequest request, Long listDeviceId, Long policyId) {
+        PolicyEntity policyEntity = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
+
+        ListDeviceEntity listDevice = listDeviceRepository.findById(listDeviceId)
+                .orElseThrow(() -> new ResourceNotFoundException(" cant not find list Device with id = " + listDeviceId));
+
+        String jwt = authTokenFilter.parseJwtTMS(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        UserEntity userEntity = userRepository.findByUsername(username);
+        List<ListDeviceEntity> listDeviceEntities = userEntity.getDeviceEntities();
+
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+
+        boolean isWrong = true;
+        for (ListDeviceEntity list : listDeviceEntities) {
+            if (listDeviceId.equals(list.getId())) {
+                isWrong = false;
+                break;
+            }
+        }
+
+        if (isWrong) {
+            throw new RuntimeException("you do not have permission to operate the list device with id = " + listDeviceId);
+        }
+
+        List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
+        for (DeviceEntity device : deviceEntities) {
+            DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
+            devicePolicyDetailEntity.setDeviceEntityDetail(device);
+            devicePolicyDetailEntity.setPolicyEntityDetail(policyEntity);
+            devicePolicyDetailEntity.setStatus(0);
+            devicePolicyDetailEntity.setAction(policyEntity.getAction());
+
+            devicePolicyDetailEntity = devicePolicyDetailRepository.save(devicePolicyDetailEntity);
+            result.add(devicePolicyDetailConverter.toDTO(devicePolicyDetailEntity));
+
         }
         return result;
     }

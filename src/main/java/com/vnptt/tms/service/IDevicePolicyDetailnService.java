@@ -3,10 +3,11 @@ package com.vnptt.tms.service;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IDevicePolicyDetailnService {
-    List<DevicePolicyDetailDTO> save(String username,Long[] ids, Long policyId);
+    List<DevicePolicyDetailDTO> save(HttpServletRequest request, Long[] ids, Long policyId);
 
     DevicePolicyDetailDTO findOne(Long id);
 
@@ -23,4 +24,6 @@ public interface IDevicePolicyDetailnService {
     DevicePolicyDetailDTO update(Long id, int status);
 
     List<DevicePolicyDetailDTO> findAllWithPolicy(Long policyId);
+
+    List<DevicePolicyDetailDTO> save(HttpServletRequest request, Long listDeviceId, Long policyId);
 }

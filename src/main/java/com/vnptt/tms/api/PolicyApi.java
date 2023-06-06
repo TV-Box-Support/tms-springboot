@@ -19,13 +19,21 @@ public class PolicyApi {
 
     @GetMapping(value = "/policy")
     public PolicyOutput showPolicy(@RequestParam(value = "page", required = false) Integer page,
-                                   @RequestParam(value = "limit", required = false) Integer limit) {
+                                   @RequestParam(value = "limit", required = false) Integer limit,
+                                   @RequestParam(value = "Policyname", required = false) String policyname) {
         PolicyOutput result = new PolicyOutput();
         if (page != null && limit != null) {
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult((policyService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) policyService.totalItem() / limit));
+            if (policyname != null) {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((policyService.findwithPolicyname(policyname, pageable)));
+                result.setTotalPage((int) Math.ceil((double) policyService.totalCountByPolicynameContain(policyname) / limit));
+            } else {
+                result.setPage(page);
+                Pageable pageable = PageRequest.of(page - 1, limit);
+                result.setListResult((policyService.findAll(pageable)));
+                result.setTotalPage((int) Math.ceil((double) policyService.totalItem() / limit));
+            }
         } else {
             result.setListResult(policyService.findAll());
         }
