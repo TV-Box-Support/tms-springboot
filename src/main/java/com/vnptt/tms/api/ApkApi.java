@@ -190,7 +190,7 @@ public class ApkApi {
      * @return http status no content 204
      */
     @DeleteMapping(value = "/policy/{policyId}/apk/{apkId}")
-    public ResponseEntity<HttpStatus> removeApkinPolicy(@PathVariable(value = "policyId") Long policyId,
+    public ResponseEntity<HttpStatus> removeApkInPolicy(@PathVariable(value = "policyId") Long policyId,
                                                         @PathVariable(value = "apkId") Long apkId) {
         apkService.removeApkinPolicy(policyId, apkId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
