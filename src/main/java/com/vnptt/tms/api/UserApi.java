@@ -174,7 +174,7 @@ public class UserApi {
     }
 
     /**
-     * update info user for user
+     * update info user for admin
      *
      * @param model
      * @param id
