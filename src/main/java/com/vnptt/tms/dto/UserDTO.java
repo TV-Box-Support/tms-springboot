@@ -12,7 +12,7 @@ public class UserDTO extends AbstractDTO  {
     private String email;
     private Long contact;
     private boolean active;
-    private List<String> ruleName;
+    private List<String> rulename;
 
     public String getName() {
         return name;
@@ -70,12 +70,11 @@ public class UserDTO extends AbstractDTO  {
         this.active = active;
     }
 
-    public List<String> getRuleName() {
-        return ruleName;
+    public List<String> getRulename() {
+        return rulename;
     }
 
-    public void setRuleName(List<String> ruleName) {
-        this.ruleName = ruleName;
+    public void setRulename(List<String> rulename) {
+        this.rulename = rulename;
     }
-
 }

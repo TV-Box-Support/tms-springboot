@@ -135,36 +135,19 @@ public class DeviceService implements IDeviceService {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }
 
-//        WebServiceClient client = new WebServiceClient.Builder(874837, "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")
-//                .build();
-//
-//        InetAddress ipAddress = null;
-//        try {
-//            ipAddress = InetAddress.getByName("14.224.147.23");
-//            // Do the lookup
-//            CountryResponse response = client.country(ipAddress);
-//
-//            Country country = response.getCountry();
-//            System.out.println(country.getIsoCode());            // 'US'
-//            System.out.println(country.getName());               // 'United States'
-//            System.out.println(country.getNames().get("zh-CN")); // '美国'
-//        } catch (IOException | GeoIp2Exception e) {
-//            throw new RuntimeException(e);
-//        }
-
 
         try {
             // A File object pointing to your GeoIP2 or GeoLite2 database
-            File database = new File("/home/thanhchung/Desktop/GeoLite2-City.mmdb");
+            File database = new File("/home/thanhchung/Desktop/data.mmdb");
 
-// This creates the DatabaseReader object. To improve performance, reuse
-// the object across lookups. The object is thread-safe.
+            // This creates the DatabaseReader object. To improve performance, reuse
+            // the object across lookups. The object is thread-safe.
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
 
             InetAddress ipAddress = InetAddress.getByName("14.224.147.23");
 
-// Replace "city" with the appropriate method for your database, e.g.,
-// "country".
+            // Replace "city" with the appropriate method for your database, e.g.,
+            // "country".
             CityResponse response = reader.city(ipAddress);
 
             City city = response.getCity();
@@ -175,24 +158,9 @@ public class DeviceService implements IDeviceService {
             System.out.println(city.toString());            // 'US'
             System.out.println(city.getName());               // 'United States'
             System.out.println(city.getNames().get("zh-CN")); // '美国'
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-
-
-//        Subdivision subdivision = response.getMostSpecificSubdivision();
-//        System.out.println(subdivision.getName());    // 'Minnesota'
-//        System.out.println(subdivision.getIsoCode()); // 'MN'
-//
-//        City city = response.getCity();
-//        System.out.println(city.getName()); // 'Minneapolis'
-//
-//        Postal postal = response.getPostal();
-//        System.out.println(postal.getCode()); // '55455'
-//
-//        Location location = response.getLocation();
-//        System.out.println(location.getLatitude());  // 44.9733
-//        System.out.println(location.getLongitude()); // -93.
 
         if (!Objects.equals(entity.getIp(), ip)) {
             entity.setIp(ip);

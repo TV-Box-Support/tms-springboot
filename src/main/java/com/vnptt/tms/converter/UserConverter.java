@@ -48,7 +48,7 @@ public class UserConverter {
             rules.add(iteam.getName().name());
         }
 
-        dto.setRuleName(rules);
+        dto.setRulename(rules);
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setModifiedDate(entity.getModifiedDate());

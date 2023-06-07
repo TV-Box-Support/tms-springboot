@@ -123,7 +123,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         if (active == 0) {
             activeConvert = false;
         }
-        List<UserEntity> entities = userRepository.findAllByActiveOrNameContainingOrEmailContainingOrUsernameContainingOrCompanyContainingOrderByModifiedDateDesc(pageable, activeConvert, name, email, username, company);
+        List<UserEntity> entities = userRepository.findAllByActiveAndNameContainingOrEmailContainingOrUsernameContainingOrCompanyContainingOrderByModifiedDateDesc(pageable, activeConvert, name, email, username, company);
         List<UserDTO> result = new ArrayList<>();
         for (UserEntity item : entities) {
             UserDTO userDTO = userConverter.toDTO(item);
@@ -138,7 +138,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         if (active == 0) {
             activeConvert = false;
         }
-        return userRepository.countAllByActiveOrNameContainingOrEmailContainingOrUsernameContainingOrCompanyContaining(activeConvert, name, email, username, company);
+        return userRepository.countAllByActiveAndNameContainingOrEmailContainingOrUsernameContainingOrCompanyContaining(activeConvert, name, email, username, company);
     }
 
     @Override
@@ -178,12 +178,15 @@ public class UserService implements IUserService {//, UserDetailsService {
         userEntity = userConverter.toEntity(userDTO, oldUserEntity.get());
 
         List<RolesEntity> ruleEntities = new ArrayList<>();
-        List<String> rules = userDTO.getRuleName();
+        List<String> rules = userDTO.getRulename();
         if (rules != null) {
+            if (rules.size() > 3 || rules.size() == 0) {
+                throw new ResourceNotFoundException("number of rule name is wrong ");
+            }
             for (String iteam : rules) {
                 RolesEntity rolesEntity = rolesRepository.findOneByName(ERole.valueOf(iteam));
                 if (rolesEntity == null) {
-                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
+                    throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRulename());
                 }
                 ruleEntities.add(rolesEntity);
             }
@@ -322,7 +325,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         // Create new user's account
         userEntity.setPassword(encoder.encode(model.getPassword()));
 
-        List<String> strRoles = model.getRuleName();
+        List<String> strRoles = model.getRulename();
         List<RolesEntity> roles = new ArrayList<>();
 
         if (strRoles == null) {
