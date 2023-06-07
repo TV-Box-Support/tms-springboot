@@ -115,12 +115,16 @@ public class UserEntity extends BaseEntity {
         rolesEntity.getUserEntities().add(this);
     }
 
-    public void removeRoleDevice(long roleId) {
-        RolesEntity rolesEntity = this.ruleEntities.stream().filter(Entity -> Entity.getId() == roleId).findFirst().orElse(null);
-        if (rolesEntity != null) {
-            this.deviceEntities.remove(rolesEntity);
-            rolesEntity.getUserEntities().remove(this);
+    public void removeRoleDevice() {
+        for (int i = 1; i < 4; i++) {
+            Long id = (long) i;
+            RolesEntity rolesEntity = this.ruleEntities.stream().filter(Entity -> Entity.getId() == id).findFirst().orElse(null);
+            if (rolesEntity != null) {
+                this.ruleEntities.remove(rolesEntity);
+                rolesEntity.getUserEntities().remove(this);
+            }
         }
+
     }
 
     public void addListDevice(ListDeviceEntity listDeviceEntity) {

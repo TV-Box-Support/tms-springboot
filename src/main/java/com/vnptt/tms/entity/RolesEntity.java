@@ -1,6 +1,6 @@
 package com.vnptt.tms.entity;
 
-import com.vnptt.tms.config.ERoleFunction;
+import com.vnptt.tms.config.ERole;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class RolesEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false, unique = true)
-    private ERoleFunction name;
+    private ERole name;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -29,11 +29,11 @@ public class RolesEntity {
         return id;
     }
 
-    public ERoleFunction getName() {
+    public ERole getName() {
         return name;
     }
 
-    public void setName(ERoleFunction name) {
+    public void setName(ERole name) {
         this.name = name;
     }
 

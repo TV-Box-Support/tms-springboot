@@ -1,7 +1,7 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.api.input.LoginRequest;
-import com.vnptt.tms.config.ERoleFunction;
+import com.vnptt.tms.config.ERole;
 import com.vnptt.tms.converter.UserConverter;
 import com.vnptt.tms.dto.UserDTO;
 import com.vnptt.tms.entity.ListDeviceEntity;
@@ -181,16 +181,13 @@ public class UserService implements IUserService {//, UserDetailsService {
         List<String> rules = userDTO.getRuleName();
         if (rules != null) {
             for (String iteam : rules) {
-                RolesEntity rolesEntity = rolesRepository.findOneByName(iteam);
+                RolesEntity rolesEntity = rolesRepository.findOneByName(ERole.valueOf(iteam));
                 if (rolesEntity == null) {
                     throw new ResourceNotFoundException("can't not found rule with rule_name = " + userDTO.getRuleName());
                 }
                 ruleEntities.add(rolesEntity);
             }
-
-            userEntity.removeRoleDevice(1);
-            userEntity.removeRoleDevice(2);
-            userEntity.removeRoleDevice(3);
+            userEntity.removeRoleDevice();
 
             for (RolesEntity entity : ruleEntities) {
                 userEntity.addRole(entity);
@@ -329,7 +326,7 @@ public class UserService implements IUserService {//, UserDetailsService {
         List<RolesEntity> roles = new ArrayList<>();
 
         if (strRoles == null) {
-            RolesEntity userRole = rolesRepository.findByName(ERoleFunction.ROLE_USER);
+            RolesEntity userRole = rolesRepository.findByName(ERole.ROLE_USER);
             if (userRole == null) {
                 throw new RuntimeException("Error: Role is not found.");
             }
@@ -338,14 +335,14 @@ public class UserService implements IUserService {//, UserDetailsService {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        RolesEntity adminRole = rolesRepository.findByName(ERoleFunction.ROLE_ADMIN);
+                        RolesEntity adminRole = rolesRepository.findByName(ERole.ROLE_ADMIN);
                         if (adminRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }
                         roles.add(adminRole);
                         break;
                     case "mod":
-                        RolesEntity modRole = rolesRepository.findByName(ERoleFunction.ROLE_MODERATOR);
+                        RolesEntity modRole = rolesRepository.findByName(ERole.ROLE_MODERATOR);
                         if (modRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }
@@ -353,7 +350,7 @@ public class UserService implements IUserService {//, UserDetailsService {
 
                         break;
                     default:
-                        RolesEntity userRole = rolesRepository.findByName(ERoleFunction.ROLE_USER);
+                        RolesEntity userRole = rolesRepository.findByName(ERole.ROLE_USER);
                         if (userRole == null) {
                             throw new RuntimeException("Error: Role is not found.");
                         }
