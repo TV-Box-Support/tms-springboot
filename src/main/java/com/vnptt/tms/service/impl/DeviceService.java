@@ -439,8 +439,8 @@ public class DeviceService implements IDeviceService {
     public TerminalStudioOutput updateTerminalStudioInfo() {
         TerminalStudioOutput terminalStudioOutput = new TerminalStudioOutput();
         LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
-        LocalDateTime timeLast7day = LocalDateTime.now().plusDays(7);
-        LocalDateTime timeLast30day = LocalDateTime.now().plusDays(30);
+        LocalDateTime timeLast7day = LocalDateTime.now().plusDays(-7);
+        LocalDateTime timeLast30day = LocalDateTime.now().plusDays(-30);
         Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
         Long last7day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast7day, LocalDateTime.now());
         Long last30day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast30day, LocalDateTime.now());
