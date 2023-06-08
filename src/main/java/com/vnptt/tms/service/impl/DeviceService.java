@@ -472,7 +472,7 @@ public class DeviceService implements IDeviceService {
             LocalDate DaysAgo = LocalDate.now().minusDays(i);
             LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
             LocalDateTime end;
-            if (i == 7) {
+            if (i == 1) {
                 end = LocalDateTime.now();
             } else {
                 end = LocalDateTime.of(DaysAgo, LocalTime.MAX);

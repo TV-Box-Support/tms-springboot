@@ -127,24 +127,23 @@ public class ApplicationService implements IApplicationService {
     /**
      * add app to device if app not found create new app
      *
-     * @param deviceId
      * @param model
      * @return
      */
     @Override
-    public ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model) {
-
-        if (!deviceRepository.existsById(deviceId)) {
-            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+    public ApplicationDTO addAppToDevice(String sn, ApplicationDTO model) {
+        DeviceEntity deviceEntity = deviceRepository.findOneBySn(sn);
+        if (deviceEntity != null ) {
+            throw new ResourceNotFoundException("Not found device with sn = " + sn);
         }
         ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion());
         if (applicationEntity != null) {
-            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(deviceId, applicationEntity.getId());
+            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailSnAndApplicationEntityDetailId(sn, applicationEntity.getId());
             if (deviceApplicationEntity != null) {
                 throw new FileStorageException(" Application had map in device ");
             }
             deviceApplicationEntity = new DeviceApplicationEntity();
-            deviceApplicationEntity.setDeviceAppEntityDetail(deviceRepository.findOneById(deviceId));
+            deviceApplicationEntity.setDeviceAppEntityDetail(deviceRepository.findOneById(deviceEntity.getId()));
             deviceApplicationEntity.setApplicationEntityDetail(applicationEntity);
             deviceApplicationEntity.setIsalive(true);
             deviceApplicationRepository.save(deviceApplicationEntity);

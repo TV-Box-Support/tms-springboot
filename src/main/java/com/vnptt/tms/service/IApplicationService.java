@@ -22,7 +22,7 @@ public interface IApplicationService {
 
     List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable);
 
-    ApplicationDTO addAppToDevice(Long deviceId, ApplicationDTO model);
+    ApplicationDTO addAppToDevice(String deviceId, ApplicationDTO model);
 
     List<ApplicationDTO> findAllOnDevice(Long deviceId, Pageable pageable);
 

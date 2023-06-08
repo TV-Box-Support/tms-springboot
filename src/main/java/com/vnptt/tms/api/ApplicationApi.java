@@ -160,10 +160,10 @@ public class ApplicationApi {
      * @param model    dto application (need id from response when post new app)
      * @return
      */
-    @PostMapping(value = "/device/{deviceId}/application")
-    public ApplicationDTO addApplicationToDevice(@PathVariable(value = "deviceId") Long deviceId,
+    @PostMapping(value = "/device/application")
+    public ApplicationDTO addApplicationToDevice(@RequestParam(value = "serialnumber") String sn,
                                                  @RequestBody ApplicationDTO model) {
-        return applicationService.addAppToDevice(deviceId, model);
+        return applicationService.addAppToDevice(sn, model);
     }
 
     /**

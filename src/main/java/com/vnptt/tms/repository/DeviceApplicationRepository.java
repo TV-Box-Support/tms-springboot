@@ -13,6 +13,8 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     DeviceApplicationEntity findDeviceApplicationEntityByDeviceAppEntityDetailIdAndApplicationEntityDetailId(Long deviceId, Long applicationId);
 
+    DeviceApplicationEntity findDeviceApplicationEntityByDeviceAppEntityDetailSnAndApplicationEntityDetailId(String sn, Long applicationId);
+
     List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdOrderByModifiedDateDesc(Long deviceId, Pageable pageable);
 
     List<DeviceApplicationEntity> findByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingOrderByModifiedDateDesc(Long deviceId, boolean isAlive, String name, Pageable pageable);
