@@ -483,6 +483,24 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
+    /**
+     * update Box info for Box
+     *
+     * @param sn
+     * @param model
+     * @return
+     */
+    @Override
+    public DeviceDTO boxUpdate(String sn, DeviceDTO model) {
+        DeviceEntity deviceEntity = deviceRepository.findOneBySn(sn);
+        if(deviceEntity == null){
+            throw new ResourceNotFoundException("not found device with serialnumber: " + sn);
+        }
+        deviceEntity = deviceConverter.toEntity(model, deviceEntity);
+        deviceEntity = deviceRepository.save(deviceEntity);
+        return deviceConverter.toDTO(deviceEntity);
+    }
+
 
     @Override
     public int totalItem() {

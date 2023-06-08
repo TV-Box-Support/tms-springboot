@@ -83,7 +83,7 @@ public class ApplicationApi {
 
 
     /**
-     * see the apps available on the device for box and web
+     * see the apps available on the device for web
      *
      * @param deviceId device want to search
      * @param isSystem true/false/null
@@ -104,12 +104,32 @@ public class ApplicationApi {
             result.setListResult(applicationService.findAllOnDevice(deviceId, pageable));
             result.setTotalPage((int) Math.ceil((double) applicationService.countByDeviceId(deviceId) / limit));
         } else {
-            if (isSystem == null){
+            if (isSystem == null) {
                 isSystem = false;
             }
             result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isSystem, pageable));
             result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isSystem) / limit));
         }
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
+     * see the apps available on the device for box
+     *
+     * @return List application DTO
+     */
+    @GetMapping("/device/application")
+    public ApplicationOutput getAllApplicationAliveForBox(@RequestParam(value = "serialnumber") String sn) {
+        ApplicationOutput result = new ApplicationOutput();
+
+        result.setListResult(applicationService.findAllApplicationAliveOnBox(sn));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");

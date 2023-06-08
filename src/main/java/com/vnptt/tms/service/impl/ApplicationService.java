@@ -4,6 +4,7 @@ import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceApplicationEntity;
+import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.exception.FileStorageException;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
@@ -199,6 +200,22 @@ public class ApplicationService implements IApplicationService {
     @Override
     public Long countByPackagename(String packagename) {
         return applicationRepository.countByPackagenameContaining(packagename);
+    }
+
+    @Override
+    public List<ApplicationDTO> findAllApplicationAliveOnBox(String sn) {
+        DeviceEntity deviceEntity = deviceRepository.findOneBySn(sn);
+        if (deviceEntity == null) {
+            throw new ResourceNotFoundException("can not found device with serialnumber on box ");
+        }
+        List<ApplicationEntity> applicationEntities = applicationRepository.findByDeviceApplicationEntitiesDeviceAppEntityDetailSnAndDeviceApplicationEntitiesIsalive(sn, true);
+        List<ApplicationDTO> result = new ArrayList<>();
+
+        for (ApplicationEntity item : applicationEntities) {
+            ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
+            result.add(applicationDTO);
+        }
+        return result;
     }
 
     /**

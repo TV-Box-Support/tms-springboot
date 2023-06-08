@@ -33,4 +33,6 @@ public interface IApplicationService {
     Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem);
 
     Long countByPackagename(String packagename);
+
+    List<ApplicationDTO> findAllApplicationAliveOnBox(String sn);
 }

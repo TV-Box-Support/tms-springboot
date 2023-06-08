@@ -56,4 +56,5 @@ public interface IDeviceService {
 
     List<AreaChart> getTotalAreaChart();
 
+    DeviceDTO boxUpdate(String sn, DeviceDTO model);
 }

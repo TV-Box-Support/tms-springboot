@@ -323,21 +323,6 @@ public class DeviceApi {
     }
 
     /**
-     * Remove device in List Device
-     *
-     * @param listDeviceId list Device Id
-     * @param deviceId     device Id
-     * @return
-     */
-    @DeleteMapping(value = "/listDevice/{listDeviceId}/device/{deviceId}")
-    public ResponseEntity<HttpStatus> removeDeviceInListDevice(@PathVariable(value = "listDeviceId") Long listDeviceId,
-                                                               @PathVariable(value = "deviceId") Long deviceId) {
-        deviceService.removeDeviceinListDevice(listDeviceId, deviceId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-    /**
      * update device info for Box
      *
      * @param model
@@ -349,6 +334,33 @@ public class DeviceApi {
                                   @PathVariable("id") Long id) {
         model.setId(id);
         return deviceService.save(model);
+    }
+
+    /**
+     * update device info for Box
+     *
+     * @param model
+     * @param sn
+     * @return
+     */
+    @PutMapping(value = "/device/box")
+    public DeviceDTO updateDeviceBox(@RequestBody DeviceDTO model,
+                                     @RequestParam(value = "serialnumber") String sn) {
+        return deviceService.boxUpdate(sn, model);
+    }
+
+    /**
+     * Remove device in List Device
+     *
+     * @param listDeviceId list Device Id
+     * @param deviceId     device Id
+     * @return
+     */
+    @DeleteMapping(value = "/listDevice/{listDeviceId}/device/{deviceId}")
+    public ResponseEntity<HttpStatus> removeDeviceInListDevice(@PathVariable(value = "listDeviceId") Long listDeviceId,
+                                                               @PathVariable(value = "deviceId") Long deviceId) {
+        deviceService.removeDeviceinListDevice(listDeviceId, deviceId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**

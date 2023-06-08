@@ -19,5 +19,6 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     List<ApplicationEntity> findByPackagenameContainingOrderByModifiedDateDesc(String packagename, Pageable pageable);
 
+    List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailSnAndDeviceApplicationEntitiesIsalive(String sn, Boolean isalive);
 
 }
