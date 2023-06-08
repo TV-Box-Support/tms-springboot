@@ -1,7 +1,9 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.DeviceOutput;
-import com.vnptt.tms.api.output.TerminalStudioOutput;
+import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.PieChart;
+import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
+import com.vnptt.tms.api.output.table.DeviceOutput;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.security.jwt.JwtUtils;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Application Programming Interface for device manager
@@ -271,6 +274,18 @@ public class DeviceApi {
     public TerminalStudioOutput showTerminalStudioInfo() {
         TerminalStudioOutput result = deviceService.updateTerminalStudioInfo();
 
+        return result;
+    }
+
+    @GetMapping(value = "/chart/area/device")
+    public List<AreaChart> showAreaChartDeviceStatus() {
+        List<AreaChart> result = deviceService.getTotalAreaChart();
+        return result;
+    }
+
+    @GetMapping(value = "/chart/pie/device")
+    public List<PieChart> showTotalDeviceStatus() {
+        List<PieChart> result = deviceService.getTotalPieChart();
         return result;
     }
 

@@ -1,4 +1,4 @@
-package com.vnptt.tms.api.output;
+package com.vnptt.tms.api.output.table;
 
 import com.vnptt.tms.dto.DeviceApplicationDTO;
 

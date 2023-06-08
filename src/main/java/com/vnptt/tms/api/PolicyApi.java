@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.PolicyOutput;
+import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;

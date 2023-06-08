@@ -3,8 +3,9 @@ package com.vnptt.tms.service.impl;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.City;
-import com.maxmind.geoip2.record.Country;
-import com.vnptt.tms.api.output.TerminalStudioOutput;
+import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.PieChart;
+import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
 import com.vnptt.tms.converter.DeviceConverter;
 import com.vnptt.tms.dto.DeviceDTO;
 import com.vnptt.tms.entity.*;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.net.InetAddress;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -135,31 +138,24 @@ public class DeviceService implements IDeviceService {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }
 
-
         try {
-            // A File object pointing to your GeoIP2 or GeoLite2 database
-            File database = new File("/home/thanhchung/Desktop/data.mmdb");
+            // A File object pointing to file*.mmdb database
+            File database = new File("src/main/resources/data.mmdb");
 
             // This creates the DatabaseReader object. To improve performance, reuse
             // the object across lookups. The object is thread-safe.
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
 
             InetAddress ipAddress = InetAddress.getByName("14.224.147.23");
-
-            // Replace "city" with the appropriate method for your database, e.g.,
-            // "country".
             CityResponse response = reader.city(ipAddress);
 
             City city = response.getCity();
-            Country country = response.getCountry();
-            System.out.println(country.getIsoCode());            // 'US'
-            System.out.println(country.getName());               // 'United States'
-            System.out.println(country.getNames().get("zh-CN")); // '美国'
-            System.out.println(city.toString());            // 'US'
-            System.out.println(city.getName());               // 'United States'
-            System.out.println(city.getNames().get("zh-CN")); // '美国'
+            if (!Objects.equals(city.getName(), entity.getLocation())) {
+                entity.setLocation(city.getName());
+            }
+
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error: " + e);
         }
 
         if (!Objects.equals(entity.getIp(), ip)) {
@@ -453,6 +449,38 @@ public class DeviceService implements IDeviceService {
         terminalStudioOutput.setLast30day(last30day);
         terminalStudioOutput.setTotal(deviceRepository.count());
         return terminalStudioOutput;
+    }
+
+    @Override
+    public List<PieChart> getTotalPieChart() {
+        List<PieChart> result = new ArrayList<>();
+        Long total = deviceRepository.count();
+        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
+        Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
+        Long notActive = deviceRepository.countDistinctByHistoryPerformanceEntitiesIsNull();
+        Long offline = total - online;
+        result.add(new PieChart(online,"online"));
+        result.add(new PieChart(notActive,"notActive"));
+        result.add(new PieChart(offline,"offline"));
+        return result;
+    }
+
+    @Override
+    public List<AreaChart> getTotalAreaChart() {
+        List<AreaChart> result = new ArrayList<>();
+        for (int i = 7; i > 0; i--) {
+            LocalDate DaysAgo = LocalDate.now().minusDays(i);
+            LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+            LocalDateTime end;
+            if (i == 7) {
+                end = LocalDateTime.now();
+            } else {
+                end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+            }
+            Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(start, end);
+            result.add(new AreaChart(DaysAgo, deviceOnline));
+        }
+        return result;
     }
 
 

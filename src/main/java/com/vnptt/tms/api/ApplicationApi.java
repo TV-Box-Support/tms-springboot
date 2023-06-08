@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.ApplicationOutput;
+import com.vnptt.tms.api.output.table.ApplicationOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;

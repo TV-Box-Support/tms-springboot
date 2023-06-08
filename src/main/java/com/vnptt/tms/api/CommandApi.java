@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.CommandOutput;
+import com.vnptt.tms.api.output.table.CommandOutput;
 import com.vnptt.tms.dto.CommandDTO;
 import com.vnptt.tms.service.ICommandService;
 import org.springframework.beans.factory.annotation.Autowired;

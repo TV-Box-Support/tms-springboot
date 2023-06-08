@@ -1,9 +1,6 @@
-package com.vnptt.tms.api.output;
+package com.vnptt.tms.api.output.table;
 
 import com.vnptt.tms.dto.UserDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserOutput extends AbstractOutput<UserDTO>{
 

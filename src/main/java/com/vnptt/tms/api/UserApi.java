@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.UserOutput;
+import com.vnptt.tms.api.output.table.UserOutput;
 import com.vnptt.tms.dto.UserDTO;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.service.IUserService;

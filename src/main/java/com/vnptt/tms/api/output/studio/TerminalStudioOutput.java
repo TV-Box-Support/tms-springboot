@@ -1,4 +1,4 @@
-package com.vnptt.tms.api.output;
+package com.vnptt.tms.api.output.studio;
 
 public class TerminalStudioOutput {
     private Long total;

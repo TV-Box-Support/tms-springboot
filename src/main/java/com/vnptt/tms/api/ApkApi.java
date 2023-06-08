@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.ApkOutput;
+import com.vnptt.tms.api.output.table.ApkOutput;
 import com.vnptt.tms.dto.ApkDTO;
 import com.vnptt.tms.service.IApkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.io.IOException;
  * <p>
  * - get list apk from database pageable or none
  * - get single apk form database by id
- * - dowload (get method) apk file by fileDownloadUri
+ * - download (get method) apk file by fileDownloadUri
  * - show (get method) the apk available on the policy for box and web
  * - Map (post method) apk to policy
  * - create (post method) apk normal with info add manually

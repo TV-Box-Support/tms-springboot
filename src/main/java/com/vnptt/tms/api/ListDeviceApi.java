@@ -1,7 +1,7 @@
 package com.vnptt.tms.api;
 
 
-import com.vnptt.tms.api.output.ListDeviceOutput;
+import com.vnptt.tms.api.output.table.ListDeviceOutput;
 import com.vnptt.tms.dto.ListDeviceDTO;
 import com.vnptt.tms.service.IListDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;

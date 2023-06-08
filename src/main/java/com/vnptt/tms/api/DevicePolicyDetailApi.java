@@ -1,7 +1,7 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.DevicePolicyDetailOutput;
-import com.vnptt.tms.api.output.PolicyOutput;
+import com.vnptt.tms.api.output.table.DevicePolicyDetailOutput;
+import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import com.vnptt.tms.service.IDevicePolicyDetailnService;
 import org.springframework.beans.factory.annotation.Autowired;

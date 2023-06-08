@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.HistoryApplicationOutput;
+import com.vnptt.tms.api.output.table.HistoryApplicationOutput;
 import com.vnptt.tms.dto.HistoryApplicationDTO;
 import com.vnptt.tms.service.IHistoryApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
