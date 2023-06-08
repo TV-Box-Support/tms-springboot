@@ -445,7 +445,7 @@ public class DeviceService implements IDeviceService {
         Long last7day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast7day, LocalDateTime.now());
         Long last30day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast30day, LocalDateTime.now());
         terminalStudioOutput.setOnline(deviceOnline);
-        terminalStudioOutput.setLast7day(deviceOnline);
+        terminalStudioOutput.setLast7day(last7day);
         terminalStudioOutput.setLast30day(last30day);
         terminalStudioOutput.setTotal(deviceRepository.count());
         return terminalStudioOutput;
