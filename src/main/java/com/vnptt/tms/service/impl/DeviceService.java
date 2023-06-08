@@ -459,9 +459,9 @@ public class DeviceService implements IDeviceService {
         Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
         Long notActive = deviceRepository.countDistinctByHistoryPerformanceEntitiesIsNull();
         Long offline = total - online;
-        result.add(new PieChart(online,"online"));
-        result.add(new PieChart(notActive,"notActive"));
-        result.add(new PieChart(offline,"offline"));
+        result.add(new PieChart(online,"Online"));
+        result.add(new PieChart(notActive,"Not active"));
+        result.add(new PieChart(offline,"Offline"));
         return result;
     }
 
