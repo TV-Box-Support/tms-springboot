@@ -5,7 +5,6 @@ import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
 import com.vnptt.tms.entity.DeviceApplicationEntity;
 import com.vnptt.tms.entity.DeviceEntity;
-import com.vnptt.tms.exception.FileStorageException;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceApplicationRepository;
@@ -133,22 +132,34 @@ public class ApplicationService implements IApplicationService {
     @Override
     public ApplicationDTO addAppToDevice(String sn, ApplicationDTO model) {
         DeviceEntity deviceEntity = deviceRepository.findOneBySn(sn);
-        if (deviceEntity != null ) {
+        if (deviceEntity == null) {
             throw new ResourceNotFoundException("Not found device with sn = " + sn);
         }
         ApplicationEntity applicationEntity = applicationRepository.findOneByPackagenameAndVersion(model.getPackagename(), model.getVersion());
+        // exist application
         if (applicationEntity != null) {
             DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findDeviceApplicationEntityByDeviceAppEntityDetailSnAndApplicationEntityDetailId(sn, applicationEntity.getId());
             if (deviceApplicationEntity != null) {
-                throw new FileStorageException(" Application had map in device ");
+                return applicationConverter.toDTO(applicationEntity);
             }
+            //map application to device
             deviceApplicationEntity = new DeviceApplicationEntity();
-            deviceApplicationEntity.setDeviceAppEntityDetail(deviceRepository.findOneById(deviceEntity.getId()));
+            deviceApplicationEntity.setDeviceAppEntityDetail(deviceEntity);
             deviceApplicationEntity.setApplicationEntityDetail(applicationEntity);
             deviceApplicationEntity.setIsalive(true);
             deviceApplicationRepository.save(deviceApplicationEntity);
         } else {
+            // add applicaion
             applicationEntity = applicationConverter.toEntity(model);
+            applicationRepository.save(applicationEntity);
+
+            //map application to device
+            DeviceApplicationEntity deviceApplicationEntity = new DeviceApplicationEntity();
+            deviceApplicationEntity.setDeviceAppEntityDetail(deviceEntity);
+            deviceApplicationEntity.setApplicationEntityDetail(applicationEntity);
+            deviceApplicationEntity.setIsalive(true);
+            deviceApplicationRepository.save(deviceApplicationEntity);
+
         }
 
         return applicationConverter.toDTO(applicationEntity);
