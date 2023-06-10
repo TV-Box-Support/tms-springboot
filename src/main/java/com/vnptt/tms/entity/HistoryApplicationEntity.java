@@ -9,8 +9,6 @@ public class HistoryApplicationEntity extends BaseEntity {
     private Double cpu;
     @Column(name = "memory")
     private Double memory;
-    @Column(name = "status", nullable = false)
-    private boolean status;
     @ManyToOne
     @JoinColumn(name = "deviceApplicationId", nullable = false)
     private DeviceApplicationEntity historyDeviceApplicationEntity;
@@ -31,13 +29,6 @@ public class HistoryApplicationEntity extends BaseEntity {
         this.memory = memory;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
     public DeviceApplicationEntity getHistoryDeviceApplicationEntity() {
         return historyDeviceApplicationEntity;

@@ -33,16 +33,18 @@ public class HistoryApplicationService implements IHistoryApplicationService {
      * save history application, if application is still in device
      *
      * @param historyApplicationDTO
+     * @param sn
+     * @param packagename
      * @return
      */
     @Override
-    public HistoryApplicationDTO save(HistoryApplicationDTO historyApplicationDTO) {
-        HistoryApplicationEntity historyApplicationEntity = historyApplicationConverter.toEntity(historyApplicationDTO);
+    public HistoryApplicationDTO save(HistoryApplicationDTO historyApplicationDTO, String sn, String packagename) {
 
-        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneById(historyApplicationDTO.getDeviceApplicationId());
+        HistoryApplicationEntity historyApplicationEntity = historyApplicationConverter.toEntity(historyApplicationDTO);
+        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneByDeviceAppEntityDetailSnAndApplicationEntityDetailPackagenameAndIsalive(sn, packagename, true);
 
         if (deviceApplicationEntity == null) {
-            throw new ResourceNotFoundException("not found device-application info with id " + historyApplicationDTO.getDeviceApplicationId());
+            throw new ResourceNotFoundException("not found application info with packagename " + packagename + " in device with serialnumber " + sn );
         }
 
         historyApplicationEntity.setHistoryDeviceApplicationEntity(deviceApplicationEntity);

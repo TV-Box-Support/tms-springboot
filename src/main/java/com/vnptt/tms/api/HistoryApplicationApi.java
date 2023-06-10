@@ -79,15 +79,14 @@ public class HistoryApplicationApi {
     /**
      * Add new history application
      *
-     * @param deviceApplicationId
-     * @param model         (cpu, memory, status)
+     * @param model               (cpu, memory, status)
      * @return
      */
-    @PostMapping(value = "/deviceApplication/{deviceApplicationId}/historyApplication")
-    public HistoryApplicationDTO createHistoryApplication(@PathVariable(value = "deviceApplicationId") Long deviceApplicationId,
+    @PostMapping(value = "/historyApplication")
+    public HistoryApplicationDTO createHistoryApplication(@RequestParam(value = "serialnumber") String sn,
+                                                          @RequestParam(value = "packagename") String packagename,
                                                           @RequestBody HistoryApplicationDTO model) {
-        model.setDeviceApplicationId(deviceApplicationId);
-        return historyApplicationService.save(model);
+        return historyApplicationService.save( model, sn, packagename);
     }
 
     /**
@@ -97,11 +96,11 @@ public class HistoryApplicationApi {
      * @param id
      * @return
      */
-    @PutMapping(value = "/historyApplication/{id}")
-    public HistoryApplicationDTO updateHistoryApplication(@RequestBody HistoryApplicationDTO model, @PathVariable("id") Long id) {
-        model.setId(id);
-        return historyApplicationService.save(model);
-    }
+//    @PutMapping(value = "/historyApplication/{id}")
+//    public HistoryApplicationDTO updateHistoryApplication(@RequestBody HistoryApplicationDTO model, @PathVariable("id") Long id) {
+//        model.setId(id);
+//        return historyApplicationService.save(model);
+//    }
 
     @DeleteMapping(value = "/historyApplication")
     @PreAuthorize("hasRole('MODERATOR')")

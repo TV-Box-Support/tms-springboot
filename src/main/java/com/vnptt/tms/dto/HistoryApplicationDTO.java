@@ -5,7 +5,6 @@ public class HistoryApplicationDTO extends AbstractDTO{
     private Long deviceApplicationId;
     private Double cpu;
     private Double memory;
-    private boolean status;
 
     public Long getDeviceApplicationId() {
         return deviceApplicationId;
@@ -31,11 +30,4 @@ public class HistoryApplicationDTO extends AbstractDTO{
         this.memory = memory;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 }

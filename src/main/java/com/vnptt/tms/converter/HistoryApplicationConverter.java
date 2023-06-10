@@ -51,7 +51,6 @@ public class HistoryApplicationConverter {
     public HistoryApplicationEntity toEntity(HistoryApplicationDTO dto, HistoryApplicationEntity entity) {
         entity.setCpu(dto.getCpu());
         entity.setMemory((dto.getMemory()));
-        entity.setStatus(dto.isStatus());
         return entity;
     }
 }

@@ -29,4 +29,6 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     Long countByApplicationEntityDetailNameContaining(String name);
 
+    DeviceApplicationEntity findOneByDeviceAppEntityDetailSnAndApplicationEntityDetailPackagenameAndIsalive(String sn, String packagename, Boolean isalive);
+
 }
