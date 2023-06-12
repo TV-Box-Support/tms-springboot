@@ -273,7 +273,6 @@ public class DeviceApi {
     @GetMapping(value = "/terminalStudio/device")
     public TerminalStudioOutput showTerminalStudioInfo() {
         TerminalStudioOutput result = deviceService.updateTerminalStudioInfo();
-
         return result;
     }
 
@@ -284,8 +283,8 @@ public class DeviceApi {
     }
 
     @GetMapping(value = "/chart/pie/device")
-    public List<PieChart> showTotalDeviceStatus() {
-        List<PieChart> result = deviceService.getTotalPieChart();
+    public List<PieChart> showTotalDeviceStatus(@RequestParam(name = "type") String type) {
+        List<PieChart> result = deviceService.getTotalPieChart(type);
         return result;
     }
 

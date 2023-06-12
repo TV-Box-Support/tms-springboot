@@ -26,4 +26,9 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     Long countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(@Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow );
 
     Long countDistinctByHistoryPerformanceEntitiesIsNull();
+
+    Long countByHdmiBetween(Integer lower, Integer upper);
+
+    Long countByNetworkContaining(String network);
+
 }

@@ -452,16 +452,35 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public List<PieChart> getTotalPieChart() {
+    public List<PieChart> getTotalPieChart(String type) {
         List<PieChart> result = new ArrayList<>();
-        Long total = deviceRepository.count();
-        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
-        Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
-        Long notActive = deviceRepository.countDistinctByHistoryPerformanceEntitiesIsNull();
-        Long offline = total - online;
-        result.add(new PieChart(online,"Online"));
-        result.add(new PieChart(notActive,"Not active"));
-        result.add(new PieChart(offline,"Offline"));
+        if (Objects.equals(type, "online")) {
+            Long total = deviceRepository.count();
+            LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
+            Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
+            Long notActive = deviceRepository.countDistinctByHistoryPerformanceEntitiesIsNull();
+            Long offline = total - online;
+            result.add(new PieChart(online, "Online"));
+            result.add(new PieChart(notActive, "Not active"));
+            result.add(new PieChart(offline, "Offline"));
+        } else if (Objects.equals(type, "hdmi")) {
+            Long hdmi480 = deviceRepository.countByHdmiBetween(0, 480);
+            Long hdmi720 = deviceRepository.countByHdmiBetween(481, 720);
+            Long hdmi1080 = deviceRepository.countByHdmiBetween(721, 1080);
+            Long hdmi2k = deviceRepository.countByHdmiBetween(1081, 2000);
+            Long hdmi4k = deviceRepository.countByHdmiBetween(2001, 4000);
+            result.add(new PieChart(hdmi480, "480P & lower"));
+            result.add(new PieChart(hdmi720, "720P"));
+            result.add(new PieChart(hdmi1080, "1080P"));
+            result.add(new PieChart(hdmi2k, "2K"));
+            result.add(new PieChart(hdmi4k, "4K & upper"));
+        } else if (Objects.equals(type, "network")){
+            Long wifi = deviceRepository.countByNetworkContaining("Wifi");
+            Long ethernet = deviceRepository.countByNetworkContaining("Ethernet");
+            Long diff = deviceRepository.countByNetworkContaining("diff");
+            result.add(new PieChart(wifi, "Wifi"));
+            result.add(new PieChart(ethernet, "4K & Ethernet"));
+        }
         return result;
     }
 
@@ -493,7 +512,7 @@ public class DeviceService implements IDeviceService {
     @Override
     public DeviceDTO boxUpdate(String sn, DeviceDTO model) {
         DeviceEntity deviceEntity = deviceRepository.findOneBySn(sn);
-        if(deviceEntity == null){
+        if (deviceEntity == null) {
             throw new ResourceNotFoundException("not found device with serialnumber: " + sn);
         }
         deviceEntity = deviceConverter.toEntity(model, deviceEntity);

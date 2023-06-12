@@ -52,7 +52,7 @@ public interface IDeviceService {
 
     TerminalStudioOutput updateTerminalStudioInfo();
 
-    List<PieChart> getTotalPieChart();
+    List<PieChart> getTotalPieChart(String type);
 
     List<AreaChart> getTotalAreaChart();
 
