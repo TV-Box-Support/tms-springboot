@@ -34,11 +34,11 @@ public interface IDeviceService {
 
     List<DeviceDTO> findByDate(Date date);
 
-    List<DeviceDTO> findAllDeviceRunNow();
+    List<DeviceDTO> findAllDeviceRunNow(Pageable pageable);
 
     ResponseEntity<?> authenticateDevice(String serialnumber, String mac);
 
-    List<DeviceDTO> findDeviceActive(int day, long hour, int minutes);
+    List<DeviceDTO> findDeviceActive(int day, long hour, int minutes, Pageable pageable);
 
     List<DeviceDTO> findAllWithApplication(Long applicationId);
 
@@ -57,4 +57,8 @@ public interface IDeviceService {
     List<AreaChart> getTotalAreaChart();
 
     DeviceDTO boxUpdate(String sn, DeviceDTO model);
+
+    Long countDeviceRunNow();
+
+    Long countDeviceActive(int day, long hour, int minutes);
 }

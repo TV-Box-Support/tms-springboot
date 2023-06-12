@@ -194,9 +194,13 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device/now")
-    public DeviceOutput showDeviceRunNow() {
+    public DeviceOutput showDeviceRunNow(@RequestParam(value = "page") Integer page,
+                                         @RequestParam(value = "limit") Integer limit) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findAllDeviceRunNow());
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        result.setListResult(deviceService.findAllDeviceRunNow(pageable));
+        result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceRunNow() / limit));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -230,11 +234,16 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device/active")
-    public DeviceOutput showDeviceActive(@RequestParam(value = "day") int day,
+    public DeviceOutput showDeviceActive(@RequestParam(value = "page") Integer page,
+                                         @RequestParam(value = "limit") Integer limit,
+                                         @RequestParam(value = "day") int day,
                                          @RequestParam(value = "hour") long hour,
                                          @RequestParam(value = "minutes") int minutes) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findDeviceActive(day, hour, minutes));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        result.setListResult(deviceService.findDeviceActive(day, hour, minutes, pageable));
+        result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceActive(day, hour, minutes) / limit));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
