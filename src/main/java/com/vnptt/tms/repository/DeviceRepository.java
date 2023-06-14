@@ -15,15 +15,21 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     DeviceEntity findOneBySn(String sn);
 
-    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(String model, String firmwareVer);
+    List<DeviceEntity> findAllByDescriptionContainingOrSnContainingOrderByModifiedDateDesc(String description, String sn, Pageable pageable);
 
-    List<DeviceEntity> findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(String model, String firmwareVer, Pageable pageable);
+    Long countByDescriptionContainingOrSnContaining(String description, String sn);
 
-    List<DeviceEntity> findAllByLocationContainingOrderByModifiedDateDesc(String location);
+    List<DeviceEntity> findAllByLocationContainingOrderByModifiedDateDesc(String location, Pageable pageable);
 
-    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date);
+    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date, Pageable pageable);
 
-    Long countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(@Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow );
+    List<DeviceEntity> findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(Date date, String description, Pageable pageable);
+
+    Long countByDateAndDescriptionContaining(Date date, String description);
+
+    Long countByDate(Date date);
+
+    Long countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(@Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
 
     Long countDistinctByHistoryPerformanceEntitiesIsNull();
 
@@ -31,4 +37,9 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     Long countByNetworkContaining(String network);
 
+    List<DeviceEntity> findAllByLocationContainingOrDescriptionContainingOrderByModifiedDateDesc(String location, String description, Pageable pageable);
+
+    Long countByLocationContainingOrDescriptionContaining(String location, String description);
+
+    Long countByLocationContaining(String location);
 }

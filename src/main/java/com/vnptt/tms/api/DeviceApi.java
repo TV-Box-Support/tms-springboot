@@ -45,33 +45,25 @@ public class DeviceApi {
     /**
      * show device with model and firmware for web
      *
-     * @param page     the page you want to display
-     * @param limit    element on a page
-     * @param model    type STB
-     * @param firmware firmware version
+     * @param page   the page you want to display
+     * @param limit  element on a page
+     * @param search search of STB
      * @return List of device DTO
      */
     @GetMapping(value = "/device")
-    public DeviceOutput showDevice(@RequestParam(value = "page", required = false) Integer page,
-                                   @RequestParam(value = "limit", required = false) Integer limit,
-                                   @RequestParam(value = "model", required = false) String model,
-                                   @RequestParam(value = "firmware", required = false) String firmware) {
+    public DeviceOutput showDevice(@RequestParam(value = "page") Integer page,
+                                   @RequestParam(value = "limit") Integer limit,
+                                   @RequestParam(value = "search", required = false) String search) {
         DeviceOutput result = new DeviceOutput();
-        if (page != null && limit != null) {
-            result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1, limit);
-            if (model != null || firmware != null) {
-                result.setListResult(deviceService.findByModelAndFirmwareVer(model, firmware, pageable));
-            } else {
-                result.setListResult((deviceService.findAll(pageable)));
-            }
-            result.setTotalPage((int) Math.ceil((double) deviceService.totalItem() / limit));
+
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (search != null) {
+            result.setListResult(deviceService.findByDescriptionAndSn(search, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndSn(search) / limit));
         } else {
-            if (model != null || firmware != null) {
-                result.setListResult(deviceService.findByModelAndFirmwareVer(model, firmware));
-            } else {
-                result.setListResult((deviceService.findAll()));
-            }
+            result.setListResult((deviceService.findAll(pageable)));
+            result.setTotalPage((int) Math.ceil((double) deviceService.totalItem() / limit));
         }
 
         if (result.getListResult().size() >= 1) {
@@ -102,9 +94,22 @@ public class DeviceApi {
      * @return list device DTO
      */
     @GetMapping(value = "/device/date")
-    public DeviceOutput showDeviceWithDate(@RequestParam(value = "date") Date dateOfManufacture) {
+    public DeviceOutput showDeviceWithDate(@RequestParam(value = "page") Integer page,
+                                           @RequestParam(value = "limit") Integer limit,
+                                           @RequestParam(value = "description", required = false) String description,
+                                           @RequestParam(value = "date") Date dateOfManufacture) {
+
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findByDate(dateOfManufacture));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (description != null) {
+            result.setListResult(deviceService.findByDescriptionAndDate(dateOfManufacture, description, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndDate(dateOfManufacture, description) / limit));
+        } else {
+            result.setListResult(deviceService.findByDate(dateOfManufacture, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByDate(dateOfManufacture) / limit));
+        }
+
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
             result.setTotalElement(result.getListResult().size());
@@ -135,9 +140,21 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/device/location")
-    public DeviceOutput showDeviceWithLocation(@RequestParam(value = "location") String location) {
+    public DeviceOutput showDeviceWithLocation(@RequestParam(value = "page") Integer page,
+                                               @RequestParam(value = "limit") Integer limit,
+                                               @RequestParam(value = "description", required = false) String description,
+                                               @RequestParam(value = "location") String location) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findByLocation(location));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (description != null) {
+            result.setListResult(deviceService.findByDescriptionAndLocation(location, description, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndLocation(location, description) / limit));
+        } else {
+            result.setListResult(deviceService.findByLocation(location, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByLocation(location) / limit));
+        }
+
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
             result.setTotalElement(result.getListResult().size());

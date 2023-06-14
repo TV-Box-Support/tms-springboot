@@ -26,13 +26,9 @@ public interface IDeviceService {
 
     DeviceDTO findOneBySn(String ip, String serialnumber);
 
-    List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer);
+    List<DeviceDTO> findByLocation(String location, Pageable pageable);
 
-    List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable);
-
-    List<DeviceDTO> findByLocation(String location);
-
-    List<DeviceDTO> findByDate(Date date);
+    List<DeviceDTO> findByDate(Date date, Pageable pageable);
 
     List<DeviceDTO> findAllDeviceRunNow(Pageable pageable);
 
@@ -61,4 +57,20 @@ public interface IDeviceService {
     Long countDeviceRunNow();
 
     Long countDeviceActive(int day, long hour, int minutes);
+
+    List<DeviceDTO> findByDescriptionAndSn(String search, Pageable pageable);
+
+    Long countByDescriptionAndSn(String search);
+
+    List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable);
+
+    Long countByDescriptionAndDate(Date dateOfManufacture, String description);
+
+    Long countByDate(Date dateOfManufacture);
+
+    List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable);
+
+    Long countByDescriptionAndLocation(String location, String description);
+
+    Long countByLocation(String location);
 }

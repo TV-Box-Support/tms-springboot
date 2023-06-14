@@ -165,42 +165,11 @@ public class DeviceService implements IDeviceService {
         return deviceConverter.toDTO(entity);
     }
 
-    /**
-     * find nomal
-     *
-     * @param model
-     * @param firmwareVer
-     * @return
-     */
     @Override
-    public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer) {
+    public List<DeviceDTO> findByLocation(String location, Pageable pageable) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        if (model == null) model = "";
-        if (firmwareVer == null) firmwareVer = "";
-        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(model, firmwareVer);
-        for (DeviceEntity item : deviceEntities) {
-            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
-            result.add(deviceDTO);
-        }
-        return result;
-    }
-
-    /**
-     * find with pageable
-     *
-     * @param model
-     * @param firmwareVer
-     * @param pageable
-     * @return
-     */
-    @Override
-    public List<DeviceDTO> findByModelAndFirmwareVer(String model, String firmwareVer, Pageable pageable) {
-        List<DeviceEntity> deviceEntities = new ArrayList<>();
-        List<DeviceDTO> result = new ArrayList<>();
-        if (model == null) model = "";
-        if (firmwareVer == null) firmwareVer = "";
-        deviceEntities = deviceRepository.findAllByModelContainingAndFirmwareVerContainingOrderByModifiedDateDesc(model, firmwareVer, pageable);
+        deviceEntities = deviceRepository.findAllByLocationContainingOrderByModifiedDateDesc(location, pageable);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -209,22 +178,10 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public List<DeviceDTO> findByLocation(String location) {
+    public List<DeviceDTO> findByDate(Date date, Pageable pageable) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByLocationContainingOrderByModifiedDateDesc(location);
-        for (DeviceEntity item : deviceEntities) {
-            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
-            result.add(deviceDTO);
-        }
-        return result;
-    }
-
-    @Override
-    public List<DeviceDTO> findByDate(Date date) {
-        List<DeviceEntity> deviceEntities = new ArrayList<>();
-        List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByDateOrderByModifiedDateDesc(date);
+        deviceEntities = deviceRepository.findAllByDateOrderByModifiedDateDesc(date, pageable);
         for (DeviceEntity item : deviceEntities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
             result.add(deviceDTO);
@@ -475,7 +432,7 @@ public class DeviceService implements IDeviceService {
             result.add(new PieChart(hdmi1080, "1080P"));
             result.add(new PieChart(hdmi2k, "2K"));
             result.add(new PieChart(hdmi4k, "4K & upper"));
-        } else if (Objects.equals(type, "network")){
+        } else if (Objects.equals(type, "network")) {
             Long wifi = deviceRepository.countByNetworkContaining("Wifi");
             Long ethernet = deviceRepository.countByNetworkContaining("Ethernet");
             Long diff = deviceRepository.countByNetworkContaining("diff");
@@ -531,6 +488,67 @@ public class DeviceService implements IDeviceService {
     public Long countDeviceActive(int day, long hour, int minutes) {
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
         return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, LocalDateTime.now());
+    }
+
+    @Override
+    public List<DeviceDTO> findByDescriptionAndSn(String search, Pageable pageable) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByDescriptionContainingOrSnContainingOrderByModifiedDateDesc(search, search, pageable);
+        for (DeviceEntity item : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countByDescriptionAndSn(String description) {
+        return deviceRepository.countByDescriptionContainingOrSnContaining(description, description);
+    }
+
+    @Override
+    public List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(dateOfManufacture, description, pageable);
+        for (DeviceEntity item : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countByDescriptionAndDate(Date dateOfManufacture, String description) {
+        return deviceRepository.countByDateAndDescriptionContaining(dateOfManufacture, description);
+    }
+
+    @Override
+    public Long countByDate(Date dateOfManufacture) {
+        return deviceRepository.countByDate(dateOfManufacture);
+    }
+
+    @Override
+    public List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByLocationContainingOrDescriptionContainingOrderByModifiedDateDesc(location, description, pageable);
+        for (DeviceEntity item : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countByDescriptionAndLocation(String location, String description) {
+        return deviceRepository.countByLocationContainingOrDescriptionContaining(location, description);
+    }
+
+    @Override
+    public Long countByLocation(String location) {
+        return deviceRepository.countByLocationContaining(location);
     }
 
 
