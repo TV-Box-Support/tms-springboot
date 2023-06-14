@@ -7,7 +7,6 @@ import com.vnptt.tms.dto.DeviceDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface IDeviceService {
@@ -28,7 +27,6 @@ public interface IDeviceService {
 
     List<DeviceDTO> findByLocation(String location, Pageable pageable);
 
-    List<DeviceDTO> findByDate(Date date, Pageable pageable);
 
     List<DeviceDTO> findAllDeviceRunNow(Pageable pageable);
 
@@ -62,11 +60,13 @@ public interface IDeviceService {
 
     Long countByDescriptionAndSn(String search);
 
-    List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable);
-
-    Long countByDescriptionAndDate(Date dateOfManufacture, String description);
-
-    Long countByDate(Date dateOfManufacture);
+//    List<DeviceDTO> findByDate(Date date, Pageable pageable);
+//
+//    List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable);
+//
+//    Long countByDescriptionAndDate(Date dateOfManufacture, String description);
+//
+//    Long countByDate(Date dateOfManufacture);
 
     List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable);
 

@@ -1,7 +1,6 @@
 package com.vnptt.tms.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +9,11 @@ import java.util.List;
 public class DeviceEntity extends BaseEntity {
     @Column(name = "product")
     private String product;
-    @Column(name = "model", nullable = false)
+    @Column(name = "model")
     private String model;
     @Column(name = "serialNumber", nullable = false, unique = true)
     private String sn;
-    @Column(name = "mac", nullable = false, unique = true)
+    @Column(name = "mac", unique = true)
     private String mac;
     @Column(name = "fiwareVersion")
     private String firmwareVer;
@@ -26,8 +25,8 @@ public class DeviceEntity extends BaseEntity {
     private String network;
     @Column(name = "rom")
     private Long rom;
-    @Column(name = "dateOfManufacture", nullable = false)
-    private Date date;
+//    @Column(name = "dateOfManufacture")
+//    private Date date;
     @Column(name = "location")
     private String location;
     @Column(name = "description", length = 2000)
@@ -114,13 +113,13 @@ public class DeviceEntity extends BaseEntity {
         this.ip = ip;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
 
     public Long getRom() {
         return rom;

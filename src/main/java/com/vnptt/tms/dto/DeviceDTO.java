@@ -1,7 +1,5 @@
 package com.vnptt.tms.dto;
 
-import java.sql.Date;
-
 public class DeviceDTO extends AbstractDTO {
     private String sn;
     private String mac;
@@ -12,7 +10,7 @@ public class DeviceDTO extends AbstractDTO {
     private String ip;
     private String network;
     private Long rom;
-    private Date date;
+//    private Date date;
     private String location;
     private String description;
 
@@ -80,13 +78,13 @@ public class DeviceDTO extends AbstractDTO {
         this.rom = rom;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
 
     public String getLocation() {
         return location;

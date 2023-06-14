@@ -177,17 +177,17 @@ public class DeviceService implements IDeviceService {
         return result;
     }
 
-    @Override
-    public List<DeviceDTO> findByDate(Date date, Pageable pageable) {
-        List<DeviceEntity> deviceEntities = new ArrayList<>();
-        List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByDateOrderByModifiedDateDesc(date, pageable);
-        for (DeviceEntity item : deviceEntities) {
-            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
-            result.add(deviceDTO);
-        }
-        return result;
-    }
+//    @Override
+//    public List<DeviceDTO> findByDate(Date date, Pageable pageable) {
+//        List<DeviceEntity> deviceEntities = new ArrayList<>();
+//        List<DeviceDTO> result = new ArrayList<>();
+//        deviceEntities = deviceRepository.findAllByDateOrderByModifiedDateDesc(date, pageable);
+//        for (DeviceEntity item : deviceEntities) {
+//            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+//            result.add(deviceDTO);
+//        }
+//        return result;
+//    }
 
     /**
      * find all device with application id
@@ -507,27 +507,27 @@ public class DeviceService implements IDeviceService {
         return deviceRepository.countByDescriptionContainingOrSnContaining(description, description);
     }
 
-    @Override
-    public List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable) {
-        List<DeviceEntity> deviceEntities = new ArrayList<>();
-        List<DeviceDTO> result = new ArrayList<>();
-        deviceEntities = deviceRepository.findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(dateOfManufacture, description, pageable);
-        for (DeviceEntity item : deviceEntities) {
-            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
-            result.add(deviceDTO);
-        }
-        return result;
-    }
-
-    @Override
-    public Long countByDescriptionAndDate(Date dateOfManufacture, String description) {
-        return deviceRepository.countByDateAndDescriptionContaining(dateOfManufacture, description);
-    }
-
-    @Override
-    public Long countByDate(Date dateOfManufacture) {
-        return deviceRepository.countByDate(dateOfManufacture);
-    }
+//    @Override
+//    public List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable) {
+//        List<DeviceEntity> deviceEntities = new ArrayList<>();
+//        List<DeviceDTO> result = new ArrayList<>();
+//        deviceEntities = deviceRepository.findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(dateOfManufacture, description, pageable);
+//        for (DeviceEntity item : deviceEntities) {
+//            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+//            result.add(deviceDTO);
+//        }
+//        return result;
+//    }
+//
+//    @Override
+//    public Long countByDescriptionAndDate(Date dateOfManufacture, String description) {
+//        return deviceRepository.countByDateAndDescriptionContaining(dateOfManufacture, description);
+//    }
+//
+//    @Override
+//    public Long countByDate(Date dateOfManufacture) {
+//        return deviceRepository.countByDate(dateOfManufacture);
+//    }
 
     @Override
     public List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable) {

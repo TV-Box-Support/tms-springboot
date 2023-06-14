@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -87,37 +86,37 @@ public class DeviceApi {
         return deviceService.findOne(id);
     }
 
-    /**
-     * show device with production
-     *
-     * @param dateOfManufacture ex 2022-12-30
-     * @return list device DTO
-     */
-    @GetMapping(value = "/device/date")
-    public DeviceOutput showDeviceWithDate(@RequestParam(value = "page") Integer page,
-                                           @RequestParam(value = "limit") Integer limit,
-                                           @RequestParam(value = "description", required = false) String description,
-                                           @RequestParam(value = "date") Date dateOfManufacture) {
-
-        DeviceOutput result = new DeviceOutput();
-        result.setPage(page);
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        if (description != null) {
-            result.setListResult(deviceService.findByDescriptionAndDate(dateOfManufacture, description, pageable));
-            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndDate(dateOfManufacture, description) / limit));
-        } else {
-            result.setListResult(deviceService.findByDate(dateOfManufacture, pageable));
-            result.setTotalPage((int) Math.ceil((double) deviceService.countByDate(dateOfManufacture) / limit));
-        }
-
-        if (result.getListResult().size() >= 1) {
-            result.setMessage("Request Success");
-            result.setTotalElement(result.getListResult().size());
-        } else {
-            result.setMessage("no matching element found");
-        }
-        return result;
-    }
+//    /**
+//     * show device with production
+//     *
+//     * @param dateOfManufacture ex 2022-12-30
+//     * @return list device DTO
+//     */
+//    @GetMapping(value = "/device/date")
+//    public DeviceOutput showDeviceWithDate(@RequestParam(value = "page") Integer page,
+//                                           @RequestParam(value = "limit") Integer limit,
+//                                           @RequestParam(value = "description", required = false) String description,
+//                                           @RequestParam(value = "date") Date dateOfManufacture) {
+//
+//        DeviceOutput result = new DeviceOutput();
+//        result.setPage(page);
+//        Pageable pageable = PageRequest.of(page - 1, limit);
+//        if (description != null) {
+//            result.setListResult(deviceService.findByDescriptionAndDate(dateOfManufacture, description, pageable));
+//            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndDate(dateOfManufacture, description) / limit));
+//        } else {
+//            result.setListResult(deviceService.findByDate(dateOfManufacture, pageable));
+//            result.setTotalPage((int) Math.ceil((double) deviceService.countByDate(dateOfManufacture) / limit));
+//        }
+//
+//        if (result.getListResult().size() >= 1) {
+//            result.setMessage("Request Success");
+//            result.setTotalElement(result.getListResult().size());
+//        } else {
+//            result.setMessage("no matching element found");
+//        }
+//        return result;
+//    }
 
     /**
      * Show device info with serialnumber

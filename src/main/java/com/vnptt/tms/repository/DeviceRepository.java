@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,13 +20,13 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     List<DeviceEntity> findAllByLocationContainingOrderByModifiedDateDesc(String location, Pageable pageable);
 
-    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date, Pageable pageable);
-
-    List<DeviceEntity> findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(Date date, String description, Pageable pageable);
-
-    Long countByDateAndDescriptionContaining(Date date, String description);
-
-    Long countByDate(Date date);
+//    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date, Pageable pageable);
+//
+//    List<DeviceEntity> findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(Date date, String description, Pageable pageable);
+//
+//    Long countByDateAndDescriptionContaining(Date date, String description);
+//
+//    Long countByDate(Date date);
 
     Long countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(@Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
 
