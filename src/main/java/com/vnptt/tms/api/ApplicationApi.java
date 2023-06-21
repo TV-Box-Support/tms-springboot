@@ -108,8 +108,11 @@ public class ApplicationApi {
             if (isSystem == null) {
                 isSystem = false;
             }
-            result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isAlive ,  isSystem, pageable));
-            result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isAlive ,isSystem) / limit));
+            if (isAlive == null) {
+                isAlive = true;
+            }
+            result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isAlive, isSystem, pageable));
+            result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isAlive, isSystem) / limit));
         }
 
         if (result.getListResult().size() >= 1) {
@@ -157,7 +160,7 @@ public class ApplicationApi {
     /**
      * Map app to device for box, if database don't have app, create and add
      *
-     * @param model    dto application (need id from response when post new app)
+     * @param model dto application (need id from response when post new app)
      * @return
      */
     @PostMapping(value = "/device/application")

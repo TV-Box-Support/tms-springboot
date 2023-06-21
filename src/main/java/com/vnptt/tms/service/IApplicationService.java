@@ -28,7 +28,7 @@ public interface IApplicationService {
 
     Long countByDeviceId(Long deviceId);
 
-    List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Boolean system, Pageable pageable);
+    List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isAlive, Boolean isSystem, Pageable pageable);
 
     Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Boolean system);
 
