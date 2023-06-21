@@ -10,7 +10,6 @@ public class DeviceDTO extends AbstractDTO {
     private String ip;
     private String network;
     private Long rom;
-//    private Date date;
     private String location;
     private String description;
 

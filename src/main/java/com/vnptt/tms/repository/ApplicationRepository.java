@@ -21,4 +21,5 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailSnAndDeviceApplicationEntitiesIsalive(String sn, Boolean isalive);
 
+    List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByModifiedDateDesc(Long deviceId, Boolean isalive, String name, Boolean isSystem, Pageable pageable);
 }

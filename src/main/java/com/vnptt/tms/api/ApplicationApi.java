@@ -94,6 +94,7 @@ public class ApplicationApi {
     public ApplicationOutput getAllApplicationByDeviceEntityId(@RequestParam(value = "page") Integer page,
                                                                @RequestParam(value = "limit") Integer limit,
                                                                @PathVariable(value = "deviceId") Long deviceId,
+                                                               @RequestParam(value = "isAlive") Boolean isAlive,
                                                                @RequestParam(value = "isSystem", required = false) Boolean isSystem,
                                                                @RequestParam(value = "name", required = false) String name) {
         ApplicationOutput result = new ApplicationOutput();
@@ -107,8 +108,8 @@ public class ApplicationApi {
             if (isSystem == null) {
                 isSystem = false;
             }
-            result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isSystem, pageable));
-            result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isSystem) / limit));
+            result.setListResult(applicationService.findAllWithDeviceNameIsSystem(deviceId, name, isAlive ,  isSystem, pageable));
+            result.setTotalPage((int) Math.ceil((double) applicationService.countWithDeviceNameIsSystem(deviceId, name, isAlive ,isSystem) / limit));
         }
 
         if (result.getListResult().size() >= 1) {

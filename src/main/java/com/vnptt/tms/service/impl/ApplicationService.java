@@ -187,15 +187,16 @@ public class ApplicationService implements IApplicationService {
     }
 
     @Override
-    public List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Pageable pageable) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
+    public List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isAlive, Boolean system, Pageable pageable) {
+//        List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
+        List<ApplicationEntity> applicationEntityList = applicationRepository.findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByModifiedDateDesc(deviceId, isAlive, name, system, pageable);
 
-        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingOrderByModifiedDateDesc(deviceId, isSystem, name, pageable);
-        for (DeviceApplicationEntity item : deviceApplicationEntities) {
-            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
-        }
-        for (ApplicationEntity item : applicationEntities) {
+//        List<DeviceApplicationEntity> deviceApplicationEntities = deviceApplicationRepository.findByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingOrderByModifiedDateDesc(deviceId, true, name, pageable);
+//        for (DeviceApplicationEntity item : deviceApplicationEntities) {
+//            applicationEntities.add(applicationRepository.findOneById(item.getApplicationEntityDetail().getId()));
+//        }
+        for (ApplicationEntity item : applicationEntityList) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }
@@ -203,7 +204,7 @@ public class ApplicationService implements IApplicationService {
     }
 
     @Override
-    public Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem) {
+    public Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Boolean system) {
         return deviceApplicationRepository.countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContaining(deviceId, isSystem, name);
     }
 
