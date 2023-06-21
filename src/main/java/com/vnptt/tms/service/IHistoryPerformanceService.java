@@ -1,12 +1,13 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IHistoryPerformanceService {
-    HistoryPerformanceDTO save(HistoryPerformanceDTO historyPerformanceDTO);
+    List<PolicyDTO> save(HistoryPerformanceDTO historyPerformanceDTO);
 
     HistoryPerformanceDTO findOne(Long id);
 

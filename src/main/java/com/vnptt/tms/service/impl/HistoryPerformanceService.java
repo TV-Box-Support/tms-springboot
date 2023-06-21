@@ -1,12 +1,16 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.HistoryPerformanceConverter;
+import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
+import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
+import com.vnptt.tms.entity.PolicyEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.HistoryPerformanceRepository;
+import com.vnptt.tms.repository.PolicyRepository;
 import com.vnptt.tms.service.IHistoryPerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -28,26 +31,36 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
     private DeviceRepository deviceRepository;
 
     @Autowired
+    private PolicyRepository policyRepository;
+
+    @Autowired
+    private PolicyConverter policyConverter;
+
+    @Autowired
     private HistoryPerformanceConverter historyPerformanceConverter;
 
     @Override
-    public HistoryPerformanceDTO save(HistoryPerformanceDTO historyPerformanceDTO) {
-        HistoryPerformanceEntity historyPerformanceEntity = new HistoryPerformanceEntity();
-        if (historyPerformanceDTO.getId() != null) {
-            Optional<HistoryPerformanceEntity> oldHistoryPerformanceEntity = historyPerformanceRepository.findById(historyPerformanceDTO.getId());
-            historyPerformanceEntity = historyPerformanceConverter.toEntity(historyPerformanceDTO, oldHistoryPerformanceEntity.get());
-        } else {
-            historyPerformanceEntity = historyPerformanceConverter.toEntity(historyPerformanceDTO);
+    public List<PolicyDTO> save(HistoryPerformanceDTO historyPerformanceDTO) {
+        HistoryPerformanceEntity historyPerformanceEntity = historyPerformanceConverter.toEntity(historyPerformanceDTO);
+        DeviceEntity deviceEntity = deviceRepository.findOneBySn(historyPerformanceDTO.getDevicesn());
+        if (deviceEntity == null){
+            throw new ResourceNotFoundException("Can not find device with sn " + historyPerformanceDTO.getDevicesn());
         }
         try {
-            DeviceEntity deviceEntity = deviceRepository.findOneBySn(historyPerformanceDTO.getDevicesn());
             historyPerformanceEntity.setDeviceEntityHistory(deviceEntity);
         } catch (Exception e) {
-            historyPerformanceDTO.setDevicesn(historyPerformanceDTO.getDevicesn() + "wrong value");
-            return historyPerformanceDTO;
+            throw new ResourceNotFoundException(e.toString());
         }
-        historyPerformanceEntity = historyPerformanceRepository.save(historyPerformanceEntity);
-        return historyPerformanceConverter.toDTO(historyPerformanceEntity);
+        historyPerformanceRepository.save(historyPerformanceEntity);
+
+        // return policy for box
+        List<PolicyDTO> result = new ArrayList<>();
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceEntity.getId());
+        for (PolicyEntity entity : policyEntities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+            result.add(policyDTO);
+        }
+        return result;
     }
 
     @Override

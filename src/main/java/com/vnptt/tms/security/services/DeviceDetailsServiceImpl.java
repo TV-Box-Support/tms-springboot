@@ -19,11 +19,13 @@ public class DeviceDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String serialnumber) throws UsernameNotFoundException {
         // Check if the device exists in the database?
+        // Username = serialnumber
         DeviceEntity deviceEntity = deviceRepository.findOneBySn(serialnumber);
         if (deviceEntity == null) {
-            throw new RuntimeException("Device Not Found with sn: " + serialnumber);
+            deviceEntity = new DeviceEntity();
+            deviceEntity.setSn(serialnumber);
+            deviceRepository.save(deviceEntity);
         }
-
         return DeviceDetailsImpl.build(deviceEntity);
     }
 

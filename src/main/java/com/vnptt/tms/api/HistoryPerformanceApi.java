@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.table.HistoryPerformanceOutput;
+import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.service.IHistoryPerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,16 +93,25 @@ public class HistoryPerformanceApi {
      * @return
      */
     @PostMapping(value = "/historyPerformance")
-    public HistoryPerformanceDTO createHistoryPerformance(@RequestBody HistoryPerformanceDTO model) {
-        return historyPerformanceService.save(model);
+    public PolicyOutput createHistoryPerformance(@RequestBody HistoryPerformanceDTO model) {
+        PolicyOutput result = new PolicyOutput();
+        result.setListResult(historyPerformanceService.save(model));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
     }
 
-    @PutMapping(value = "/historyPerformance/{id}")
-    public HistoryPerformanceDTO updateHistoryPerformance(@RequestBody HistoryPerformanceDTO model,
-                                                          @PathVariable("id") Long id) {
-        model.setId(id);
-        return historyPerformanceService.save(model);
-    }
+//    @PutMapping(value = "/historyPerformance/{id}")
+//    public HistoryPerformanceDTO updateHistoryPerformance(@RequestBody HistoryPerformanceDTO model,
+//                                                          @PathVariable("id") Long id) {
+//        model.setId(id);
+//        return historyPerformanceService.save(model);
+//    }
 
     @DeleteMapping(value = "/historyPerformance")
     @PreAuthorize("hasRole('MODERATOR')")
