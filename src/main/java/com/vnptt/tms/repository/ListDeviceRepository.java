@@ -1,6 +1,7 @@
 package com.vnptt.tms.repository;
 
 import com.vnptt.tms.entity.ListDeviceEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface ListDeviceRepository extends JpaRepository<ListDeviceEntity, Lo
 
     ListDeviceEntity findOneByName(String all);
 
-    List<ListDeviceEntity> findAllByUserEntitiesListDeviceId(Long roleManagementId);
+    List<ListDeviceEntity> findAllByNameContainingOrderByModifiedDateDesc(String name, Pageable pageable);
+
+    Long countAllByNameContaining(String name);
 
 }

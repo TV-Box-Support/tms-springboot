@@ -29,13 +29,19 @@ public class ListDeviceApi {
      */
     @GetMapping(value = "/listDevice")
     public ListDeviceOutput showListDevice(@RequestParam(value = "page", required = false) Integer page,
-                                           @RequestParam(value = "limit", required = false) Integer limit) {
+                                           @RequestParam(value = "limit", required = false) Integer limit,
+                                           @RequestParam(value = "name", required = false) String name) {
         ListDeviceOutput result = new ListDeviceOutput();
         if (page != null && limit != null) {
             result.setPage(page);
             Pageable pageable = PageRequest.of(page - 1, limit);
-            result.setListResult((listDeviceService.findAll(pageable)));
-            result.setTotalPage((int) Math.ceil((double) listDeviceService.totalItem() / limit));
+            if (name == null) {
+                result.setListResult((listDeviceService.findAll(pageable)));
+                result.setTotalPage((int) Math.ceil((double) listDeviceService.totalItem() / limit));
+            } else {
+                result.setListResult((listDeviceService.findAllWithName(name, pageable)));
+                result.setTotalPage((int) Math.ceil((double) listDeviceService.countWithName(name) / limit));
+            }
         } else {
             result.setListResult(listDeviceService.findAll());
         }

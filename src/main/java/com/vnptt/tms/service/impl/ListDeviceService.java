@@ -187,4 +187,20 @@ public class ListDeviceService implements IListDeviceService {
         return result;
     }
 
+    @Override
+    public List<ListDeviceDTO> findAllWithName(String name, Pageable pageable) {
+        List<ListDeviceEntity> entities = listDeviceRepository.findAllByNameContainingOrderByModifiedDateDesc(name, pageable);
+        List<ListDeviceDTO> result = new ArrayList<>();
+        for (ListDeviceEntity item : entities) {
+            ListDeviceDTO ListDeviceDTO = listDeviceConverter.toDTO(item);
+            result.add(ListDeviceDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countWithName(String name) {
+        return listDeviceRepository.countAllByNameContaining(name);
+    }
+
 }

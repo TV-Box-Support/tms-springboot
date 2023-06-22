@@ -23,4 +23,8 @@ public interface IListDeviceService {
     void removeListDeviceInUser(Long userId, Long listDeviceId);
 
     List<ListDeviceDTO> findListDeviceManagementByUser(Long userId);
+
+    List<ListDeviceDTO> findAllWithName(String name, Pageable pageable);
+
+    Long countWithName(String name);
 }
