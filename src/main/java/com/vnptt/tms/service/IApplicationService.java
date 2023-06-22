@@ -30,7 +30,7 @@ public interface IApplicationService {
 
     List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isAlive, Boolean isSystem, Pageable pageable);
 
-    Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isSystem, Boolean system);
+    Long countWithDeviceNameIsSystem(Long deviceId, String name, Boolean isAlive, Boolean system);
 
     Long countByPackagename(String packagename);
 

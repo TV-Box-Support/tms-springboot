@@ -21,7 +21,7 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     Long countByDeviceAppEntityDetailId(Long deviceId);
 
-    Long countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContaining(Long deviceId, boolean isAlive, String name);
+    Long countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingAndApplicationEntityDetailIssystem(Long deviceId, boolean isAlive, String name, Boolean isSystem);
 
     List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdOrderByModifiedDateDesc(Long applicationId);
 
