@@ -43,10 +43,12 @@ public class ApkApi {
     private IApkService apkService;
 
     /**
-     * get list apk from database
+     * api get and search apk from database
      *
-     * @param page  the number of page you want to display
-     * @param limit the number of element in a page
+     * @param page        the number of page you want to display
+     * @param limit       the number of element in a page
+     * @param packagename packagename of apk
+     * @param version     version off apk
      * @return List apk DTO
      */
     @GetMapping(value = "/apk")
@@ -85,7 +87,7 @@ public class ApkApi {
     }
 
     /**
-     * dowload apk file
+     * api download apk file of Box
      *
      * @param fileName name of apk file
      * @param request  HTTP Header
@@ -116,7 +118,7 @@ public class ApkApi {
     }
 
     /**
-     * show apk with id
+     * api show apk with id
      *
      * @param id id of apk
      * @return apk DTO
@@ -127,7 +129,7 @@ public class ApkApi {
     }
 
     /**
-     * see the apk available on the policy for box and web
+     * api show apks available on the policy for box and web
      *
      * @param policyId device want to search
      * @return List Apk DTO
@@ -147,7 +149,7 @@ public class ApkApi {
     }
 
     /**
-     * Mapp apk to policy
+     * api Map apk to policy
      *
      * @param policyId policy want to map
      * @param apkId    apk want to map
@@ -160,7 +162,7 @@ public class ApkApi {
     }
 
     /**
-     * create apk normal
+     * api create apk normal
      *
      * @param model apk DTO
      * @return apk DTO after save on database
@@ -171,7 +173,7 @@ public class ApkApi {
     }
 
     /**
-     * upload file to server and save apk info
+     * api upload file to server and save apk info
      *
      * @param file MultipartFile file apk
      * @return apk DTO after apk has upload done in dir (in application.properties)
@@ -182,7 +184,7 @@ public class ApkApi {
     }
 
     /**
-     * update apk info
+     * api update apk info
      *
      * @param model new info of element apk
      * @param id    id of apk in database

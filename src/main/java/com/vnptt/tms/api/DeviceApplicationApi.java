@@ -21,7 +21,7 @@ public class DeviceApplicationApi {
     private IDeviceApplicationService deviceApplicationService;
 
     /**
-     * Get List device application for web
+     * api Get List device application for web
      *
      * @param page  desired page to display
      * @param limit number of elements 1 page
@@ -45,7 +45,7 @@ public class DeviceApplicationApi {
                 result.setTotalPage((int) Math.ceil((double) deviceApplicationService.countAllWithName(name) / limit));
             }
         } else {
-            if(name != null){
+            if (name != null) {
                 throw new RuntimeException("search must be had page value and limit value!");
             }
             result.setListResult(deviceApplicationService.findAll());
@@ -62,7 +62,7 @@ public class DeviceApplicationApi {
     }
 
     /**
-     * show application with id
+     * api show application with id
      *
      * @param id id of app want to show
      * @return app DTO
@@ -86,6 +86,14 @@ public class DeviceApplicationApi {
         return new ResponseEntity<>(deviceApplicationService.save(deviceId, applicationId), HttpStatus.OK);
     }
 
+    /**
+     * api update status of
+     * todo: check what api?
+     *
+     * @param deviceId
+     * @param applicationId
+     * @return
+     */
     @PutMapping(value = "/device/{deviceId}/application/{applicationId}/deviceApplication")
     public ResponseEntity<DeviceApplicationDTO> updateDeviceApplication(@PathVariable("deviceId") Long deviceId,
                                                                         @PathVariable("applicationId") Long applicationId) {
@@ -93,7 +101,7 @@ public class DeviceApplicationApi {
     }
 
     /**
-     * remove app no longer on the device
+     * api remove app no longer on the device
      *
      * @param deviceId      id of device need modify app list
      * @param applicationId id of application need remove

@@ -40,7 +40,7 @@ public class HistoryApplicationApi {
     }
 
     /**
-     * find HistoryApplication with id
+     * api show HistoryApplication with id
      *
      * @param id
      * @return
@@ -51,7 +51,7 @@ public class HistoryApplicationApi {
     }
 
     /**
-     * find all history application of device
+     * api show all history application of device
      *
      * @param deviceApplicationId
      * @param day
@@ -77,16 +77,16 @@ public class HistoryApplicationApi {
     }
 
     /**
-     * Add new history application
+     * api Add new history application for box
      *
-     * @param model               (cpu, memory, status)
+     * @param model (cpu, memory, status)
      * @return
      */
     @PostMapping(value = "/historyApplication")
     public HistoryApplicationDTO createHistoryApplication(@RequestParam(value = "serialnumber") String sn,
                                                           @RequestParam(value = "packagename") String packagename,
                                                           @RequestBody HistoryApplicationDTO model) {
-        return historyApplicationService.save( model, sn, packagename);
+        return historyApplicationService.save(model, sn, packagename);
     }
 
     /**
@@ -102,6 +102,11 @@ public class HistoryApplicationApi {
 //        return historyApplicationService.save(model);
 //    }
 
+    /**
+     * only use to test
+     *
+     * @param ids
+     */
     @DeleteMapping(value = "/historyApplication")
     @PreAuthorize("hasRole('MODERATOR')")
     public void removeHistoryApplication(@RequestBody Long[] ids) {

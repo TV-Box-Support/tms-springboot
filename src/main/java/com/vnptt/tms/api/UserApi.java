@@ -19,7 +19,7 @@ public class UserApi {
     private IUserService userService;
 
     /**
-     * Show User for web
+     * api Show User for web
      *
      * @param page
      * @param limit
@@ -86,7 +86,7 @@ public class UserApi {
 
 
     /**
-     * find user by id
+     * api find user by id
      *
      * @param id
      * @return
@@ -97,7 +97,7 @@ public class UserApi {
     }
 
     /**
-     * Show list User with rule for web
+     * api Show list User with rule for web
      *
      * @param ids
      * @return
@@ -118,7 +118,7 @@ public class UserApi {
     }
 
     /**
-     * get list User management List device
+     * api get list User management List device
      *
      * @return
      */
@@ -137,7 +137,7 @@ public class UserApi {
     }
 
     /**
-     * create new user (only use to test before token
+     * api create new user (only use to test before token
      *
      * @param model
      * @return
@@ -148,7 +148,7 @@ public class UserApi {
 //    }
 
     /**
-     * update password
+     * api update password
      *
      * @param id
      * @return
@@ -161,7 +161,7 @@ public class UserApi {
     }
 
     /**
-     * update password
+     * api update password
      *
      * @param id
      * @return
@@ -174,7 +174,7 @@ public class UserApi {
     }
 
     /**
-     * update info user for admin
+     * api update info user for admin
      *
      * @param model
      * @param id
@@ -188,7 +188,7 @@ public class UserApi {
     }
 
     /**
-     * update info user for user
+     * api update info user for user
      *
      * @param model
      * @param id
@@ -201,7 +201,7 @@ public class UserApi {
     }
 
     /**
-     * change active to off
+     * api change active to off
      *
      * @param id
      */
@@ -212,7 +212,7 @@ public class UserApi {
     }
 
     /**
-     * only use to test
+     * api only use to test
      *
      * @param ids
      */

@@ -1,29 +1,40 @@
 package com.vnptt.tms.api.output.chart;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AreaChart {
-    private LocalDate date;
-    private Long devicenumber;
+    private LocalDateTime date;
+    private Double cpu;
+    private Double memory;
 
-    public AreaChart(LocalDate date, Long devicenumber) {
+    public AreaChart(LocalDateTime date, Double cpu, Double memory) {
         this.date = date;
-        this.devicenumber = devicenumber;
+        this.cpu = cpu;
+        this.memory = memory;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public Long getDevicenumber() {
-        return devicenumber;
+    public Double getCpu() {
+        return cpu;
     }
 
-    public void setDevicenumber(Long devicenumber) {
-        this.devicenumber = devicenumber;
+    public void setCpu(Double cpu) {
+        this.cpu = cpu;
+    }
+
+    public Double getMemory() {
+        return memory;
+    }
+
+    public void setMemory(Double memory) {
+        this.memory = memory;
     }
 }

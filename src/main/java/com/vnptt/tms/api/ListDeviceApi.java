@@ -21,11 +21,11 @@ public class ListDeviceApi {
     private IListDeviceService listDeviceService;
 
     /**
-     * Get List device for web
+     * api show List device for web
      *
      * @param page  desired page to display
      * @param limit number of elements 1 page
-     * @return List app DTO
+     * @return List listdevice DTO
      */
     @GetMapping(value = "/listDevice")
     public ListDeviceOutput showListDevice(@RequestParam(value = "page", required = false) Integer page,
@@ -57,9 +57,9 @@ public class ListDeviceApi {
     }
 
     /**
-     * show application with id
+     * api show listDevice with id
      *
-     * @param id id of app want to show
+     * @param id id of listDevice want to show
      * @return app DTO
      */
     @GetMapping(value = "/listDevice/{id}")
@@ -68,8 +68,9 @@ public class ListDeviceApi {
     }
 
     /**
-     * get list device in of User management
+     * api show list device in of User management
      *
+     * @param userId id of user
      * @return
      */
     @GetMapping(value = "/user/{userId}/listDevice")
@@ -88,8 +89,9 @@ public class ListDeviceApi {
     }
 
     /**
-     * add new app to database
+     * api add new app to database
      *
+     * @param listDeviceDTO new listDevice info
      * @return http status ok 200
      */
     @PostMapping(value = "listDevice")
@@ -101,9 +103,9 @@ public class ListDeviceApi {
 
 
     /**
-     * Map List Device to roles Management
+     * api Map List Device to roles Management
      *
-     * @param userId       id of role
+     * @param userId       id of user
      * @param listDeviceId id of list Device
      * @return
      */
@@ -116,7 +118,7 @@ public class ListDeviceApi {
 
 
     /**
-     * Edit list device info
+     * api Edit info of listDevice
      *
      * @param listDeviceId
      * @param listDeviceDTO
@@ -131,7 +133,7 @@ public class ListDeviceApi {
     }
 
     /**
-     * remove map list device of roles management
+     * api remove map list device of roles management
      *
      * @param userId
      * @param listDeviceId

@@ -1,6 +1,6 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
 import com.vnptt.tms.api.output.table.DeviceOutput;
@@ -42,7 +42,7 @@ public class DeviceApi {
     private JwtUtils jwtUtils;
 
     /**
-     * show device with model and firmware for web
+     * api show device with model and firmware for web
      *
      * @param page   the page you want to display
      * @param limit  element on a page
@@ -75,10 +75,10 @@ public class DeviceApi {
     }
 
     /**
-     * find device with id
+     * api show device with id
      * check information for web
      *
-     * @param id if of device
+     * @param id id of device
      * @return device DTO
      */
     @GetMapping(value = "/device/{id}")
@@ -86,40 +86,8 @@ public class DeviceApi {
         return deviceService.findOne(id);
     }
 
-//    /**
-//     * show device with production
-//     *
-//     * @param dateOfManufacture ex 2022-12-30
-//     * @return list device DTO
-//     */
-//    @GetMapping(value = "/device/date")
-//    public DeviceOutput showDeviceWithDate(@RequestParam(value = "page") Integer page,
-//                                           @RequestParam(value = "limit") Integer limit,
-//                                           @RequestParam(value = "description", required = false) String description,
-//                                           @RequestParam(value = "date") Date dateOfManufacture) {
-//
-//        DeviceOutput result = new DeviceOutput();
-//        result.setPage(page);
-//        Pageable pageable = PageRequest.of(page - 1, limit);
-//        if (description != null) {
-//            result.setListResult(deviceService.findByDescriptionAndDate(dateOfManufacture, description, pageable));
-//            result.setTotalPage((int) Math.ceil((double) deviceService.countByDescriptionAndDate(dateOfManufacture, description) / limit));
-//        } else {
-//            result.setListResult(deviceService.findByDate(dateOfManufacture, pageable));
-//            result.setTotalPage((int) Math.ceil((double) deviceService.countByDate(dateOfManufacture) / limit));
-//        }
-//
-//        if (result.getListResult().size() >= 1) {
-//            result.setMessage("Request Success");
-//            result.setTotalElement(result.getListResult().size());
-//        } else {
-//            result.setMessage("no matching element found");
-//        }
-//        return result;
-//    }
-
     /**
-     * Show device info with serialnumber
+     * api Show device info with serialnumber
      *
      * @param serialnumber sb of device, unique field in database
      * @return device DTO
@@ -133,7 +101,7 @@ public class DeviceApi {
     }
 
     /**
-     * show device with location
+     * api show device with location
      *
      * @param location
      * @return
@@ -185,7 +153,7 @@ public class DeviceApi {
     }
 
     /**
-     * Show list device play application now
+     * api Show list device play application now
      *
      * @param applicationId
      * @return
@@ -205,8 +173,10 @@ public class DeviceApi {
     }
 
     /**
-     * Show list device active now
+     * api Show list device active now
      *
+     * @param page
+     * @param limit
      * @return
      */
     @GetMapping(value = "/device/now")
@@ -228,7 +198,7 @@ public class DeviceApi {
     }
 
     /**
-     * get jwt of box (only use to test)
+     * api get jwt of box (only use to test)
      *
      * @param serialnumber
      * @param mac
@@ -242,7 +212,7 @@ public class DeviceApi {
     }
 
     /**
-     * find all device active with time
+     * api show all device active in time
      *
      * @param day
      * @param hour
@@ -271,10 +241,10 @@ public class DeviceApi {
     }
 
     /**
-     * get all device in list Device
+     * api show all device in list Device
      *
-     * @param listDeviceId
-     * @return
+     * @param listDeviceId id of listdevice
+     * @return list device in listDevice
      */
     @GetMapping(value = "/listDevice/{listDeviceId}/device")
     public DeviceOutput showDeviceInListDevice(@PathVariable(name = "listDeviceId") Long listDeviceId) {
@@ -291,7 +261,7 @@ public class DeviceApi {
     }
 
     /**
-     * get terminal studio info
+     * api get terminal studio info
      *
      * @return
      */
@@ -301,12 +271,23 @@ public class DeviceApi {
         return result;
     }
 
+    /**
+     * api Show device online 7 day ago
+     *
+     * @return
+     */
     @GetMapping(value = "/chart/area/device")
-    public List<AreaChart> showAreaChartDeviceStatus() {
-        List<AreaChart> result = deviceService.getTotalAreaChart();
+    public List<BarChart> showAreaChartDeviceStatus() {
+        List<BarChart> result = deviceService.getTotalAreaChart();
         return result;
     }
 
+    /**
+     * api Show device online offline and not active
+     *
+     * @param type
+     * @return
+     */
     @GetMapping(value = "/chart/pie/device")
     public List<PieChart> showTotalDeviceStatus(@RequestParam(name = "type") String type) {
         List<PieChart> result = deviceService.getTotalPieChart(type);
@@ -314,9 +295,9 @@ public class DeviceApi {
     }
 
     /**
-     * Create new device for production batch
+     * api Create new device for production batch
      *
-     * @param model serialNumber, dateOfManufacture, mac have required
+     * @param model serialNumber have required
      * @return
      */
     @PostMapping(value = "/device")
@@ -325,7 +306,7 @@ public class DeviceApi {
     }
 
     /**
-     * add device to list to management
+     * api add device to listDevice
      *
      * @param listDeviceId id of List Device want to add
      * @param deviceIds    list id of device add
@@ -347,11 +328,11 @@ public class DeviceApi {
     }
 
     /**
-     * update device info for Box
+     * api update device info for web (description)
      *
-     * @param model
+     * @param model device info
      * @param id    must get and have required
-     * @return
+     * @return device info after update
      */
     @PutMapping(value = "/device/{id}")
     public DeviceDTO updateDevice(@RequestBody DeviceDTO model,
@@ -361,10 +342,10 @@ public class DeviceApi {
     }
 
     /**
-     * update device info for Box
+     * api update device info for Box
      *
-     * @param model
-     * @param sn
+     * @param model device info
+     * @param sn    sn of box
      * @return
      */
     @PutMapping(value = "/device/box")
@@ -374,11 +355,11 @@ public class DeviceApi {
     }
 
     /**
-     * Remove device in List Device
+     * api Remove device in List Device
      *
      * @param listDeviceId list Device Id
      * @param deviceId     device Id
-     * @return
+     * @return https 200
      */
     @DeleteMapping(value = "/listDevice/{listDeviceId}/device/{deviceId}")
     public ResponseEntity<HttpStatus> removeDeviceInListDevice(@PathVariable(value = "listDeviceId") Long listDeviceId,

@@ -32,7 +32,7 @@ public class ApplicationApi {
     private IApplicationService applicationService;
 
     /**
-     * Get List application with any version for web
+     * api show List application with any version for web
      *
      * @param page        desired page to display
      * @param limit       number of elements 1 page
@@ -71,7 +71,7 @@ public class ApplicationApi {
     }
 
     /**
-     * show application with id
+     * api show application with id
      *
      * @param id id of app want to show
      * @return app DTO
@@ -83,11 +83,14 @@ public class ApplicationApi {
 
 
     /**
-     * see the apps available on the device for web
+     * api show apps available on the device for web
      *
      * @param deviceId device want to search
      * @param isSystem true/false/null
      * @param name     name of application want to search
+     * @param isAlive  app available on device ?
+     * @param limit    number element of a page
+     * @param page     page view
      * @return List application DTO
      */
     @GetMapping("/device/{deviceId}/application")

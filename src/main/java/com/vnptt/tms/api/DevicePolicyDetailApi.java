@@ -42,7 +42,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * find devicePolicyDetail with id
+     * api find devicePolicyDetail with id
      *
      * @param id
      * @return
@@ -53,7 +53,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * get list PolicyDetail math with device to check policies unfinished for box
+     * api get list PolicyDetail math with device to check policies unfinished for box
      * <p>
      * status of PolicyDetail
      * status 0 = not run
@@ -79,7 +79,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * get list PolicyDetail math for Web
+     * api get list PolicyDetail math for Web
      * <p>
      * status of PolicyDetail
      * status 0 = not run
@@ -105,7 +105,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * get list PolicyDetail math with device to check policies detail unfinished for policy
+     * api get list PolicyDetail math with device to check policies detail unfinished for policy
      * <p>
      * status of PolicyDetail
      * status 0 = not run
@@ -148,7 +148,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * create policy detail for devices web
+     * api create policy detail for devices web
      * <p>
      * status of policy detail
      * status = 0 not run
@@ -174,7 +174,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * create policy detail for device web
+     * api create policy detail for device web
      * <p>
      * status of policy detail
      * status = 0 not run
@@ -201,7 +201,7 @@ public class DevicePolicyDetailApi {
     }
 
     /**
-     * update status of policy detail for box
+     * api update status of policy detail for box
      * <p>
      * status of PolicyDetail
      * status 0 = not run
@@ -221,7 +221,6 @@ public class DevicePolicyDetailApi {
 
     /**
      * dangerous (only use to test)
-     * When
      *
      * @param ids
      */

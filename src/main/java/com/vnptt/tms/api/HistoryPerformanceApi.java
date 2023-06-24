@@ -68,7 +68,7 @@ public class HistoryPerformanceApi {
      * @param minutes
      * @return
      */
-    @GetMapping(value = "/device/{id}/historyApplication")
+    @GetMapping(value = "/device/{id}/historyPerformance")
     public HistoryPerformanceOutput showHistoryPerformanceDevice(@PathVariable("id") Long deviceId,
                                                                  @RequestParam(value = "day") int day,
                                                                  @RequestParam(value = "hour") long hour,

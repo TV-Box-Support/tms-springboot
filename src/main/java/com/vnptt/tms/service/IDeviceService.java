@@ -1,6 +1,6 @@
 package com.vnptt.tms.service;
 
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
 import com.vnptt.tms.dto.DeviceDTO;
@@ -48,7 +48,7 @@ public interface IDeviceService {
 
     List<PieChart> getTotalPieChart(String type);
 
-    List<AreaChart> getTotalAreaChart();
+    List<BarChart> getTotalAreaChart();
 
     DeviceDTO boxUpdate(String sn, DeviceDTO model);
 

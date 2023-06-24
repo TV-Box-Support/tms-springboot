@@ -3,7 +3,7 @@ package com.vnptt.tms.service.impl;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.City;
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
 import com.vnptt.tms.converter.DeviceConverter;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -146,7 +145,7 @@ public class DeviceService implements IDeviceService {
             // the object across lookups. The object is thread-safe.
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
 
-            InetAddress ipAddress = InetAddress.getByName("14.224.147.23");
+            InetAddress ipAddress = InetAddress.getByName(ip);
             CityResponse response = reader.city(ipAddress);
 
             City city = response.getCity();
@@ -443,8 +442,8 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public List<AreaChart> getTotalAreaChart() {
-        List<AreaChart> result = new ArrayList<>();
+    public List<BarChart> getTotalAreaChart() {
+        List<BarChart> result = new ArrayList<>();
         for (int i = 7; i > 0; i--) {
             LocalDate DaysAgo = LocalDate.now().minusDays(i);
             LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
@@ -455,7 +454,7 @@ public class DeviceService implements IDeviceService {
                 end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
             }
             Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(start, end);
-            result.add(new AreaChart(DaysAgo, deviceOnline));
+            result.add(new BarChart(DaysAgo, deviceOnline));
         }
         return result;
     }

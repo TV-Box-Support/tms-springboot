@@ -49,9 +49,9 @@ public class PolicyApi {
     }
 
     /**
-     * find policy by id
+     * api show policy by id
      *
-     * @param id
+     * @param id id of policy
      * @return
      */
     @GetMapping(value = "/policy/{id}")
@@ -60,9 +60,9 @@ public class PolicyApi {
     }
 
     /**
-     * get list policy has use command
+     * api show list policy has use command
      *
-     * @param commandId
+     * @param commandId command id
      * @return
      */
     @GetMapping(value = "/command/{commandId}/policy")
@@ -80,7 +80,7 @@ public class PolicyApi {
     }
 
     /**
-     * get list policy have apk
+     * api show list policy have apk
      *
      * @param apkId
      * @return
@@ -100,7 +100,7 @@ public class PolicyApi {
     }
 
     /**
-     * get list policy of device for web
+     * api show list policy of device for web
      *
      * @param deviceId
      * @return
@@ -121,7 +121,7 @@ public class PolicyApi {
 
 
     /**
-     * create new policy for web
+     * api create new policy for web
      *
      * @param model
      * @return
@@ -132,7 +132,7 @@ public class PolicyApi {
     }
 
     /**
-     * update policy for web
+     * api update policy for web
      *
      * @param model
      * @param id
@@ -145,7 +145,7 @@ public class PolicyApi {
     }
 
     /**
-     * update status for policy
+     * api update status for policy
      * <p>
      * status of policy
      * status 0 = not run

@@ -18,11 +18,11 @@ public class CommandApi {
     private ICommandService commandService;
 
     /**
-     * show command for web
+     * api show list command for web
      *
      * @param page  number of page want to show
      * @param limit total number element in a page
-     * @return
+     * @return list command
      */
     @GetMapping(value = "/command")
     public CommandOutput showCommand(@RequestParam(value = "page", required = false) Integer page,
@@ -48,7 +48,7 @@ public class CommandApi {
     }
 
     /**
-     * find command with id
+     * api show command with id
      *
      * @param id
      * @return
@@ -59,7 +59,7 @@ public class CommandApi {
     }
 
     /**
-     * post one model command
+     * api create one model command
      *
      * @param model
      * @return
@@ -70,7 +70,7 @@ public class CommandApi {
     }
 
     /**
-     * modify command
+     * api modify command
      *
      * @param model
      * @param id
@@ -83,7 +83,7 @@ public class CommandApi {
     }
 
     /**
-     * delete command (only use to test)
+     * api delete command (only use to test)
      *
      * @param ids
      */
