@@ -1,5 +1,6 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.chart.AreaChart;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -272,13 +273,13 @@ public class DeviceApi {
     }
 
     /**
-     * api Show device online 7 day ago
+     * api Show total device online 7 day ago
      *
      * @return
      */
-    @GetMapping(value = "/chart/area/device")
-    public List<BarChart> showAreaChartDeviceStatus() {
-        List<BarChart> result = deviceService.getTotalAreaChart();
+    @GetMapping(value = "/chart/bar/device")
+    public List<BarChart> showBarChartDeviceStatus() {
+        List<BarChart> result = deviceService.getTotalBarChart();
         return result;
     }
 
@@ -295,11 +296,25 @@ public class DeviceApi {
     }
 
     /**
-     * api Create new device for production batch
+     * api Show history online day now
      *
-     * @param model serialNumber have required
+     * @param dayAgo
      * @return
      */
+    @GetMapping(value = "/chart/area/device/{id}")
+    public List<AreaChart> showAreaChartStatus(@RequestParam(name = "dayAgo") Integer dayAgo,
+                                               @PathVariable(name = "id") Long id) {
+        List<AreaChart> result = deviceService.getAreaChartStatus(dayAgo, id);
+        return result;
+    }
+
+
+        /**
+         * api Create new device for production batch
+         *
+         * @param model serialNumber have required
+         * @return
+         */
     @PostMapping(value = "/device")
     public DeviceDTO createDevice(@RequestBody DeviceDTO model) {
         return deviceService.save(model);

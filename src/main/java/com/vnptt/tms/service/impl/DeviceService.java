@@ -3,6 +3,7 @@ package com.vnptt.tms.service.impl;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.City;
+import com.vnptt.tms.api.output.chart.AreaChart;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -442,7 +443,7 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public List<BarChart> getTotalAreaChart() {
+    public List<BarChart> getTotalBarChart() {
         List<BarChart> result = new ArrayList<>();
         for (int i = 7; i > 0; i--) {
             LocalDate DaysAgo = LocalDate.now().minusDays(i);
@@ -506,28 +507,6 @@ public class DeviceService implements IDeviceService {
         return deviceRepository.countByDescriptionContainingOrSnContaining(description, description);
     }
 
-//    @Override
-//    public List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable) {
-//        List<DeviceEntity> deviceEntities = new ArrayList<>();
-//        List<DeviceDTO> result = new ArrayList<>();
-//        deviceEntities = deviceRepository.findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(dateOfManufacture, description, pageable);
-//        for (DeviceEntity item : deviceEntities) {
-//            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
-//            result.add(deviceDTO);
-//        }
-//        return result;
-//    }
-//
-//    @Override
-//    public Long countByDescriptionAndDate(Date dateOfManufacture, String description) {
-//        return deviceRepository.countByDateAndDescriptionContaining(dateOfManufacture, description);
-//    }
-//
-//    @Override
-//    public Long countByDate(Date dateOfManufacture) {
-//        return deviceRepository.countByDate(dateOfManufacture);
-//    }
-
     @Override
     public List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable) {
         List<DeviceEntity> deviceEntities = new ArrayList<>();
@@ -548,6 +527,42 @@ public class DeviceService implements IDeviceService {
     @Override
     public Long countByLocation(String location) {
         return deviceRepository.countByLocationContaining(location);
+    }
+
+    @Override
+    public List<AreaChart> getAreaChartStatus(Integer dayAgo, Long id) {
+        List<AreaChart> result = new ArrayList<>();
+
+        LocalDate DaysAgo = LocalDate.now().minusDays(dayAgo);
+        LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+        List<HistoryPerformanceEntity> historyPerformanceEntity = historyPerformanceRepository.findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByModifiedDateAsc(id, start, end);
+        if (historyPerformanceEntity == null) {
+            throw new ResourceNotFoundException("device not active in " + dayAgo + " day age");
+        }
+
+        for (int i = 0; i < 480; i++) {
+            HistoryPerformanceEntity entity = new HistoryPerformanceEntity();
+            if (historyPerformanceEntity.size() != 0) {
+                entity = historyPerformanceEntity.get(1);
+            } else{
+                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChart);
+                continue;
+            }
+
+            if (entity.getCreatedDate().plusMinutes(-1).plusSeconds(-30).isBefore(start.plusMinutes(i * 3))
+                    && entity.getCreatedDate().plusMinutes(1).plusSeconds(30).isAfter(start.plusMinutes(i * 3))) {
+                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
+                result.add(areaChart);
+                historyPerformanceEntity.remove(1);
+            } else{
+                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChart);
+            }
+        }
+
+        return result;
     }
 
 

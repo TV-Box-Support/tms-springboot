@@ -20,14 +20,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     List<DeviceEntity> findAllByLocationContainingOrderByModifiedDateDesc(String location, Pageable pageable);
 
-//    List<DeviceEntity> findAllByDateOrderByModifiedDateDesc(Date date, Pageable pageable);
-//
-//    List<DeviceEntity> findAllByDateAndDescriptionContainingOrderByModifiedDateDesc(Date date, String description, Pageable pageable);
-//
-//    Long countByDateAndDescriptionContaining(Date date, String description);
-//
-//    Long countByDate(Date date);
-
     Long countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(@Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
 
     Long countDistinctByHistoryPerformanceEntitiesIsNull();

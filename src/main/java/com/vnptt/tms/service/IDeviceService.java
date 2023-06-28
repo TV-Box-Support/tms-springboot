@@ -1,5 +1,6 @@
 package com.vnptt.tms.service;
 
+import com.vnptt.tms.api.output.chart.AreaChart;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -27,7 +28,6 @@ public interface IDeviceService {
 
     List<DeviceDTO> findByLocation(String location, Pageable pageable);
 
-
     List<DeviceDTO> findAllDeviceRunNow(Pageable pageable);
 
     ResponseEntity<?> authenticateDevice(String serialnumber, String mac);
@@ -48,7 +48,7 @@ public interface IDeviceService {
 
     List<PieChart> getTotalPieChart(String type);
 
-    List<BarChart> getTotalAreaChart();
+    List<BarChart> getTotalBarChart();
 
     DeviceDTO boxUpdate(String sn, DeviceDTO model);
 
@@ -60,17 +60,11 @@ public interface IDeviceService {
 
     Long countByDescriptionAndSn(String search);
 
-//    List<DeviceDTO> findByDate(Date date, Pageable pageable);
-//
-//    List<DeviceDTO> findByDescriptionAndDate(Date dateOfManufacture, String description, Pageable pageable);
-//
-//    Long countByDescriptionAndDate(Date dateOfManufacture, String description);
-//
-//    Long countByDate(Date dateOfManufacture);
-
     List<DeviceDTO> findByDescriptionAndLocation(String location, String description, Pageable pageable);
 
     Long countByDescriptionAndLocation(String location, String description);
 
     Long countByLocation(String location);
+
+    List<AreaChart> getAreaChartStatus(Integer dayAgo, Long id );
 }
