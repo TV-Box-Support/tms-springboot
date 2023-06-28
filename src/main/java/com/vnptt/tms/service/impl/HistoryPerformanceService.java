@@ -5,9 +5,11 @@ import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.DevicePolicyDetailEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
 import com.vnptt.tms.entity.PolicyEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
+import com.vnptt.tms.repository.DevicePolicyDetailRepository;
 import com.vnptt.tms.repository.DeviceRepository;
 import com.vnptt.tms.repository.HistoryPerformanceRepository;
 import com.vnptt.tms.repository.PolicyRepository;
@@ -34,6 +36,9 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
     private PolicyRepository policyRepository;
 
     @Autowired
+    private DevicePolicyDetailRepository devicePolicyDetailRepository;
+
+    @Autowired
     private PolicyConverter policyConverter;
 
     @Autowired
@@ -43,7 +48,7 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
     public List<PolicyDTO> save(HistoryPerformanceDTO historyPerformanceDTO) {
         HistoryPerformanceEntity historyPerformanceEntity = historyPerformanceConverter.toEntity(historyPerformanceDTO);
         DeviceEntity deviceEntity = deviceRepository.findOneBySn(historyPerformanceDTO.getDevicesn());
-        if (deviceEntity == null){
+        if (deviceEntity == null) {
             throw new ResourceNotFoundException("Can not find device with sn " + historyPerformanceDTO.getDevicesn());
         }
         try {
@@ -53,11 +58,19 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
         }
         historyPerformanceRepository.save(historyPerformanceEntity);
 
-        // return policy for box
+        // return policyDetail for box
         List<PolicyDTO> result = new ArrayList<>();
-        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceEntity.getId());
-        for (PolicyEntity entity : policyEntities) {
-            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+        // status of PolicyDetail
+        // status 0 = not run
+        // status 1 = run
+        // status 2 = running
+        // status 3 = success
+        // status 4 = error
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities= devicePolicyDetailRepository.findAllByDeviceEntityDetailIdAndStatusOrderByModifiedDateAsc(deviceEntity.getId(),1);
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
+            // status = 1/run - 0/stop - 2/pause
+            PolicyEntity policyEntity = policyRepository.findOneByDevicePolicyDetailEntitiesId(entity.getId());
+            PolicyDTO policyDTO = policyConverter.toDTO(policyEntity);
             result.add(policyDTO);
         }
         return result;

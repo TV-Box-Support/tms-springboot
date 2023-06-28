@@ -87,7 +87,8 @@ public class HistoryPerformanceApi {
 
 
     /**
-     * add new history performance
+     * add new history performance for Box
+     * and return task for box
      *
      * @param model
      * @return
@@ -105,13 +106,6 @@ public class HistoryPerformanceApi {
         }
         return result;
     }
-
-//    @PutMapping(value = "/historyPerformance/{id}")
-//    public HistoryPerformanceDTO updateHistoryPerformance(@RequestBody HistoryPerformanceDTO model,
-//                                                          @PathVariable("id") Long id) {
-//        model.setId(id);
-//        return historyPerformanceService.save(model);
-//    }
 
     @DeleteMapping(value = "/historyPerformance")
     @PreAuthorize("hasRole('MODERATOR')")
