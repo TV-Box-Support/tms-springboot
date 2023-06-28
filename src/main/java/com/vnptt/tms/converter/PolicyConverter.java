@@ -13,7 +13,8 @@ public class PolicyConverter {
     private ModelMapper mapper;
 
     /**
-     *  Convert for method Post
+     * Convert for method Post
+     *
      * @param dto
      * @return
      */
@@ -24,7 +25,8 @@ public class PolicyConverter {
     }
 
     /**
-     *  Convert for mehtod get
+     * Convert for mehtod get
+     *
      * @param entity
      * @return
      */
@@ -45,15 +47,19 @@ public class PolicyConverter {
     }
 
     /**
-     *  Convert for method put
+     * Convert for method put
+     *
      * @param dto
      * @param entity
      * @return
      */
     public PolicyEntity toEntity(PolicyDTO dto, PolicyEntity entity) {
-        entity.setPolicyname(dto.getPolicyname());
-        //not use
-        //entity.setStatus(dto.getStatus());
+        if (dto.getPolicyname() != null) {
+            entity.setPolicyname(dto.getPolicyname());
+        }
+        if (dto.getPolicyname() != null) {
+            entity.setAction(dto.getAction());
+        }
         return entity;
     }
 }
