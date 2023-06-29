@@ -302,7 +302,7 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/chart/area/device/{id}")
-    public List<AreaChart> showAreaChartStatus(@RequestParam(name = "dayAgo") Integer dayAgo,
+    public List<AreaChart> showAreaChartStatus(@RequestParam(name = "dayago") Integer dayAgo,
                                                @PathVariable(name = "id") Long id) {
         List<AreaChart> result = deviceService.getAreaChartStatus(dayAgo, id);
         return result;
