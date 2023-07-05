@@ -71,6 +71,8 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
             // status = 1/run - 0/stop - 2/pause
             PolicyEntity policyEntity = policyRepository.findOneByDevicePolicyDetailEntitiesId(entity.getId());
             PolicyDTO policyDTO = policyConverter.toDTO(policyEntity);
+            // for Box: change id of policy to policy detail
+            policyDTO.setId(entity.getId());
             result.add(policyDTO);
         }
         return result;
