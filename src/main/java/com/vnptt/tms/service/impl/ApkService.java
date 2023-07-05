@@ -114,7 +114,7 @@ public class ApkService implements IApkService {
      */
     @Override
     public List<ApkDTO> findAllOnPolicy(Long policyId) {
-        if (!apkRepository.existsById(policyId)) {
+        if (!policyRepository.existsById(policyId)) {
             throw new ResourceNotFoundException("Not found policy with id = " + policyId);
         }
         List<ApkEntity> apkEntities = apkRepository.findApkEntitiesByPolicyEntitiesIdOrderByModifiedDateDesc(policyId);
