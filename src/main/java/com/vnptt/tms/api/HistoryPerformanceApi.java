@@ -1,7 +1,7 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.box.PolicyBoxOutput;
 import com.vnptt.tms.api.output.table.HistoryPerformanceOutput;
-import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
 import com.vnptt.tms.service.IHistoryPerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +94,8 @@ public class HistoryPerformanceApi {
      * @return
      */
     @PostMapping(value = "/historyPerformance")
-    public PolicyOutput createHistoryPerformance(@RequestBody HistoryPerformanceDTO model) {
-        PolicyOutput result = new PolicyOutput();
+    public PolicyBoxOutput createHistoryPerformance(@RequestBody HistoryPerformanceDTO model) {
+        PolicyBoxOutput result = new PolicyBoxOutput();
         result.setListResult(historyPerformanceService.save(model));
 
         if (result.getListResult().size() >= 1) {

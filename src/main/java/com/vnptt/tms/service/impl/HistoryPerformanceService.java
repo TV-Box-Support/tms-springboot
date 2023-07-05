@@ -1,9 +1,9 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.box.PolicyBox;
 import com.vnptt.tms.converter.HistoryPerformanceConverter;
 import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.HistoryPerformanceDTO;
-import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.DeviceEntity;
 import com.vnptt.tms.entity.DevicePolicyDetailEntity;
 import com.vnptt.tms.entity.HistoryPerformanceEntity;
@@ -45,7 +45,7 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
     private HistoryPerformanceConverter historyPerformanceConverter;
 
     @Override
-    public List<PolicyDTO> save(HistoryPerformanceDTO historyPerformanceDTO) {
+    public List<PolicyBox> save(HistoryPerformanceDTO historyPerformanceDTO) {
         HistoryPerformanceEntity historyPerformanceEntity = historyPerformanceConverter.toEntity(historyPerformanceDTO);
         DeviceEntity deviceEntity = deviceRepository.findOneBySn(historyPerformanceDTO.getDevicesn());
         if (deviceEntity == null) {
@@ -59,7 +59,7 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
         historyPerformanceRepository.save(historyPerformanceEntity);
 
         // return policyDetail for box
-        List<PolicyDTO> result = new ArrayList<>();
+        List<PolicyBox> result = new ArrayList<>();
         // status of PolicyDetail
         // status 0 = not run
         // status 1 = run
@@ -70,10 +70,8 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             // status = 1/run - 0/stop - 2/pause
             PolicyEntity policyEntity = policyRepository.findOneByDevicePolicyDetailEntitiesId(entity.getId());
-            PolicyDTO policyDTO = policyConverter.toDTO(policyEntity);
-            // for Box: change id of policy to policy detail
-            policyDTO.setId(entity.getId());
-            result.add(policyDTO);
+            PolicyBox policyBox = policyConverter.toPolicyBox(policyEntity, entity.getId());
+            result.add(policyBox);
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.vnptt.tms.converter;
 
+import com.vnptt.tms.api.output.box.PolicyBox;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.PolicyEntity;
 import org.modelmapper.ModelMapper;
@@ -45,6 +46,27 @@ public class PolicyConverter {
         dto.setModifiedBy(entity.getModifiedBy());
         return dto;
     }
+
+    public PolicyBox toPolicyBox(PolicyEntity entity, Long policyDetalId) {
+        PolicyBox dto = new PolicyBox();
+        if (entity.getId() != null) {
+            dto.setId(entity.getId());
+        }
+        if (entity.getCommandEntity() != null) {
+            dto.setCommandName(entity.getCommandEntity().getCommand());
+        }
+        dto.setIdPolicyDetail(policyDetalId);
+        dto.setPolicyname(entity.getPolicyname());
+        dto.setAction(entity.getAction());
+        dto.setStatus(entity.getStatus());
+
+        dto.setCreatedDate(entity.getCreatedDate());
+        dto.setCreatedBy(entity.getCreatedBy());
+        dto.setModifiedDate(entity.getModifiedDate());
+        dto.setModifiedBy(entity.getModifiedBy());
+        return dto;
+    }
+
 
     /**
      * Convert for method put
