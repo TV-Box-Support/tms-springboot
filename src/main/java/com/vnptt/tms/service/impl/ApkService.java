@@ -190,19 +190,19 @@ public class ApkService implements IApkService {
      */
     @Override
     public ApkDTO saveFile(MultipartFile file) {
-        String packagename = storeFile(file);
+        String name = storeFile(file);
 
         //create link to dowload apk
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/TMS/api/downloadFile/")
-                .path(packagename)
+                .path(name)
                 .toUriString();
 
         //String filePath = "/media/thanhchung/data/data/" + packagename;
-        String filePath = fileStorageLocation + "/" + packagename;
+        String filePath = fileStorageLocation + "/" + name;
         String md5 = checkSumApacheCommons(filePath);
         ApkEntity apkEntity = new ApkEntity();
-        apkEntity.setPackagename(packagename);
+
         apkEntity.setApkfileUrl(fileDownloadUri);
         apkEntity.setPackagesize(file.getSize());
         apkEntity.setMd5(md5);
@@ -211,6 +211,7 @@ public class ApkService implements IApkService {
         try {
             ApkFile apkFile = new ApkFile(filePath);
             ApkMeta apkMeta = apkFile.getApkMeta();
+            apkEntity.setPackagename(apkMeta.getPackageName());
             apkEntity.setVersion(String.valueOf(apkMeta.getVersionCode()));
         } catch (IOException e) {
             throw new RuntimeException("the file you use is not apk");

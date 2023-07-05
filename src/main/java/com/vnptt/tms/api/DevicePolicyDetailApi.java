@@ -206,8 +206,9 @@ public class DevicePolicyDetailApi {
      * status of PolicyDetail
      * status 0 = not run
      * status 1 = run
-     * status 2 = success
-     * status 3 = error
+     * status 2 = running
+     * status 3 = success
+     * status 4 = error
      *
      * @param status
      * @param id

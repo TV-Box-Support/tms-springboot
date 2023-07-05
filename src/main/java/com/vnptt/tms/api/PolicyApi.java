@@ -20,7 +20,7 @@ public class PolicyApi {
     @GetMapping(value = "/policy")
     public PolicyOutput showPolicy(@RequestParam(value = "page", required = false) Integer page,
                                    @RequestParam(value = "limit", required = false) Integer limit,
-                                   @RequestParam(value = "Policyname", required = false) String policyname) {
+                                   @RequestParam(value = "policyname", required = false) String policyname) {
         PolicyOutput result = new PolicyOutput();
         if (page != null && limit != null) {
             if (policyname != null) {
