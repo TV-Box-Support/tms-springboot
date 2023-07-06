@@ -198,7 +198,7 @@ public class ApkService implements IApkService {
                 .path(name)
                 .toUriString();
 
-        //String filePath = "/media/thanhchung/data/data/" + packagename;
+        //String filePath = "/media/thanhchung/data/data/" + name;
         String filePath = fileStorageLocation + "/" + name;
         String md5 = checkSumApacheCommons(filePath);
         ApkEntity apkEntity = new ApkEntity();
@@ -211,7 +211,7 @@ public class ApkService implements IApkService {
         try {
             ApkFile apkFile = new ApkFile(filePath);
             ApkMeta apkMeta = apkFile.getApkMeta();
-            apkEntity.setPackagename(apkMeta.getPackageName());
+            apkEntity.setPackagename(apkFile.getApkMeta().getPackageName());
             apkEntity.setVersion(String.valueOf(apkMeta.getVersionCode()));
         } catch (IOException e) {
             throw new RuntimeException("the file you use is not apk");
