@@ -67,4 +67,8 @@ public interface IDeviceService {
     Long countByLocation(String location);
 
     List<AreaChart> getAreaChartStatus(Integer dayAgo, Long id );
+
+    List<DeviceDTO> findDeviceWithPolicyId(Long policyId, Pageable pageable);
+
+    Long countDeviceWithPolicyId(Long policyId);
 }

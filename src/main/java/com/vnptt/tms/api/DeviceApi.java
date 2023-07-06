@@ -273,6 +273,39 @@ public class DeviceApi {
     }
 
     /**
+     * api get device has policy
+     *
+     * @return
+     */
+    @GetMapping(value = "/policy/{policyId}/device")
+    public DeviceOutput showDeviceHasPolicy(@PathVariable(value = "policyId") Long policyId,
+                                            @RequestParam(value = "page") Integer page,
+                                            @RequestParam(value = "limit") Integer limit) {
+        DeviceOutput result = new DeviceOutput();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        result.setListResult(deviceService.findDeviceWithPolicyId(policyId, pageable));
+        result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceWithPolicyId(policyId) / limit));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            throw new ResourceNotFoundException("no matching element found");
+        }
+        return result;
+
+    }
+
+
+    /**
      * api Show total device online 7 day ago
      *
      * @return

@@ -545,7 +545,7 @@ public class DeviceService implements IDeviceService {
             HistoryPerformanceEntity entity = new HistoryPerformanceEntity();
             if (historyPerformanceEntity.size() != 0) {
                 entity = historyPerformanceEntity.get(1);
-            } else{
+            } else {
                 AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
                 result.add(areaChart);
                 continue;
@@ -556,13 +556,43 @@ public class DeviceService implements IDeviceService {
                 AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
                 result.add(areaChart);
                 historyPerformanceEntity.remove(1);
-            } else{
+            } else {
                 AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
                 result.add(areaChart);
             }
         }
 
         return result;
+    }
+
+    /**
+     * find all device has policy
+     *
+     * @param policyId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public List<DeviceDTO> findDeviceWithPolicyId(Long policyId, Pageable pageable) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findAllByDevicePolicyDetailEntitiesPolicyEntityDetailIdOrderByModifiedDateDesc(policyId, pageable);
+        for (DeviceEntity item : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
+    /**
+     * count all device has policy
+     *
+     * @param policyId
+     * @return
+     */
+    @Override
+    public Long countDeviceWithPolicyId(Long policyId) {
+        return deviceRepository.countByDevicePolicyDetailEntitiesPolicyEntityDetailId(policyId);
     }
 
 

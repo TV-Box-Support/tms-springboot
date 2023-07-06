@@ -25,8 +25,6 @@ public class DeviceEntity extends BaseEntity {
     private String network;
     @Column(name = "rom")
     private Long rom;
-//    @Column(name = "dateOfManufacture")
-//    private Date date;
     @Column(name = "location")
     private String location;
     @Column(name = "description", length = 2000)
@@ -112,14 +110,6 @@ public class DeviceEntity extends BaseEntity {
     public void setIp(String ip) {
         this.ip = ip;
     }
-
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
 
     public Long getRom() {
         return rom;
