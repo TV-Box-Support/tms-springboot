@@ -51,6 +51,9 @@ public class ApkConverter {
      * @return
      */
     public ApkEntity toEntity(ApkDTO dto, ApkEntity entity) {
+        if (dto.getName() != null) {
+            entity.setName(dto.getName());
+        }
         if (dto.getPackagename() != null) {
             entity.setPackagename(dto.getPackagename());
         }
