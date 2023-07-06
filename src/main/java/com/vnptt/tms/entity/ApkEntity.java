@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "apk")
 public class ApkEntity extends BaseEntity {
+
+    @Column(name = "name", nullable = false)
+    private String name;
     @Column(name = "packagename", nullable = false)
     private String packagename;
     @Column(name = "apkfileUrl", nullable = false)
@@ -73,4 +76,11 @@ public class ApkEntity extends BaseEntity {
         this.policyEntities = policyEntities;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

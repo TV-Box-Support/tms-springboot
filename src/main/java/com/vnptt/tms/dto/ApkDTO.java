@@ -1,6 +1,8 @@
 package com.vnptt.tms.dto;
 
 public class ApkDTO extends AbstractDTO{
+
+    private String name;
     private String packagename;
     private String apkfileUrl;
     private String version;
@@ -45,5 +47,13 @@ public class ApkDTO extends AbstractDTO{
 
     public void setPackagesize(Long packagesize) {
         this.packagesize = packagesize;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -203,6 +203,7 @@ public class ApkService implements IApkService {
         String md5 = checkSumApacheCommons(filePath);
         ApkEntity apkEntity = new ApkEntity();
 
+        apkEntity.setName(name);
         apkEntity.setApkfileUrl(fileDownloadUri);
         apkEntity.setPackagesize(file.getSize());
         apkEntity.setMd5(md5);

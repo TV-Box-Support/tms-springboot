@@ -64,7 +64,10 @@ public class UserConverter {
      * @return
      */
     public UserEntity toEntity(UserDTO dto, UserEntity entity) {
-        if (dto.getName() != null){
+        if (dto.getName() != null) {
+            entity.setName(dto.getName());
+        }
+        if (dto.getName() != null) {
             entity.setName(dto.getName());
         }
         if (dto.getCompany() != null) {
@@ -73,7 +76,7 @@ public class UserConverter {
         if (dto.getEmail() != null) {
             entity.setEmail(dto.getEmail());
         }
-        if(dto.getContact()!= null){
+        if (dto.getContact() != null) {
             entity.setContact(dto.getContact());
         }
         return entity;
