@@ -13,7 +13,8 @@ public class ApkConverter {
     private ModelMapper mapper;
 
     /**
-     *  Convert for method Post
+     * Convert for method Post
+     *
      * @param dto
      * @return
      */
@@ -24,7 +25,8 @@ public class ApkConverter {
     }
 
     /**
-     *  Convert for mehtod get
+     * Convert for mehtod get
+     *
      * @param entity
      * @return
      */
@@ -42,17 +44,28 @@ public class ApkConverter {
     }
 
     /**
-     *  Convert for method put
+     * Convert for method put
+     *
      * @param dto
      * @param entity
      * @return
      */
     public ApkEntity toEntity(ApkDTO dto, ApkEntity entity) {
-        entity.setPackagename(dto.getPackagename());
-        entity.setVersion(dto.getVersion());
-        entity.setApkfileUrl(dto.getApkfileUrl());
-        entity.setMd5(dto.getMd5());
-        entity.setPackagesize(dto.getPackagesize());
+        if (dto.getPackagename() != null) {
+            entity.setPackagename(dto.getPackagename());
+        }
+        if (dto.getVersion() != null) {
+            entity.setVersion(dto.getVersion());
+        }
+        if (dto.getApkfileUrl() != null) {
+            entity.setApkfileUrl(dto.getApkfileUrl());
+        }
+        if (dto.getMd5() != null) {
+            entity.setMd5(dto.getMd5());
+        }
+        if (dto.getPackagesize() != null) {
+            entity.setPackagesize(dto.getPackagesize());
+        }
         return entity;
     }
 }
