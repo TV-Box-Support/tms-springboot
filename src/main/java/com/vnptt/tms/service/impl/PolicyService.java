@@ -162,7 +162,16 @@ public class PolicyService implements IPolicyService {
 
     /**
      * set status for policy
-     * if policy detail status == 3 ( policy success) -> don't set
+     * policy detail status = 0 not run
+     * policy detail status = 1 run
+     * policy detail status = 2 running
+     * if policy detail status = 3 ( policy success) -> don't set
+     * policy detail status = 4 stop
+     *
+     * status 0 not run
+     * status 1 run
+     * status 2 pause
+     * status 3 stop
      *
      * @param id
      * @param status
@@ -178,9 +187,22 @@ public class PolicyService implements IPolicyService {
         policyEntity.setStatus(status);
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = policyEntity.getDevicePolicyDetailEntities();
         for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities) {
-            if (iteam.getStatus() != 3) {
-                iteam.setStatus(status);
+            switch (status){
+                case 1:
+                    if (iteam.getStatus() == 0) {
+                        iteam.setStatus(1);
+                    }
+                    break;
+                case 2:
+                    if (iteam.getStatus() == 1) {
+                        iteam.setStatus(0);
+                    }
+                    break;
+                case 3:
+                    iteam.setStatus(4);
+
             }
+
         }
         policyEntity = policyRepository.save(policyEntity);
         return policyConverter.toDTO(policyEntity);

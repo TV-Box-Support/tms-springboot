@@ -150,8 +150,8 @@ public class PolicyApi {
      * status of policy
      * status 0 = not run
      * status 1 = run
-     * status 2 = success
-     * status 3 = error
+     * status 2 = pause
+     * status 3 = stop
      *
      * @param id
      * @param status
