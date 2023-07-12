@@ -36,8 +36,8 @@ public class CommandConverter {
             dto.setId(entity.getId());
         }
         dto = mapper.map(entity, CommandDTO.class);
-        if (entity.getCommandNotificationEntity() != null) {
-            dto.setCommandNotificationId(entity.getCommandNotificationEntity().getId());
+        if (entity.getAlertDialogEntity() != null) {
+            dto.setCommandNotificationId(entity.getAlertDialogEntity().getId());
         }
 
         dto.setCreatedDate(entity.getCreatedDate());

@@ -41,7 +41,7 @@ public class CommandService implements ICommandService {
                 if (alertDialogEntity == null) {
                     throw new ResourceNotFoundException("not found cnotification with id " + commandDTO.getCommandNotificationId());
                 }
-                commandEntity.setCommandNotificationEntity(alertDialogEntity);
+                commandEntity.setAlertDialogEntity(alertDialogEntity);
             }
 
         } else {
@@ -51,7 +51,7 @@ public class CommandService implements ICommandService {
                 if (alertDialogEntity == null) {
                     throw new ResourceNotFoundException("not found cnotification with id " + commandDTO.getCommandNotificationId());
                 }
-                commandEntity.setCommandNotificationEntity(alertDialogEntity);
+                commandEntity.setAlertDialogEntity(alertDialogEntity);
             }
         }
         commandEntity = commandRepository.save(commandEntity);

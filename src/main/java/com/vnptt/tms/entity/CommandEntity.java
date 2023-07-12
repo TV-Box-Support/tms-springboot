@@ -34,11 +34,11 @@ public class CommandEntity extends BaseEntity {
         this.policyEntities = policyEntities;
     }
 
-    public AlertDialogEntity getCommandNotificationEntity() {
+    public AlertDialogEntity getAlertDialogEntity() {
         return alertDialogEntity;
     }
 
-    public void setCommandNotificationEntity(AlertDialogEntity alertDialogEntity) {
+    public void setAlertDialogEntity(AlertDialogEntity alertDialogEntity) {
         this.alertDialogEntity = alertDialogEntity;
     }
 }

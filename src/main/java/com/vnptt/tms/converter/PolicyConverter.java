@@ -54,6 +54,10 @@ public class PolicyConverter {
         }
         if (entity.getCommandEntity() != null) {
             dto.setCommandName(entity.getCommandEntity().getCommand());
+            if(entity.getCommandEntity().getCommand() == "Notification"){
+                dto.setTitle(entity.getCommandEntity().getAlertDialogEntity().getTitle());
+                dto.setMessage(entity.getCommandEntity().getAlertDialogEntity().getMessage());
+            }
         }
         dto.setIdPolicyDetail(policyDetalId);
         dto.setPolicyname(entity.getPolicyname());
