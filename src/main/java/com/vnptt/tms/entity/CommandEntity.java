@@ -1,9 +1,6 @@
 package com.vnptt.tms.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,10 @@ public class CommandEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "commandEntity")
     private List<PolicyEntity> policyEntities = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "alertDialogId")
+    private AlertDialogEntity alertDialogEntity;
 
     public String getCommand() {
         return command;
@@ -31,5 +32,13 @@ public class CommandEntity extends BaseEntity {
 
     public void setPolicyEntities(List<PolicyEntity> policyEntities) {
         this.policyEntities = policyEntities;
+    }
+
+    public AlertDialogEntity getCommandNotificationEntity() {
+        return alertDialogEntity;
+    }
+
+    public void setCommandNotificationEntity(AlertDialogEntity alertDialogEntity) {
+        this.alertDialogEntity = alertDialogEntity;
     }
 }

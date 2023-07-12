@@ -1,13 +1,13 @@
 package com.vnptt.tms.converter;
 
-import com.vnptt.tms.dto.CommandDTO;
-import com.vnptt.tms.entity.CommandEntity;
+import com.vnptt.tms.dto.AlertDialogDTO;
+import com.vnptt.tms.entity.AlertDialogEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandConverter {
+public class AlertDialogConverter {
 
     @Autowired
     private ModelMapper mapper;
@@ -18,9 +18,9 @@ public class CommandConverter {
      * @param dto
      * @return
      */
-    public CommandEntity toEntity(CommandDTO dto) {
-        CommandEntity entity = new CommandEntity();
-        entity = mapper.map(dto, CommandEntity.class);
+    public AlertDialogEntity toEntity(AlertDialogDTO dto) {
+        AlertDialogEntity entity = new AlertDialogEntity();
+        entity = mapper.map(dto, AlertDialogEntity.class);
         return entity;
     }
 
@@ -30,16 +30,12 @@ public class CommandConverter {
      * @param entity
      * @return
      */
-    public CommandDTO toDTO(CommandEntity entity) {
-        CommandDTO dto = new CommandDTO();
+    public AlertDialogDTO toDTO(AlertDialogEntity entity) {
+        AlertDialogDTO dto = new AlertDialogDTO();
         if (entity.getId() != null) {
             dto.setId(entity.getId());
         }
-        dto = mapper.map(entity, CommandDTO.class);
-        if (entity.getCommandNotificationEntity() != null) {
-            dto.setCommandNotificationId(entity.getCommandNotificationEntity().getId());
-        }
-
+        dto = mapper.map(entity, AlertDialogDTO.class);
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setModifiedDate(entity.getCreatedDate());
@@ -54,9 +50,11 @@ public class CommandConverter {
      * @param entity
      * @return
      */
-    public CommandEntity toEntity(CommandDTO dto, CommandEntity entity) {
-        if (dto.getCommand() != null)
-            entity.setCommand(dto.getCommand());
+    public AlertDialogEntity toEntity(AlertDialogDTO dto, AlertDialogEntity entity) {
+        if (dto.getMessage() != null)
+            entity.setMessage(dto.getMessage());
+        if (dto.getTitle() != null)
+            entity.setTitle(dto.getTitle());
         return entity;
     }
 }
