@@ -71,4 +71,8 @@ public interface IDeviceService {
     List<DeviceDTO> findDeviceWithPolicyId(Long policyId, Pageable pageable);
 
     Long countDeviceWithPolicyId(Long policyId);
+
+    List<DeviceDTO> findAllDeviceRunNowWithSN(String serialmunber, Pageable pageable);
+
+    Long countDeviceRunNowWithSN(String serialmunber);
 }

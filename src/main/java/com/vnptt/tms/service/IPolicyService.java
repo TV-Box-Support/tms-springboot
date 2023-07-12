@@ -22,11 +22,17 @@ public interface IPolicyService {
 
     List<PolicyDTO> findAllWithApk(Long apkId);
 
-    List<PolicyDTO> findAllWithDeviceId(Long deviceId);
+    List<PolicyDTO> findAllWithDeviceId(Long deviceId, Pageable pageable);
 
     PolicyDTO updateStatus(Long id, int status);
 
     List<PolicyDTO> findwithPolicyname(String policyname, Pageable pageable);
 
     Long totalCountByPolicynameContain(String packagename);
+
+    Long totalCountByDeviceId(Long deviceId);
+
+    List<PolicyDTO> findAllWithDeviceIdAndPolicyName(Long deviceId, String policyname, Pageable pageable);
+
+    Long countAllByDeviceIdAndPolicyName(Long deviceId, String policyname);
 }

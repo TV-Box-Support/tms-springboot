@@ -182,12 +182,19 @@ public class DeviceApi {
      */
     @GetMapping(value = "/device/now")
     public DeviceOutput showDeviceRunNow(@RequestParam(value = "page") Integer page,
-                                         @RequestParam(value = "limit") Integer limit) {
+                                         @RequestParam(value = "limit") Integer limit,
+                                         @RequestParam(value = "search", required = false) String serialmunber) {
         DeviceOutput result = new DeviceOutput();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        result.setListResult(deviceService.findAllDeviceRunNow(pageable));
-        result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceRunNow() / limit));
+        if( serialmunber != null){
+            result.setListResult(deviceService.findAllDeviceRunNowWithSN(serialmunber, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceRunNowWithSN(serialmunber) / limit));
+        } else {
+            result.setListResult(deviceService.findAllDeviceRunNow(pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceRunNow() / limit));
+        }
+
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");

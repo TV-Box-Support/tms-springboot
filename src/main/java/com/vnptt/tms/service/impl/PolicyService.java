@@ -144,15 +144,16 @@ public class PolicyService implements IPolicyService {
      * find all policy in device
      *
      * @param deviceId
+     * @param pageable
      * @return
      */
     @Override
-    public List<PolicyDTO> findAllWithDeviceId(Long deviceId) {
+    public List<PolicyDTO> findAllWithDeviceId(Long deviceId, Pageable pageable) {
         if (!deviceRepository.existsById(deviceId)) {
-            throw new ResourceNotFoundException("Not found apk device id = " + deviceId);
+            throw new ResourceNotFoundException("Not found device id = " + deviceId);
         }
         List<PolicyDTO> result = new ArrayList<>();
-        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId);
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId, pageable);
         for (PolicyEntity entity : policyEntities) {
             PolicyDTO policyDTO = policyConverter.toDTO(entity);
             result.add(policyDTO);
@@ -167,7 +168,7 @@ public class PolicyService implements IPolicyService {
      * policy detail status = 2 running
      * if policy detail status = 3 ( policy success) -> don't set
      * policy detail status = 4 stop
-     *
+     * <p>
      * status 0 not run
      * status 1 run
      * status 2 pause
@@ -187,7 +188,7 @@ public class PolicyService implements IPolicyService {
         policyEntity.setStatus(status);
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = policyEntity.getDevicePolicyDetailEntities();
         for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities) {
-            switch (status){
+            switch (status) {
                 case 1:
                     if (iteam.getStatus() == 0) {
                         iteam.setStatus(1);
@@ -221,7 +222,31 @@ public class PolicyService implements IPolicyService {
 
     @Override
     public Long totalCountByPolicynameContain(String policyname) {
-        return  (Long) policyRepository.countAllByPolicynameContaining(policyname);
+        return policyRepository.countAllByPolicynameContaining(policyname);
+    }
+
+    @Override
+    public Long totalCountByDeviceId(Long deviceId) {
+        return policyRepository.countAllByDevicePolicyDetailEntitiesDeviceEntityDetailId(deviceId);
+    }
+
+    @Override
+    public List<PolicyDTO> findAllWithDeviceIdAndPolicyName(Long deviceId, String policyname, Pageable pageable) {
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device id = " + deviceId);
+        }
+        List<PolicyDTO> result = new ArrayList<>();
+        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdAndPolicynameContainingOrderByModifiedDateDesc(deviceId, policyname, pageable);
+        for (PolicyEntity entity : policyEntities) {
+            PolicyDTO policyDTO = policyConverter.toDTO(entity);
+            result.add(policyDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAllByDeviceIdAndPolicyName(Long deviceId, String policyname) {
+        return policyRepository.countAllByDevicePolicyDetailEntitiesDeviceEntityDetailIdAndPolicynameContaining(deviceId, policyname);
     }
 
     @Override

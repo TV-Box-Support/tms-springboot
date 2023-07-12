@@ -106,9 +106,20 @@ public class PolicyApi {
      * @return
      */
     @GetMapping(value = "/device/{deviceId}/policy")
-    public PolicyOutput showAllPolicyByDeviceId(@PathVariable(value = "deviceId") Long deviceId) {
+    public PolicyOutput showAllPolicyByDeviceId(@PathVariable(value = "deviceId") Long deviceId,
+                                                @RequestParam(value = "page") Integer page,
+                                                @RequestParam(value = "limit") Integer limit,
+                                                @RequestParam(value = "search", required = false) String policyname) {
         PolicyOutput result = new PolicyOutput();
-        result.setListResult(policyService.findAllWithDeviceId(deviceId));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (policyname != null) {
+            result.setListResult((policyService.findAllWithDeviceId(deviceId, pageable)));
+            result.setTotalPage((int) Math.ceil((double) policyService.totalCountByDeviceId(deviceId) / limit));
+        } else {
+            result.setListResult((policyService.findAllWithDeviceIdAndPolicyName(deviceId, policyname, pageable)));
+            result.setTotalPage((int) Math.ceil((double) policyService.countAllByDeviceIdAndPolicyName(deviceId, policyname) / limit));
+        }
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");

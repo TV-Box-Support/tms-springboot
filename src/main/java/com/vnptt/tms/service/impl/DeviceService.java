@@ -595,6 +595,27 @@ public class DeviceService implements IDeviceService {
         return deviceRepository.countByDevicePolicyDetailEntitiesPolicyEntityDetailId(policyId);
     }
 
+    @Override
+    public List<DeviceDTO> findAllDeviceRunNowWithSN(String serialmunber, Pageable pageable) {
+        List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByModifiedDateDesc(serialmunber, time, LocalDateTime.now(), pageable);
+        for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
+            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
+            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
+                result.add(deviceConverter.toDTO(deviceEntity));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Long countDeviceRunNowWithSN(String serialmunber) {
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        return deviceRepository.countDistinctBySnContainingAndHistoryPerformanceEntitiesCreatedDateBetween(serialmunber, time, LocalDateTime.now());
+    }
+
 
     @Override
     public int totalItem() {
