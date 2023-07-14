@@ -22,7 +22,7 @@ public interface IApkService {
 
     List<ApkDTO> findAllOnPolicy(Long policyId);
 
-    ApkDTO addApkToPolicy(Long policyId, Long apkId);
+    List<ApkDTO> addApkToPolicy(Long policyId, Long[] apkId);
 
     void removeApkinPolicy(Long policyId, Long apkId);
 

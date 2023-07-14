@@ -133,7 +133,7 @@ public class ListDeviceApi {
     }
 
     /**
-     * api remove map list device of roles management
+     * api remove map list device of user
      *
      * @param userId
      * @param listDeviceId

@@ -1,6 +1,6 @@
 package com.vnptt.tms.dto;
 
-public class DeviceApplicationDTO extends AbstractDTO {
+public class DeviceApplicationDTO extends AbstractTimeDTO {
     private Boolean isalive;
     private Long deviceId;
     private Long applicationId;

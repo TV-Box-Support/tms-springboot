@@ -11,13 +11,13 @@ public interface HistoryPerformanceRepository extends JpaRepository<HistoryPerfo
 
     HistoryPerformanceEntity findOneById(Long id);
 
-    List<HistoryPerformanceEntity> findAllByCreatedDateBetweenOrderByModifiedDateDesc(LocalDateTime localDateTime, LocalDateTime localDateTimeNow, Pageable pageable);
+    List<HistoryPerformanceEntity> findAllByCreatedDateBetweenOrderByCreatedDateDesc(LocalDateTime localDateTime, LocalDateTime localDateTimeNow, Pageable pageable);
 
-    List<HistoryPerformanceEntity> findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByModifiedDateDesc(String sn, LocalDateTime localDateTime, LocalDateTime localDateTimeNow, Pageable pageable);
+    List<HistoryPerformanceEntity> findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByCreatedDateDesc(String sn, LocalDateTime localDateTime, LocalDateTime localDateTimeNow, Pageable pageable);
 
 
-    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByModifiedDateDesc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
+    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateDesc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
-    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByModifiedDateAsc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
+    List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateAsc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
 }

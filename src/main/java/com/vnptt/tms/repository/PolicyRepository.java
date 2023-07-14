@@ -29,4 +29,5 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
     List<PolicyEntity> findAllByPolicynameContaining(String policyname, Pageable pageable);
 
     PolicyEntity findOneByDevicePolicyDetailEntitiesId(Long policyDetailId);
+
 }

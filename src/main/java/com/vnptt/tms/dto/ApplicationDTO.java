@@ -1,6 +1,6 @@
 package com.vnptt.tms.dto;
 
-public class ApplicationDTO extends AbstractDTO {
+public class ApplicationDTO extends AbstractCreateDateDTO {
     private String packagename;
     private String name;
     private String version;

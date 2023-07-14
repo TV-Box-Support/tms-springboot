@@ -189,7 +189,7 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<ApplicationDTO> findAllWithDeviceNameIsSystem(Long deviceId, String name, Boolean isAlive, Boolean system, Pageable pageable) {
         List<ApplicationDTO> result = new ArrayList<>();
-        List<ApplicationEntity> applicationEntityList = applicationRepository.findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByModifiedDateDesc(deviceId, isAlive, name, system, pageable);
+        List<ApplicationEntity> applicationEntityList = applicationRepository.findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByCreatedDateDesc(deviceId, isAlive, name, system, pageable);
         for (ApplicationEntity item : applicationEntityList) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
@@ -233,7 +233,7 @@ public class ApplicationService implements IApplicationService {
     public List<ApplicationDTO> findByPackagename(String packagename) {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContainingOrderByModifiedDateDesc(packagename).forEach(applicationEntities::add);
+        applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename).forEach(applicationEntities::add);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
@@ -245,7 +245,7 @@ public class ApplicationService implements IApplicationService {
     public List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable) {
         List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContainingOrderByModifiedDateDesc(packagename, pageable).forEach(applicationEntities::add);
+        applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename, pageable).forEach(applicationEntities::add);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);

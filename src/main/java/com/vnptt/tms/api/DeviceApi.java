@@ -139,10 +139,21 @@ public class DeviceApi {
      * @return
      */
     @GetMapping("/application/{applicationId}/device")
-    public DeviceOutput getAllDeviceByApplicationId(@PathVariable(value = "applicationId") Long applicationId) {
+    public DeviceOutput getAllDeviceByApplicationId(@RequestParam(value = "page") Integer page,
+                                                    @RequestParam(value = "limit") Integer limit,
+                                                    @PathVariable(value = "applicationId") Long applicationId,
+                                                    @RequestParam(value = "search", required = false) String sn) {
         DeviceOutput result = new DeviceOutput();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (sn != null) {
+            result.setListResult(deviceService.findAllWithApplicationIdAndSn(applicationId, sn, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByApplicationIdAndSn(applicationId, sn) / limit));
+        } else {
+            result.setListResult(deviceService.findAllWithApplication(applicationId, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countByApplicationId(applicationId) / limit));
+        }
 
-        result.setListResult(deviceService.findAllWithApplication(applicationId));
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -187,7 +198,7 @@ public class DeviceApi {
         DeviceOutput result = new DeviceOutput();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        if( serialmunber != null){
+        if (serialmunber != null) {
             result.setListResult(deviceService.findAllDeviceRunNowWithSN(serialmunber, pageable));
             result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceRunNowWithSN(serialmunber) / limit));
         } else {
@@ -287,18 +298,17 @@ public class DeviceApi {
     @GetMapping(value = "/policy/{policyId}/device")
     public DeviceOutput showDeviceHasPolicy(@PathVariable(value = "policyId") Long policyId,
                                             @RequestParam(value = "page") Integer page,
-                                            @RequestParam(value = "limit") Integer limit) {
+                                            @RequestParam(value = "limit") Integer limit,
+                                            @RequestParam(value = "search", required = false) String sn) {
         DeviceOutput result = new DeviceOutput();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        result.setListResult(deviceService.findDeviceWithPolicyId(policyId, pageable));
-        result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceWithPolicyId(policyId) / limit));
-
-        if (result.getListResult().size() >= 1) {
-            result.setMessage("Request Success");
-            result.setTotalElement(result.getListResult().size());
+        if (sn != null) {
+            result.setListResult(deviceService.findDeviceWithPolicyIdAndSN(policyId, sn, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceWithPolicyIdAndSn(policyId, sn) / limit));
         } else {
-            result.setMessage("no matching element found");
+            result.setListResult(deviceService.findDeviceWithPolicyId(policyId, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceWithPolicyId(policyId) / limit));
         }
 
         if (result.getListResult().size() >= 1) {
@@ -349,12 +359,12 @@ public class DeviceApi {
     }
 
 
-        /**
-         * api Create new device for production batch
-         *
-         * @param model serialNumber have required
-         * @return
-         */
+    /**
+     * api Create new device for production batch
+     *
+     * @param model serialNumber have required
+     * @return
+     */
     @PostMapping(value = "/device")
     public DeviceDTO createDevice(@RequestBody DeviceDTO model) {
         return deviceService.save(model);

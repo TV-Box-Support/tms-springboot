@@ -131,28 +131,37 @@ public class ApkService implements IApkService {
      * add apk to policy
      *
      * @param policyId
-     * @param apkId
+     * @param apkIds
      * @return
      */
     @Override
-    public ApkDTO addApkToPolicy(Long policyId, Long apkId) {
-        ApkEntity apkEntity = policyRepository.findById(policyId).map(policy -> {
-            ApkEntity apk = apkRepository.findById(apkId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found apk with id = " + apkId));
-
-            // check if apk has still
-            List<ApkEntity> apkEntities = policy.getApkEntitiesPolicy();
-            for (ApkEntity item : apkEntities) {
-                if (item.equals(apk)) {
-                    return apk;
+    public List<ApkDTO> addApkToPolicy(Long policyId, Long[] apkIds) {
+        List<ApkDTO> result = new ArrayList<>();
+        for (Long apkId : apkIds) {
+            ApkEntity apkEntity = policyRepository.findById(policyId).map(policy -> {
+                if(policy.getApkEntitiesPolicy().size() + apkIds.length  > 3){
+                    throw new RuntimeException("a working policy can only have a maximum of 3 APKs");
                 }
-            }
-            //map and add apk to policy
-            policy.addApk(apk);
-            policyRepository.save(policy);
-            return apk;
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found policy with id = " + policyId));
-        return apkConverter.toDTO(apkEntity);
+                ApkEntity apk = apkRepository.findById(apkId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found apk with id = " + apkId));
+
+                // check if apk has still
+                List<ApkEntity> apkEntities = policy.getApkEntitiesPolicy();
+                for (ApkEntity item : apkEntities) {
+                    if (item.equals(apk)) {
+                        return apk;
+                    }
+                }
+                //map and add apk to policy
+                policy.addApk(apk);
+                policyRepository.save(policy);
+                return apk;
+            }).orElseThrow(() -> new ResourceNotFoundException("Not found policy with id = " + policyId));
+
+
+            result.add(apkConverter.toDTO(apkEntity));
+        }
+        return result;
     }
 
     /**

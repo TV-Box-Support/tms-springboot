@@ -11,15 +11,15 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     ApplicationEntity findOneById(Long id);
 
-    List<ApplicationEntity> findByPackagenameContainingOrderByModifiedDateDesc(String packagename);
+    List<ApplicationEntity> findByPackagenameContainingOrderByCreatedDateDesc(String packagename);
 
     long countByPackagenameContaining(String packagename);
 
     ApplicationEntity findOneByPackagenameAndVersion(String packagename, String version);
 
-    List<ApplicationEntity> findByPackagenameContainingOrderByModifiedDateDesc(String packagename, Pageable pageable);
+    List<ApplicationEntity> findByPackagenameContainingOrderByCreatedDateDesc(String packagename, Pageable pageable);
 
     List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailSnAndDeviceApplicationEntitiesIsalive(String sn, Boolean isalive);
 
-    List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByModifiedDateDesc(Long deviceId, Boolean isalive, String name, Boolean isSystem, Pageable pageable);
+    List<ApplicationEntity> findByDeviceApplicationEntitiesDeviceAppEntityDetailIdAndDeviceApplicationEntitiesIsaliveAndNameContainingAndIssystemOrderByCreatedDateDesc(Long deviceId, Boolean isalive, String name, Boolean isSystem, Pageable pageable);
 }

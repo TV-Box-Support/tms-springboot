@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "deviceApplication")
-public class DeviceApplicationEntity extends BaseEntity{
+public class DeviceApplicationEntity extends BaseTimeEntity{
 
     @Column(name = "isAlive", nullable = false, columnDefinition = "boolean default true")
     private Boolean isalive;

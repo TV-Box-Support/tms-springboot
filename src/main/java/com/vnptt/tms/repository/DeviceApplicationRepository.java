@@ -23,7 +23,14 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     Long countByDeviceAppEntityDetailIdAndIsaliveAndApplicationEntityDetailNameContainingAndApplicationEntityDetailIssystem(Long deviceId, boolean isAlive, String name, Boolean isSystem);
 
-    List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdOrderByModifiedDateDesc(Long applicationId);
+    List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdOrderByModifiedDateDesc(Long applicationId, Pageable pageable);
+
+    List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdAndDeviceAppEntityDetailSnContainingOrderByModifiedDateDesc(Long applicationId,String sn, Pageable pageable);
+
+    Long countAllByApplicationEntityDetailIdAndDeviceAppEntityDetailSnContaining(Long applicationId,String sn);
+
+    Long countAllByApplicationEntityDetailId(Long applicationId);
+
 
     List<DeviceApplicationEntity> findAllByApplicationEntityDetailNameOrderByModifiedDateDesc(String name, Pageable pageable);
 

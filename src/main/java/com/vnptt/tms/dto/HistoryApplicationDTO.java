@@ -1,6 +1,6 @@
 package com.vnptt.tms.dto;
 
-public class HistoryApplicationDTO extends AbstractDTO{
+public class HistoryApplicationDTO extends AbstractCreateDateDTO{
 
     private Long deviceApplicationId;
     private Double cpu;

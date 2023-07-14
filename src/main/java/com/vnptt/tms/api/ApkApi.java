@@ -152,13 +152,22 @@ public class ApkApi {
      * api Map apk to policy
      *
      * @param policyId policy want to map
-     * @param apkId    apk want to map
+     * @param apkIds   apk want to map
      * @return apk in policy want to map
      */
-    @PostMapping(value = "/policy/{policyId}/apk/{apkId}")
-    public ApkDTO addApplicationToDevice(@PathVariable(value = "policyId") Long policyId,
-                                         @PathVariable(value = "apkId") Long apkId) {
-        return apkService.addApkToPolicy(policyId, apkId);
+    @PostMapping(value = "/policy/{policyId}/apk")
+    public ApkOutput mapApkToPolicy(@PathVariable(value = "policyId") Long policyId,
+                                    @RequestBody Long[] apkIds) {
+        ApkOutput result = new ApkOutput();
+        result.setListResult(apkService.addApkToPolicy(policyId, apkIds));
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
     }
 
     /**

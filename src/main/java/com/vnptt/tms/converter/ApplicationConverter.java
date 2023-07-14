@@ -38,9 +38,9 @@ public class ApplicationConverter {
         }
         dto = mapper.map(entity, ApplicationDTO.class);
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setCreatedBy(entity.getCreatedBy());
-        dto.setModifiedDate(entity.getModifiedDate());
-        dto.setModifiedBy(entity.getModifiedBy());
+//        dto.setCreatedBy(entity.getCreatedBy());
+//        dto.setModifiedDate(entity.getModifiedDate());
+//        dto.setModifiedBy(entity.getModifiedBy());
         return dto;
     }
 

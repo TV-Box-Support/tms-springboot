@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Device")
-public class DeviceEntity extends BaseEntity {
+public class DeviceEntity extends BaseTimeEntity {
     @Column(name = "product")
     private String product;
     @Column(name = "model")

@@ -34,7 +34,7 @@ public interface IDeviceService {
 
     List<DeviceDTO> findDeviceActive(int day, long hour, int minutes, Pageable pageable);
 
-    List<DeviceDTO> findAllWithApplication(Long applicationId);
+    List<DeviceDTO> findAllWithApplication(Long applicationId, Pageable pageable);
 
     List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
 
@@ -75,4 +75,14 @@ public interface IDeviceService {
     List<DeviceDTO> findAllDeviceRunNowWithSN(String serialmunber, Pageable pageable);
 
     Long countDeviceRunNowWithSN(String serialmunber);
+
+    Long countDeviceWithPolicyIdAndSn(Long policyId, String sn);
+
+    List<DeviceDTO> findDeviceWithPolicyIdAndSN(Long policyId, String sn, Pageable pageable);
+
+    List<DeviceDTO> findAllWithApplicationIdAndSn(Long applicationId, String sn, Pageable pageable);
+
+    Long countByApplicationIdAndSn(Long applicationId, String sn);
+
+    Long countByApplicationId(Long applicationId);
 }

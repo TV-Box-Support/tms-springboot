@@ -1,6 +1,6 @@
 package com.vnptt.tms.dto;
 
-public class DeviceDTO extends AbstractDTO {
+public class DeviceDTO extends AbstractTimeDTO {
     private String sn;
     private String mac;
     private String product;

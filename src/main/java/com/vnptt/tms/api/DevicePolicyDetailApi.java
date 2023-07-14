@@ -113,6 +113,8 @@ public class DevicePolicyDetailApi {
      * status 2 = success
      * status 3 = error
      *
+     * todo: add search
+     *
      * @param
      * @return
      */
@@ -121,7 +123,6 @@ public class DevicePolicyDetailApi {
                                                                 @RequestParam(value = "status", required = false) Integer status,
                                                                 @RequestParam(value = "page") Integer page,
                                                                 @RequestParam(value = "limit") Integer limit) {
-
         DevicePolicyDetailOutput result = new DevicePolicyDetailOutput();
 
         if (status == null) {

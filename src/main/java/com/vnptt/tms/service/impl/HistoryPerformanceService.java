@@ -127,7 +127,7 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
         List<HistoryPerformanceDTO> result = new ArrayList<>();
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByModifiedDateDesc(deviceId, time, LocalDateTime.now());
+        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateDesc(deviceId, time, LocalDateTime.now());
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             HistoryPerformanceDTO historyPerformanceDTO = historyPerformanceConverter.toDTO(iteam);
             result.add(historyPerformanceDTO);

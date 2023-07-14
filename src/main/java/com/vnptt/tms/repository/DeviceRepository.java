@@ -38,5 +38,8 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     List<DeviceEntity> findAllByDevicePolicyDetailEntitiesPolicyEntityDetailIdOrderByModifiedDateDesc(Long policyId, Pageable pageable);
 
+    List<DeviceEntity> findAllByDevicePolicyDetailEntitiesPolicyEntityDetailIdAndSnContainingOrderByModifiedDateDesc(Long policyId, String sn, Pageable pageable);
+
     Long countByDevicePolicyDetailEntitiesPolicyEntityDetailId(Long policyId);
+    Long countByDevicePolicyDetailEntitiesPolicyEntityDetailIdAndSnContaining(Long policyId, String sn);
 }

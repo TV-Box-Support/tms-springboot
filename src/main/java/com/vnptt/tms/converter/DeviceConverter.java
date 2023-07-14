@@ -37,9 +37,9 @@ public class DeviceConverter {
         }
         dto = mapper.map(entity, DeviceDTO.class);
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setCreatedBy(entity.getCreatedBy());
+//        dto.setCreatedBy(entity.getCreatedBy());
         dto.setModifiedDate(entity.getModifiedDate());
-        dto.setModifiedBy(entity.getModifiedBy());
+//        dto.setModifiedBy(entity.getModifiedBy());
         return dto;
     }
 

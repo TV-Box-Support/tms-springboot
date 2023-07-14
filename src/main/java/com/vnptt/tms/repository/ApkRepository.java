@@ -15,4 +15,5 @@ public interface ApkRepository extends JpaRepository<ApkEntity, Long> {
     List<ApkEntity> findAllByPackagenameContainingAndVersionContainingOrderByModifiedDateDesc(String packagename, String version, Pageable pageable);
 
     Long countByPackagenameContainingAndVersionContainingOrderByModifiedDateDesc(String packagename, String version);
+
 }
