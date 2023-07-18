@@ -58,6 +58,9 @@ public class PolicyService implements IPolicyService {
             // set default policy not run now
             policyEntity.setStatus(0);
         }
+        if (policyEntity.getAction() > 3 || policyEntity.getAction() < 1) {
+            throw new RuntimeException("Action of policy must be 1,2,3 " );
+        }
         // oke if policy don't have command
         CommandEntity commandEntity = commandRepository.findOneByCommand(policyDTO.getCommandName());
         policyEntity.setCommandEntity(commandEntity);

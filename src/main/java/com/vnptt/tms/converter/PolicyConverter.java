@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class PolicyConverter {
 
@@ -54,7 +56,7 @@ public class PolicyConverter {
         }
         if (entity.getCommandEntity() != null) {
             dto.setCommandName(entity.getCommandEntity().getCommand());
-            if(entity.getCommandEntity().getCommand() == "Notification"){
+            if(Objects.equals(entity.getCommandEntity().getCommand(), "Notification")){
                 dto.setTitle(entity.getCommandEntity().getAlertDialogEntity().getTitle());
                 dto.setMessage(entity.getCommandEntity().getAlertDialogEntity().getMessage());
             }
