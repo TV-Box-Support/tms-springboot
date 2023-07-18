@@ -3,7 +3,7 @@ package com.vnptt.tms.dto;
 public class ApplicationDTO extends AbstractCreateDateDTO {
     private String packagename;
     private String name;
-    private String version;
+    private Long version;
     private boolean issystem;
 
     public String getName() {
@@ -22,11 +22,11 @@ public class ApplicationDTO extends AbstractCreateDateDTO {
         this.packagename = packagename;
     }
 
-    public String getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
 

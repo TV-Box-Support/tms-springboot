@@ -12,7 +12,7 @@ public class ApplicationEntity extends BaseCreateDateEntity {
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "version", nullable = false)
-    private String version;
+    private Long version;
     @Column(name = "isSystem", nullable = false)
     private boolean issystem;
 
@@ -40,12 +40,20 @@ public class ApplicationEntity extends BaseCreateDateEntity {
         this.name = name;
     }
 
-    public String getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public List<DeviceApplicationEntity> getDeviceApplicationEntities() {
+        return deviceApplicationEntities;
+    }
+
+    public void setDeviceApplicationEntities(List<DeviceApplicationEntity> deviceApplicationEntities) {
+        this.deviceApplicationEntities = deviceApplicationEntities;
     }
 
     public List<DeviceApplicationEntity> getDeviceApplications() {

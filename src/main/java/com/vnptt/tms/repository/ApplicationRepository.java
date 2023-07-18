@@ -15,7 +15,7 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     long countByPackagenameContaining(String packagename);
 
-    ApplicationEntity findOneByPackagenameAndVersion(String packagename, String version);
+    ApplicationEntity findOneByPackagenameAndVersion(String packagename, Long version);
 
     List<ApplicationEntity> findByPackagenameContainingOrderByCreatedDateDesc(String packagename, Pageable pageable);
 

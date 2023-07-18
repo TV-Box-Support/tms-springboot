@@ -35,16 +35,17 @@ public class HistoryApplicationService implements IHistoryApplicationService {
      * @param historyApplicationDTO
      * @param sn
      * @param packagename
+     * @param version
      * @return
      */
     @Override
-    public HistoryApplicationDTO save(HistoryApplicationDTO historyApplicationDTO, String sn, String packagename) {
+    public HistoryApplicationDTO save(HistoryApplicationDTO historyApplicationDTO, String sn, String packagename, Long version) {
 
         HistoryApplicationEntity historyApplicationEntity = historyApplicationConverter.toEntity(historyApplicationDTO);
-        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneByDeviceAppEntityDetailSnAndApplicationEntityDetailPackagenameAndIsalive(sn, packagename, true);
+        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneByDeviceAppEntityDetailSnAndApplicationEntityDetailPackagenameAndApplicationEntityDetailVersionAndIsalive(sn, packagename, version, true);
 
         if (deviceApplicationEntity == null) {
-            throw new ResourceNotFoundException("not found application info with packagename " + packagename + " in device with serialnumber " + sn );
+            throw new ResourceNotFoundException("not found application info with packagename " + packagename + " in device with serialnumber " + sn);
         }
 
         historyApplicationEntity.setHistoryDeviceApplicationEntity(deviceApplicationEntity);
@@ -104,7 +105,7 @@ public class HistoryApplicationService implements IHistoryApplicationService {
         List<HistoryApplicationDTO> result = new ArrayList<>();
         List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween( deviceApplicationId, time, LocalDateTime.now());
+        historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween(deviceApplicationId, time, LocalDateTime.now());
         for (HistoryApplicationEntity iteam : historyApplicationEntities) {
             HistoryApplicationDTO historyApplicationDTO = historyApplicationConverter.toDTO(iteam);
             result.add(historyApplicationDTO);

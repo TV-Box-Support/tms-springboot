@@ -85,8 +85,9 @@ public class HistoryApplicationApi {
     @PostMapping(value = "/historyApplication")
     public HistoryApplicationDTO createHistoryApplication(@RequestParam(value = "serialnumber") String sn,
                                                           @RequestParam(value = "packagename") String packagename,
+                                                          @RequestParam(value = "version") Long version,
                                                           @RequestBody HistoryApplicationDTO model) {
-        return historyApplicationService.save(model, sn, packagename);
+        return historyApplicationService.save(model, sn, packagename, version);
     }
 
     /**
