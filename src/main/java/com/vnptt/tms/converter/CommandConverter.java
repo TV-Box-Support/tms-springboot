@@ -57,6 +57,8 @@ public class CommandConverter {
     public CommandEntity toEntity(CommandDTO dto, CommandEntity entity) {
         if (dto.getCommand() != null)
             entity.setCommand(dto.getCommand());
+        if(dto.getName() != null)
+            entity.setName(dto.getName());
         return entity;
     }
 }
