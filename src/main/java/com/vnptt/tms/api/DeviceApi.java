@@ -76,6 +76,28 @@ public class DeviceApi {
     }
 
     /**
+     * api show device with SN on bar search
+     *
+     * @param search search of STB
+     * @return List of device DTO
+     */
+    @GetMapping(value = "/barSearch/device")
+    public DeviceOutput showDeviceOnBarSearch(@RequestParam(value = "search", required = false) String search) {
+        DeviceOutput result = new DeviceOutput();
+
+        result.setListResult((deviceService.findOnBarSearch(search)));
+
+
+        if (result.getListResult().size() >= 1) {
+            result.setMessage("Request Success");
+            result.setTotalElement(result.getListResult().size());
+        } else {
+            result.setMessage("no matching element found");
+        }
+        return result;
+    }
+
+    /**
      * api show device with id
      * check information for web
      *

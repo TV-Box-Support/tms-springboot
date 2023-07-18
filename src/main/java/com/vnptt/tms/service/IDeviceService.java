@@ -85,4 +85,6 @@ public interface IDeviceService {
     Long countByApplicationIdAndSn(Long applicationId, String sn);
 
     Long countByApplicationId(Long applicationId);
+
+    List<DeviceDTO> findOnBarSearch(String search);
 }

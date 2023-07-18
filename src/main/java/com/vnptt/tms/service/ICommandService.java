@@ -17,4 +17,8 @@ public interface ICommandService {
     List<CommandDTO> findAll(Pageable pageable);
 
     List<CommandDTO> findAll();
+
+    List<CommandDTO> findAllWithName(String name, Pageable pageable);
+
+    Long totalItemWithName(String name);
 }

@@ -2,8 +2,8 @@ package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.converter.CommandConverter;
 import com.vnptt.tms.dto.CommandDTO;
-import com.vnptt.tms.entity.CommandEntity;
 import com.vnptt.tms.entity.AlertDialogEntity;
+import com.vnptt.tms.entity.CommandEntity;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.AlertDialogRepository;
 import com.vnptt.tms.repository.CommandRepository;
@@ -90,6 +90,22 @@ public class CommandService implements ICommandService {
             result.add(commandDTO);
         }
         return result;
+    }
+
+    @Override
+    public List<CommandDTO> findAllWithName(String name, Pageable pageable) {
+        List<CommandEntity> entities = commandRepository.findAllByNameContainingOrderByModifiedDateDesc(name, pageable);
+        List<CommandDTO> result = new ArrayList<>();
+        for (CommandEntity item : entities) {
+            CommandDTO commandDTO = commandConverter.toDTO(item);
+            result.add(commandDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long totalItemWithName(String name) {
+        return commandRepository.countAllByNameContaining(name);
     }
 
     @Override

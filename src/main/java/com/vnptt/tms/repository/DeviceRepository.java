@@ -42,4 +42,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     Long countByDevicePolicyDetailEntitiesPolicyEntityDetailId(Long policyId);
     Long countByDevicePolicyDetailEntitiesPolicyEntityDetailIdAndSnContaining(Long policyId, String sn);
+
+    List<DeviceEntity> findTop5BySnContainingOrderByModifiedDateDesc(String search);
 }

@@ -27,19 +27,20 @@ public class CommandApi {
     @GetMapping(value = "/command")
     public CommandOutput showCommand(@RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "limit", required = false) Integer limit,
-                                     @RequestParam(value = "search", required = false) String command) {
+                                     @RequestParam(value = "search", required = false) String name) {
         CommandOutput result = new CommandOutput();
         if (page != null && limit != null) {
             result.setPage(page);
             Pageable pageable = PageRequest.of(page - 1, limit);
-            if(command != null){
-
+            if(name != null){
+                result.setListResult((commandService.findAllWithName(name, pageable)));
+                result.setTotalPage((int) Math.ceil((double) commandService.totalItemWithName(name) / limit));
             } else{
                 result.setListResult((commandService.findAll(pageable)));
                 result.setTotalPage((int) Math.ceil((double) commandService.totalItem() / limit));
             }
         } else {
-            if(command != null){
+            if(name != null){
                 throw new RuntimeException("search only available with page and limit");
             }
             result.setListResult(commandService.findAll());

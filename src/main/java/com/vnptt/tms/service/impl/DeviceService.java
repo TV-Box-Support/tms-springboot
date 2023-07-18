@@ -665,6 +665,18 @@ public class DeviceService implements IDeviceService {
         return deviceApplicationRepository.countAllByApplicationEntityDetailId(applicationId);
     }
 
+    @Override
+    public List<DeviceDTO> findOnBarSearch(String search) {
+        List<DeviceEntity> deviceEntities = new ArrayList<>();
+        List<DeviceDTO> result = new ArrayList<>();
+        deviceEntities = deviceRepository.findTop5BySnContainingOrderByModifiedDateDesc(search);
+        for (DeviceEntity item : deviceEntities) {
+            DeviceDTO deviceDTO = deviceConverter.toDTO(item);
+            result.add(deviceDTO);
+        }
+        return result;
+    }
+
 
     @Override
     public int totalItem() {
