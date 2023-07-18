@@ -1,9 +1,19 @@
 package com.vnptt.tms.dto;
 
 public class CommandDTO extends AbstractDTO{
+
+    private String name;
     private String command;
 
     private Long commandNotificationId;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getCommand() {
         return command;

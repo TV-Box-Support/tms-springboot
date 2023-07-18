@@ -8,7 +8,10 @@ import java.util.List;
 @Table(name = "command")
 public class CommandEntity extends BaseEntity {
 
-    @Column(name = "command", nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
+    @Column(name = "command", nullable = false)
     private String command;
 
     @OneToMany(mappedBy = "commandEntity")
@@ -40,5 +43,13 @@ public class CommandEntity extends BaseEntity {
 
     public void setAlertDialogEntity(AlertDialogEntity alertDialogEntity) {
         this.alertDialogEntity = alertDialogEntity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
