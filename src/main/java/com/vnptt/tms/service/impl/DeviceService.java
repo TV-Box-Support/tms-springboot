@@ -378,16 +378,17 @@ public class DeviceService implements IDeviceService {
      * find all device in list
      *
      * @param listDeviceId id of list device
+     * @param pageable
      * @return
      */
     @Override
-    public List<DeviceDTO> findDeviceInListDevice(Long listDeviceId) {
+    public List<DeviceDTO> findDeviceInListDevice(Long listDeviceId, Pageable pageable) {
         List<DeviceDTO> result = new ArrayList<>();
         ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
         if (listDevice == null) {
             throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
         }
-        List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllByListDeviceDetailIdOrderByModifiedDateDesc(listDeviceId, pageable);
         for (DeviceEntity entity : deviceEntities) {
             result.add(deviceConverter.toDTO(entity));
         }
@@ -675,6 +676,21 @@ public class DeviceService implements IDeviceService {
             result.add(deviceDTO);
         }
         return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findDeviceInListDeviceWithSn(Long listDeviceId, String serialmunber, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Long countDeviceinListDeviceWithSn(Long listDeviceId, String serialmunber) {
+        return null;
+    }
+
+    @Override
+    public Long countDeviceinListDevice(Long listDeviceId) {
+        return null;
     }
 
 

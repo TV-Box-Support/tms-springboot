@@ -44,4 +44,12 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     Long countByDevicePolicyDetailEntitiesPolicyEntityDetailIdAndSnContaining(Long policyId, String sn);
 
     List<DeviceEntity> findTop5BySnContainingOrderByModifiedDateDesc(String search);
+
+    List<DeviceEntity> findAllByListDeviceDetailIdOrderByModifiedDateDesc(Long listDeviceId, Pageable pageable);
+
+    List<DeviceEntity> findAllByListDeviceDetailIdAndSnContainingOrderByModifiedDateDesc(Long listDeviceId, String sn, Pageable pageable);
+
+    Long countAllByListDeviceDetailId(Long listDeviceId);
+
+    Long countByListDeviceDetailIdAndSn(Long listDeviceId, String sn);
 }

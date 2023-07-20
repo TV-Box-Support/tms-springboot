@@ -188,6 +188,7 @@ public class DeviceApi {
 
     /**
      * api Show list device play application now
+     * todo: add ui
      *
      * @param applicationId
      * @return
@@ -288,9 +289,20 @@ public class DeviceApi {
      * @return list device in listDevice
      */
     @GetMapping(value = "/listDevice/{listDeviceId}/device")
-    public DeviceOutput showDeviceInListDevice(@PathVariable(name = "listDeviceId") Long listDeviceId) {
+    public DeviceOutput showDeviceInListDevice(@RequestParam(value = "page") Integer page,
+                                               @RequestParam(value = "limit") Integer limit,
+                                               @PathVariable(name = "listDeviceId") Long listDeviceId,
+                                               @RequestParam(value = "search", required = false) String serialmunber) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findDeviceInListDevice(listDeviceId));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (serialmunber != null){
+            result.setListResult(deviceService.findDeviceInListDeviceWithSn(listDeviceId, serialmunber , pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceinListDeviceWithSn(listDeviceId, serialmunber) / limit));
+        } else {
+            result.setListResult(deviceService.findDeviceInListDevice(listDeviceId, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceinListDevice(listDeviceId) / limit));
+        };
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");

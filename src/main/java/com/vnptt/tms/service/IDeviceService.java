@@ -42,7 +42,7 @@ public interface IDeviceService {
 
     void removeDeviceinListDevice(Long listDeviceId, Long deviceId);
 
-    List<DeviceDTO> findDeviceInListDevice(Long listDeviceId);
+    List<DeviceDTO> findDeviceInListDevice(Long listDeviceId, Pageable pageable);
 
     TerminalStudioOutput updateTerminalStudioInfo();
 
@@ -87,4 +87,10 @@ public interface IDeviceService {
     Long countByApplicationId(Long applicationId);
 
     List<DeviceDTO> findOnBarSearch(String search);
+
+    List<DeviceDTO> findDeviceInListDeviceWithSn(Long listDeviceId, String serialmunber, Pageable pageable);
+
+    Long countDeviceinListDeviceWithSn(Long listDeviceId, String serialmunber);
+
+    Long countDeviceinListDevice(Long listDeviceId);
 }
