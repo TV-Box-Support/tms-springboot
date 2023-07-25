@@ -15,4 +15,6 @@ public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
     List<CommandEntity> findAllByNameContainingOrderByModifiedDateDesc(String name, Pageable pageable);
 
     Long countAllByNameContaining(String name);
+
+    List<CommandEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
 }

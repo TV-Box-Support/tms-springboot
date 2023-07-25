@@ -72,7 +72,7 @@ public class CommandService implements ICommandService {
      */
     @Override
     public List<CommandDTO> findAll(Pageable pageable) {
-        List<CommandEntity> entities = commandRepository.findAll(pageable).getContent();
+        List<CommandEntity> entities = commandRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<CommandDTO> result = new ArrayList<>();
         for (CommandEntity item : entities) {
             CommandDTO commandDTO = commandConverter.toDTO(item);

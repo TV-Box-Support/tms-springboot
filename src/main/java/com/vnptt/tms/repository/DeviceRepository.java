@@ -52,4 +52,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     Long countAllByListDeviceDetailId(Long listDeviceId);
 
     Long countByListDeviceDetailIdAndSnContaining(Long listDeviceId, String sn);
+
+    List<DeviceEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
 }

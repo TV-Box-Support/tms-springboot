@@ -48,7 +48,7 @@ public class AlertDialogService implements com.vnptt.tms.service.AlertDialogServ
      */
     @Override
     public List<AlertDialogDTO> findAll(Pageable pageable) {
-        List<AlertDialogEntity> entities = AlertDialogRepository.findAll(pageable).getContent();
+        List<AlertDialogEntity> entities = AlertDialogRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<AlertDialogDTO> result = new ArrayList<>();
         for(AlertDialogEntity item : entities){
             AlertDialogDTO AlertDialogDTO = AlertDialogConverter.toDTO(item);

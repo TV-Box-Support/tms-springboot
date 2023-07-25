@@ -10,8 +10,6 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
 
     PolicyEntity findOneById(Long id);
 
-    List<PolicyEntity> findAllByPolicynameContaining(String policyname);
-
     Long countAllByPolicynameContaining(String policyname);
 
     List<PolicyEntity> findAllByCommandEntityIdOrderByModifiedDateDesc(Long commandId);
@@ -30,4 +28,5 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
 
     PolicyEntity findOneByDevicePolicyDetailEntitiesId(Long policyDetailId);
 
+    List<PolicyEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
 }

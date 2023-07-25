@@ -83,7 +83,7 @@ public class PolicyService implements IPolicyService {
      */
     @Override
     public List<PolicyDTO> findAll(Pageable pageable) {
-        List<PolicyEntity> entities = policyRepository.findAll(pageable).getContent();
+        List<PolicyEntity> entities = policyRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<PolicyDTO> result = new ArrayList<>();
         for (PolicyEntity item : entities) {
             PolicyDTO policyDTO = policyConverter.toDTO(item);

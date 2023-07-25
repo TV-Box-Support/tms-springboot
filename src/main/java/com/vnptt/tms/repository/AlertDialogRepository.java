@@ -14,4 +14,5 @@ public interface AlertDialogRepository extends JpaRepository<AlertDialogEntity, 
 
     Long countAllByMessageContaining(String message);
 
+    List<AlertDialogEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
 }

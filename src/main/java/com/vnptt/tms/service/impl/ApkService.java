@@ -86,7 +86,7 @@ public class ApkService implements IApkService {
      */
     @Override
     public List<ApkDTO> findAll(Pageable pageable) {
-        List<ApkEntity> entities = apkRepository.findAll(pageable).getContent();
+        List<ApkEntity> entities = apkRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<ApkDTO> result = new ArrayList<>();
         for (ApkEntity item : entities) {
             ApkDTO apkDTO = apkConverter.toDTO(item);

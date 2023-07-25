@@ -105,7 +105,7 @@ public class DeviceService implements IDeviceService {
      */
     @Override
     public List<DeviceDTO> findAll(Pageable pageable) {
-        List<DeviceEntity> entities = deviceRepository.findAll(pageable).getContent();
+        List<DeviceEntity> entities = deviceRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<DeviceDTO> result = new ArrayList<>();
         for (DeviceEntity item : entities) {
             DeviceDTO deviceDTO = deviceConverter.toDTO(item);
