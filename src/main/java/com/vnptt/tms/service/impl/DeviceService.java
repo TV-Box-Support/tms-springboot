@@ -680,17 +680,26 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public List<DeviceDTO> findDeviceInListDeviceWithSn(Long listDeviceId, String serialmunber, Pageable pageable) {
-        return null;
+        List<DeviceDTO> result = new ArrayList<>();
+        ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
+        if (listDevice == null) {
+            throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
+        }
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllByListDeviceDetailIdAndSnContainingOrderByModifiedDateDesc(listDeviceId, serialmunber, pageable);
+        for (DeviceEntity entity : deviceEntities) {
+            result.add(deviceConverter.toDTO(entity));
+        }
+        return result;
     }
 
     @Override
     public Long countDeviceinListDeviceWithSn(Long listDeviceId, String serialmunber) {
-        return null;
+        return deviceRepository.countByListDeviceDetailIdAndSnContaining(listDeviceId, serialmunber);
     }
 
     @Override
     public Long countDeviceinListDevice(Long listDeviceId) {
-        return null;
+        return deviceRepository.countAllByListDeviceDetailId(listDeviceId);
     }
 
 
