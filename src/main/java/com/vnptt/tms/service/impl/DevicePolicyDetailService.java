@@ -61,7 +61,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         PolicyEntity entity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
 
-        if(entity.getStatus() != 0){
+        if (entity.getStatus() != 0) {
             throw new RuntimeException("cannot change the already active policy");
         }
 
@@ -98,6 +98,12 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         for (Long id : deviceIds) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(id);
             if (deviceEntity != null) {
+
+                DevicePolicyDetailEntity check = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(id, policyId);
+                if (check != null) {
+                    continue;
+                }
+
                 DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
                 devicePolicyDetailEntity.setDeviceEntityDetail(deviceEntity);
                 devicePolicyDetailEntity.setPolicyEntityDetail(entity);
@@ -225,7 +231,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         ListDeviceEntity listDevice = listDeviceRepository.findById(listDeviceId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find list Device with id = " + listDeviceId));
 
-        if(policyEntity.getStatus() != 0){
+        if (policyEntity.getStatus() != 0) {
             throw new RuntimeException("cannot change the already active policy");
         }
 
@@ -251,8 +257,8 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
 
         List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
         for (DeviceEntity device : deviceEntities) {
-            DevicePolicyDetailEntity check = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(device.getId(),policyId);
-            if(check != null){
+            DevicePolicyDetailEntity check = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(device.getId(), policyId);
+            if (check != null) {
                 continue;
             }
             DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
@@ -309,13 +315,13 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         }
         PolicyEntity policyEntity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
-        if(policyEntity.getStatus() != 0){
+        if (policyEntity.getStatus() != 0) {
             throw new RuntimeException("cannot change the already active policy");
         }
-        DevicePolicyDetailEntity devicePolicyDetail = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(deviceId,policyId);
-        if(devicePolicyDetail == null){
+        DevicePolicyDetailEntity devicePolicyDetail = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(deviceId, policyId);
+        if (devicePolicyDetail == null) {
             throw new ResourceNotFoundException("device is not assigned policy ");
-        } else if (devicePolicyDetail.getStatus() == 0){
+        } else if (devicePolicyDetail.getStatus() == 0) {
             devicePolicyDetailRepository.deleteById(devicePolicyDetail.getId());
         } else {
             throw new RuntimeException("device cannot be erased in already enforced policy");
