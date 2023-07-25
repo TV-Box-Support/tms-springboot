@@ -10,7 +10,9 @@ public interface DevicePolicyDetailRepository extends JpaRepository<DevicePolicy
 
     DevicePolicyDetailEntity findOneById(Long id);
 
-    List<DevicePolicyDetailEntity> findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId);
+    DevicePolicyDetailEntity findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(Long deviceId, Long policyId);
+
+    List<DevicePolicyDetailEntity> findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId, Pageable pageable);
 
     List<DevicePolicyDetailEntity> findAllByPolicyEntityDetailIdOrderByModifiedDateDesc(Long policyId, Pageable pageable);
 
@@ -19,4 +21,10 @@ public interface DevicePolicyDetailRepository extends JpaRepository<DevicePolicy
     Long countAllByPolicyEntityDetailId(Long policyId);
 
     Long countAllByPolicyEntityDetailIdAndStatus(Long policyId, Integer status);
+
+    List<DevicePolicyDetailEntity> findAllByDeviceEntityDetailIdAndStatusOrderByModifiedDateDesc(Long deviceId, Integer status, Pageable pageable);
+
+    Long countAllByDeviceEntityDetailIdAndStatus(Long deviceId, Integer status);
+
+    Long countAllByDeviceEntityDetailId(Long deviceID);
 }

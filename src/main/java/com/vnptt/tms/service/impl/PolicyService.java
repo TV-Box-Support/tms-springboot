@@ -156,7 +156,7 @@ public class PolicyService implements IPolicyService {
             throw new ResourceNotFoundException("Not found device id = " + deviceId);
         }
         List<PolicyDTO> result = new ArrayList<>();
-        List<PolicyEntity> policyEntities = policyRepository.findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId, pageable);
+        List<PolicyEntity> policyEntities = policyRepository.findAllByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId, pageable);
         for (PolicyEntity entity : policyEntities) {
             PolicyDTO policyDTO = policyConverter.toDTO(entity);
             result.add(policyDTO);

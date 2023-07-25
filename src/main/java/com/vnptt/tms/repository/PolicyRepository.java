@@ -18,7 +18,7 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
 
     List<PolicyEntity> findPolicyEntitiesByApkEntitiesPolicyIdOrderByModifiedDateDesc(Long apkId);
 
-    List<PolicyEntity> findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId, Pageable pageable);
+    List<PolicyEntity> findAllByDevicePolicyDetailEntitiesDeviceEntityDetailIdOrderByModifiedDateDesc(Long deviceId, Pageable pageable);
 
     List<PolicyEntity> findPolicyEntitiesByDevicePolicyDetailEntitiesDeviceEntityDetailIdAndPolicynameContainingOrderByModifiedDateDesc(Long deviceId, String policyname, Pageable pageable);
 

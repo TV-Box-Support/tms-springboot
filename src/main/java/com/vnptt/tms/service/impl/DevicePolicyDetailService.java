@@ -145,14 +145,15 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
      * find all polycy of device
      *
      * @param deviceId
+     * @param pageable
      * @return
      */
     @Override
-    public List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId) {
+    public List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId, Pageable pageable) {
         if (!deviceRepository.existsById(deviceId)) {
             throw new ResourceNotFoundException("Not found device with id = " + deviceId);
         }
-        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId);
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdOrderByModifiedDateDesc(deviceId, pageable);
         List<DevicePolicyDetailDTO> result = new ArrayList<>();
         for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
             DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
@@ -276,7 +277,7 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
 
     @Override
     public List<PolicyDTO> findAllWithDeviceAndStatusRun(Long deviceId) {
-        if (!policyRepository.existsById(deviceId)) {
+        if (!deviceRepository.existsById(deviceId)) {
             throw new ResourceNotFoundException("Not found device with id = " + deviceId);
         }
         List<DevicePolicyDetailEntity> devicePolicyDetailEntitiesRun = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdAndStatusOrderByModifiedDateAsc(deviceId, 1);
@@ -287,6 +288,49 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
             result.add(policyConverter.toDTO(policyEntity));
         }
         return result;
+    }
+
+    @Override
+    public void removeDevicePolicyDetailWithDeviceAndPolicy(Long policyId, Long deviceId) {
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+        }
+        if (!policyRepository.existsById(policyId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + policyId);
+        }
+        DevicePolicyDetailEntity devicePolicyDetail = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(deviceId,policyId);
+        if(devicePolicyDetail == null){
+            throw new ResourceNotFoundException("device is not assigned policy ");
+        } else if (devicePolicyDetail.getStatus() == 0){
+            devicePolicyDetailRepository.deleteById(devicePolicyDetail.getId());
+        } else {
+            throw new RuntimeException("device cannot be erased in already enforced policy");
+        }
+
+    }
+
+    @Override
+    public Long countAllWithDevice(Long deviceId) {
+        return devicePolicyDetailRepository.countAllByDeviceEntityDetailId(deviceId);
+    }
+
+    @Override
+    public List<DevicePolicyDetailDTO> findAllWithDeviceAndStatus(Long deviceId, Integer status, Pageable pageable) {
+        if (!deviceRepository.existsById(deviceId)) {
+            throw new ResourceNotFoundException("Not found device with id = " + deviceId);
+        }
+        List<DevicePolicyDetailEntity> devicePolicyDetailEntities = devicePolicyDetailRepository.findAllByDeviceEntityDetailIdAndStatusOrderByModifiedDateDesc(deviceId, status, pageable);
+        List<DevicePolicyDetailDTO> result = new ArrayList<>();
+        for (DevicePolicyDetailEntity entity : devicePolicyDetailEntities) {
+            DevicePolicyDetailDTO devicePolicyDetailDTO = devicePolicyDetailConverter.toDTO(entity);
+            result.add(devicePolicyDetailDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAllWithDeviceAndStatus(Long deviceId, Integer status) {
+        return devicePolicyDetailRepository.countAllByDeviceEntityDetailIdAndStatus(deviceId, status);
     }
 
     @Override

@@ -20,7 +20,7 @@ public interface IDevicePolicyDetailnService {
 
     List<DevicePolicyDetailDTO> findAll();
 
-    List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId);
+    List<DevicePolicyDetailDTO> findAllWithDevice(Long deviceId, Pageable pageable);
 
     DevicePolicyDetailDTO update(Long id, int status);
 
@@ -35,4 +35,12 @@ public interface IDevicePolicyDetailnService {
     Long countAllWithPolicyStatus(Long policyId, Integer status);
 
     List<PolicyDTO> findAllWithDeviceAndStatusRun(Long deviceId);
+
+    void removeDevicePolicyDetailWithDeviceAndPolicy(Long policyId, Long deviceId);
+
+    Long countAllWithDevice(Long deviceId);
+
+    List<DevicePolicyDetailDTO> findAllWithDeviceAndStatus(Long deviceId, Integer status, Pageable pageable);
+
+    Long countAllWithDeviceAndStatus(Long deviceId, Integer status);
 }

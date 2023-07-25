@@ -113,7 +113,7 @@ public class PolicyApi {
         PolicyOutput result = new PolicyOutput();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        if (policyname != null) {
+        if (policyname == null) {
             result.setListResult((policyService.findAllWithDeviceId(deviceId, pageable)));
             result.setTotalPage((int) Math.ceil((double) policyService.totalCountByDeviceId(deviceId) / limit));
         } else {
