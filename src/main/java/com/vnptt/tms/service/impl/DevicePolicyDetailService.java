@@ -61,6 +61,10 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         PolicyEntity entity = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
 
+        if(entity.getStatus() != 0){
+            throw new RuntimeException("cannot change the already active policy");
+        }
+
         String jwt = authTokenFilter.parseJwtTMS(request);
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
@@ -221,6 +225,10 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         ListDeviceEntity listDevice = listDeviceRepository.findById(listDeviceId)
                 .orElseThrow(() -> new ResourceNotFoundException(" cant not find list Device with id = " + listDeviceId));
 
+        if(policyEntity.getStatus() != 0){
+            throw new RuntimeException("cannot change the already active policy");
+        }
+
         String jwt = authTokenFilter.parseJwtTMS(request);
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
@@ -243,6 +251,10 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
 
         List<DeviceEntity> deviceEntities = listDevice.getListDeviceDetail();
         for (DeviceEntity device : deviceEntities) {
+            DevicePolicyDetailEntity check = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(device.getId(),policyId);
+            if(check != null){
+                continue;
+            }
             DevicePolicyDetailEntity devicePolicyDetailEntity = new DevicePolicyDetailEntity();
             devicePolicyDetailEntity.setDeviceEntityDetail(device);
             devicePolicyDetailEntity.setPolicyEntityDetail(policyEntity);
@@ -295,8 +307,10 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
         if (!deviceRepository.existsById(deviceId)) {
             throw new ResourceNotFoundException("Not found device with id = " + deviceId);
         }
-        if (!policyRepository.existsById(policyId)) {
-            throw new ResourceNotFoundException("Not found device with id = " + policyId);
+        PolicyEntity policyEntity = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException(" cant not find policy with id = " + policyId));
+        if(policyEntity.getStatus() != 0){
+            throw new RuntimeException("cannot change the already active policy");
         }
         DevicePolicyDetailEntity devicePolicyDetail = devicePolicyDetailRepository.findOneByDeviceEntityDetailIdAndPolicyEntityDetailId(deviceId,policyId);
         if(devicePolicyDetail == null){
