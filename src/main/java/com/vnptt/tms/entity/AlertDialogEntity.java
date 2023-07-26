@@ -11,10 +11,10 @@ import java.util.List;
 @Table(name = "alertdialog")
 public class AlertDialogEntity extends BaseEntity {
 
-    @Column(name = "title", nullable = false, unique = true)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "message", nullable = false, unique = true)
+    @Column(name = "message", nullable = false)
     private String message;
 
     @OneToMany(mappedBy = "alertDialogEntity")
