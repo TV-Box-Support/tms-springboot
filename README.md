@@ -67,12 +67,12 @@ INSERT INTO role (name) VALUES('ROLE_ADMIN');
 INSERT INTO listdevice(name, location) VALUES('all', 'all');
 INSERT INTO listdevice(name, location) VALUES('prototype', 'all');
 
-INSERT INTO listdevice_user(device_id, user_id) VALUES("1","1");
-
 INSERT INTO user(name, username, password, company, email, contact) VALUES ("MODERATOR","root","$2a$10$icvl6beFqq9A9yL8Th5xGuhaM8dRkAFQOLgLXwJv.6SUX3lqOPWXu","none","none",0);
 INSERT INTO role_user(user_id, rule_id) VALUES (1, 1); 
 INSERT INTO role_user(user_id, rule_id) VALUES (1, 2); 
 INSERT INTO role_user(user_id, rule_id) VALUES (1, 3);
+
+INSERT INTO listdevice_user(device_id, user_id) VALUES("1","1");
 ```
 ## Moderator account
 ```

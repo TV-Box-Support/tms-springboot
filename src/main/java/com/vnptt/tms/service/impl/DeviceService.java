@@ -140,7 +140,7 @@ public class DeviceService implements IDeviceService {
 
         try {
             // A File object pointing to file*.mmdb database
-            File database = new File("src/main/resources/ipdatabase/data.mmdb");
+            File database = new File("ipdatabase/data.mmdb");
 
             // This creates the DatabaseReader object. To improve performance, reuse
             // the object across lookups. The object is thread-safe.
