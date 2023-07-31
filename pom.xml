@@ -15,7 +15,7 @@
 	<description>project Terminal Management System</description>
 	<properties>
 		<java.version>11</java.version>
-		<mysql.version>5.1.30</mysql.version>
+		<mysql.version>8.0.33</mysql.version>
 	</properties>
 	<dependencies>
 		<dependency>
