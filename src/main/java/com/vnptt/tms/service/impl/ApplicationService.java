@@ -1,5 +1,6 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.chart.DoubleBarChart;
 import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
@@ -220,6 +221,13 @@ public class ApplicationService implements IApplicationService {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
         }
+        return result;
+    }
+
+    @Override
+    public List<DoubleBarChart> getBarChartApplicationDowload() {
+        List<DoubleBarChart> result = new ArrayList<>();
+        List<ApplicationEntity> list = applicationRepository.findTop4ByOrderByDeviceApplicationEntitiesDesc();
         return result;
     }
 

@@ -10,9 +10,10 @@ public interface AlertDialogRepository extends JpaRepository<AlertDialogEntity, 
 
     AlertDialogEntity findOneById(Long id);
 
-    List<AlertDialogEntity> findAllByMessageContainingOrderByModifiedDateDesc(String message, Pageable pageable);
+    List<AlertDialogEntity> findAllByTitleContainingOrderByModifiedDateDesc(String message, Pageable pageable);
 
-    Long countAllByMessageContaining(String message);
 
     List<AlertDialogEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
+
+    Long countAllByTitleContaining(String title);
 }
