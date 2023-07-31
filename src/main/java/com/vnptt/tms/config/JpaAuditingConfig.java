@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
@@ -35,8 +36,16 @@ public class JpaAuditingConfig {
 //                return null;
 //            }
 //            return Optional.ofNullable(authentication.getName());
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            return Optional.ofNullable(username);
+            try {
+                String username = SecurityContextHolder.getContext().getAuthentication().getName();
+                return Optional.ofNullable(username);
+            } catch (Exception e) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null || !authentication.isAuthenticated()) {
+                    return Optional.empty();
+                }
+                return Optional.ofNullable(authentication.getName());
+            }
         }
     }
 }

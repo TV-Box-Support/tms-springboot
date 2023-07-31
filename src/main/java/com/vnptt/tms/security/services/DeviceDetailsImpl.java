@@ -18,7 +18,7 @@ public class DeviceDetailsImpl implements UserDetails {
     // serialnumber
     private String username;
 
-    // mac
+    // serialnumber
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
@@ -36,7 +36,7 @@ public class DeviceDetailsImpl implements UserDetails {
         return new DeviceDetailsImpl(
                 deviceEntity.getId(),
                 deviceEntity.getSn(),
-                deviceEntity.getMac(),
+                deviceEntity.getSn(),
                 authorities);
     }
 
