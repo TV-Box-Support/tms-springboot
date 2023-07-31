@@ -62,9 +62,10 @@ public class PolicyService implements IPolicyService {
             throw new RuntimeException("Action of policy must be 1,2,3 " );
         }
         // oke if policy don't have command
-        CommandEntity commandEntity = commandRepository.findOneByCommand(policyDTO.getCommandName());
-        policyEntity.setCommandEntity(commandEntity);
-
+        CommandEntity commandEntity = commandRepository.findOneByName(policyDTO.getCommandName());
+        if(commandEntity != null){
+            policyEntity.setCommandEntity(commandEntity);
+        }
         policyEntity = policyRepository.save(policyEntity);
         return policyConverter.toDTO(policyEntity);
     }
