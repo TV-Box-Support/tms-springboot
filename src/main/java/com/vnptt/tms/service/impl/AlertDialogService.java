@@ -69,8 +69,8 @@ public class AlertDialogService implements com.vnptt.tms.service.AlertDialogServ
     }
 
     @Override
-    public List<AlertDialogDTO> findAllWithMessage(String message, Pageable pageable) {
-        List<AlertDialogEntity> entities = AlertDialogRepository.findAllByMessageContainingOrderByModifiedDateDesc(message, pageable);
+    public List<AlertDialogDTO> findAllWithMessage(String title, Pageable pageable) {
+        List<AlertDialogEntity> entities = AlertDialogRepository.findAllByTitleContainingOrderByModifiedDateDesc(title, pageable);
         List<AlertDialogDTO> result = new ArrayList<>();
         for(AlertDialogEntity item : entities){
             AlertDialogDTO AlertDialogDTO = AlertDialogConverter.toDTO(item);
@@ -80,8 +80,8 @@ public class AlertDialogService implements com.vnptt.tms.service.AlertDialogServ
     }
 
     @Override
-    public Long countAllWithMessage(String message) {
-        return AlertDialogRepository.countAllByMessageContaining(message);
+    public Long countAllWithTitle(String title) {
+        return AlertDialogRepository.countAllByTitleContaining(title);
     }
 
     @Override

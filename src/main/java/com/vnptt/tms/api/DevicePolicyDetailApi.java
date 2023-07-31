@@ -1,5 +1,6 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.table.DevicePolicyDetailOutput;
 import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -166,6 +168,18 @@ public class DevicePolicyDetailApi {
         } else {
             result.setMessage("no matching element found");
         }
+        return result;
+    }
+
+    /**
+     * api Show device Pass of Policy
+     * todo add ui for this
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/pie/policy/{policyId}")
+    public List<PieChart> showTotalPolicyDetailStatus(@PathVariable(name = "policyId") Long policyId) {
+        List<PieChart> result = devicePolicyDetailService.getTotalPieChart(policyId);
         return result;
     }
 

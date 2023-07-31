@@ -1,6 +1,7 @@
 package com.vnptt.tms.service;
 
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.AreaChartDeviceOnl;
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -66,7 +67,7 @@ public interface IDeviceService {
 
     Long countByLocation(String location);
 
-    List<AreaChart> getAreaChartStatus(Integer dayAgo, Long id );
+    List<AreaChartHisPerf> getAreaChartStatus(Integer dayAgo, Long id );
 
     List<DeviceDTO> findDeviceWithPolicyId(Long policyId, Pageable pageable);
 
@@ -93,4 +94,6 @@ public interface IDeviceService {
     Long countDeviceinListDeviceWithSn(Long listDeviceId, String serialmunber);
 
     Long countDeviceinListDevice(Long listDeviceId);
+
+    List<AreaChartDeviceOnl> getAreaChartDeviceOnline();
 }

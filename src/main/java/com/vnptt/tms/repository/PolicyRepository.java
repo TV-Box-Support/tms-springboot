@@ -29,4 +29,8 @@ public interface PolicyRepository extends JpaRepository<PolicyEntity, Long> {
     PolicyEntity findOneByDevicePolicyDetailEntitiesId(Long policyDetailId);
 
     List<PolicyEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
+
+    Long countAllByStatus(int status);
+
+    Long countAllByAction(int action);
 }

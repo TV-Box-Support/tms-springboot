@@ -3,7 +3,8 @@ package com.vnptt.tms.service.impl;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.City;
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.AreaChartDeviceOnl;
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -532,8 +533,8 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public List<AreaChart> getAreaChartStatus(Integer dayAgo, Long id) {
-        List<AreaChart> result = new ArrayList<>();
+    public List<AreaChartHisPerf> getAreaChartStatus(Integer dayAgo, Long id) {
+        List<AreaChartHisPerf> result = new ArrayList<>();
 
         LocalDate DaysAgo = LocalDate.now().minusDays(dayAgo);
         LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
@@ -548,19 +549,19 @@ public class DeviceService implements IDeviceService {
             if (historyPerformanceEntity.size() != 0) {
                 entity = historyPerformanceEntity.get(1);
             } else {
-                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
-                result.add(areaChart);
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChartHisPerf);
                 continue;
             }
 
             if (entity.getCreatedDate().plusMinutes(-1).plusSeconds(-30).isBefore(start.plusMinutes(i * 3))
                     && entity.getCreatedDate().plusMinutes(1).plusSeconds(30).isAfter(start.plusMinutes(i * 3))) {
-                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
-                result.add(areaChart);
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
+                result.add(areaChartHisPerf);
                 historyPerformanceEntity.remove(1);
             } else {
-                AreaChart areaChart = new AreaChart(start.plusMinutes(i * 3), 0.0, 0.0);
-                result.add(areaChart);
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChartHisPerf);
             }
         }
 
@@ -700,6 +701,19 @@ public class DeviceService implements IDeviceService {
     @Override
     public Long countDeviceinListDevice(Long listDeviceId) {
         return deviceRepository.countAllByListDeviceDetailId(listDeviceId);
+    }
+
+    @Override
+    public List<AreaChartDeviceOnl> getAreaChartDeviceOnline() {
+        List<AreaChartDeviceOnl> result = new ArrayList<>();
+        for (int i = 1; i < 31; i++) {
+            LocalDate DaysAgo = LocalDate.now().minusDays(i);
+            LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+            LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+            Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(start, end);
+            AreaChartDeviceOnl areaChartDeviceOnl = new AreaChartDeviceOnl(DaysAgo, deviceOnline);
+        }
+        return result;
     }
 
 
