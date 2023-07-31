@@ -36,7 +36,7 @@ public class DeviceDetailsImpl implements UserDetails {
         return new DeviceDetailsImpl(
                 deviceEntity.getId(),
                 deviceEntity.getSn(),
-                deviceEntity.getMac(),
+                deviceEntity.getSn(),
                 authorities);
     }
 
