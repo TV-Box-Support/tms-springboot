@@ -18,7 +18,7 @@ public class DeviceDetailsImpl implements UserDetails {
     // serialnumber
     private String username;
 
-    // mac
+    // serialnumber
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;

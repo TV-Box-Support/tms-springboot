@@ -1,7 +1,7 @@
 package com.vnptt.tms.api.output.chart;
 
 public class PieChart {
-    Long value;
+    private Long value;
     String name;
 
     public PieChart(Long value, String name) {

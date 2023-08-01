@@ -1,5 +1,6 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.entity.CommandEntity;
@@ -59,11 +60,15 @@ public class PolicyService implements IPolicyService {
             policyEntity.setStatus(0);
         }
         if (policyEntity.getAction() > 3 || policyEntity.getAction() < 1) {
-            throw new RuntimeException("Action of policy must be 1,2,3 " );
+            throw new RuntimeException("Action of policy must be 1,2,3 ");
         }
         // oke if policy don't have command
-        CommandEntity commandEntity = commandRepository.findOneByCommand(policyDTO.getCommandName());
-        policyEntity.setCommandEntity(commandEntity);
+        if (policyDTO.getCommandName() != null) {
+            CommandEntity commandEntity = commandRepository.findOneByName(policyDTO.getCommandName());
+            if (commandEntity != null) {
+                policyEntity.setCommandEntity(commandEntity);
+            }
+        }
 
         policyEntity = policyRepository.save(policyEntity);
         return policyConverter.toDTO(policyEntity);
@@ -145,7 +150,8 @@ public class PolicyService implements IPolicyService {
 
     /**
      * find all policy in device
-     *todo: check
+     * todo: check
+     *
      * @param deviceId
      * @param pageable
      * @return
@@ -250,6 +256,29 @@ public class PolicyService implements IPolicyService {
     @Override
     public Long countAllByDeviceIdAndPolicyName(Long deviceId, String policyname) {
         return policyRepository.countAllByDevicePolicyDetailEntitiesDeviceEntityDetailIdAndPolicynameContaining(deviceId, policyname);
+    }
+
+    @Override
+    public List<PieChart> getTotalPieChart(String type) {
+        List<PieChart> result = new ArrayList<>();
+        if (type == "status") {
+            Long running = policyRepository.countAllByStatus(1);
+            Long pause = policyRepository.countAllByStatus(2);
+            Long stop = policyRepository.countAllByStatus(3);
+            Long notRun = policyRepository.countAllByStatus(0);
+            result.add(new PieChart(running, "Running"));
+            result.add(new PieChart(pause, "Pause"));
+            result.add(new PieChart(stop, "Stop"));
+            result.add(new PieChart(notRun, "Not Run"));
+        } else if( type == "action"){
+            Long install = policyRepository.countAllByAction(1);
+            Long uninstall = policyRepository.countAllByAction(2);
+            Long runCommand = policyRepository.countAllByAction(3);
+            result.add(new PieChart(install, "Install"));
+            result.add(new PieChart(uninstall, "Uninstall"));
+            result.add(new PieChart(runCommand, "RunCommand"));
+        }
+        return result;
     }
 
     @Override

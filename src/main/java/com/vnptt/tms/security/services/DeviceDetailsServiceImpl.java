@@ -24,7 +24,7 @@ public class DeviceDetailsServiceImpl implements UserDetailsService {
         if (deviceEntity == null) {
             deviceEntity = new DeviceEntity();
             deviceEntity.setSn(serialnumber);
-            deviceRepository.save(deviceEntity);
+            deviceEntity = deviceRepository.save(deviceEntity);
         }
         return DeviceDetailsImpl.build(deviceEntity);
     }

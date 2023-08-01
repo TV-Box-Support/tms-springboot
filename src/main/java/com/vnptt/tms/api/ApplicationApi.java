@@ -1,5 +1,6 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.chart.DoubleBarChart;
 import com.vnptt.tms.api.output.table.ApplicationOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.service.IApplicationService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Application Programming Interface for application manager
@@ -147,6 +150,17 @@ public class ApplicationApi {
         } else {
             result.setMessage("no matching element found");
         }
+        return result;
+    }
+
+    /**
+     * api Show Application most downloaded
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/doubleBar")
+    public List<DoubleBarChart> showAreaChartStatus() {
+        List<DoubleBarChart> result = applicationService.getBarChartApplicationDowload();
         return result;
     }
 

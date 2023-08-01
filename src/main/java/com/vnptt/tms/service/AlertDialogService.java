@@ -20,5 +20,5 @@ public interface AlertDialogService {
 
     List<AlertDialogDTO> findAllWithMessage(String message, Pageable pageable);
 
-    Long countAllWithMessage(String message);
+    Long countAllWithTitle(String message);
 }

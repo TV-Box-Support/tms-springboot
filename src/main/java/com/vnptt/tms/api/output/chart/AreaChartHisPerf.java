@@ -1,14 +1,13 @@
 package com.vnptt.tms.api.output.chart;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class AreaChart {
+public class AreaChartHisPerf {
     private LocalDateTime date;
     private Double cpu;
     private Double memory;
 
-    public AreaChart(LocalDateTime date, Double cpu, Double memory) {
+    public AreaChartHisPerf(LocalDateTime date, Double cpu, Double memory) {
         this.date = date;
         this.cpu = cpu;
         this.memory = memory;

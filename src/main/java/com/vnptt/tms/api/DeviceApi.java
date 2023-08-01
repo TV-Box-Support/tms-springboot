@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
-import com.vnptt.tms.api.output.chart.AreaChart;
+import com.vnptt.tms.api.output.chart.AreaChartDeviceOnl;
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.BarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.studio.TerminalStudioOutput;
@@ -296,13 +297,14 @@ public class DeviceApi {
         DeviceOutput result = new DeviceOutput();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        if (serialmunber != null){
-            result.setListResult(deviceService.findDeviceInListDeviceWithSn(listDeviceId, serialmunber , pageable));
+        if (serialmunber != null) {
+            result.setListResult(deviceService.findDeviceInListDeviceWithSn(listDeviceId, serialmunber, pageable));
             result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceinListDeviceWithSn(listDeviceId, serialmunber) / limit));
         } else {
             result.setListResult(deviceService.findDeviceInListDevice(listDeviceId, pageable));
             result.setTotalPage((int) Math.ceil((double) deviceService.countDeviceinListDevice(listDeviceId) / limit));
-        };
+        }
+        ;
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -386,9 +388,21 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/chart/area/device/{id}")
-    public List<AreaChart> showAreaChartStatus(@RequestParam(name = "dayago") Integer dayAgo,
-                                               @PathVariable(name = "id") Long id) {
-        List<AreaChart> result = deviceService.getAreaChartStatus(dayAgo, id);
+    public List<AreaChartHisPerf> showAreaChartStatus(@RequestParam(name = "dayago") Integer dayAgo,
+                                                      @PathVariable(name = "id") Long id) {
+        List<AreaChartHisPerf> result = deviceService.getAreaChartStatus(dayAgo, id);
+        return result;
+    }
+
+    /**
+     * api Show history online for 30 day
+     * todo add ui
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/area/device")
+    public List<AreaChartDeviceOnl> showAreaChartDeviceOnline() {
+        List<AreaChartDeviceOnl> result = deviceService.getAreaChartDeviceOnline();
         return result;
     }
 

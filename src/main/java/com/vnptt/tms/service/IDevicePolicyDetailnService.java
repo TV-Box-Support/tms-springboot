@@ -1,5 +1,6 @@
 package com.vnptt.tms.service;
 
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
 import com.vnptt.tms.dto.PolicyDTO;
 import org.springframework.data.domain.Pageable;
@@ -43,4 +44,6 @@ public interface IDevicePolicyDetailnService {
     List<DevicePolicyDetailDTO> findAllWithDeviceAndStatus(Long deviceId, Integer status, Pageable pageable);
 
     Long countAllWithDeviceAndStatus(Long deviceId, Integer status);
+
+    List<PieChart> getTotalPieChart(Long policyId);
 }

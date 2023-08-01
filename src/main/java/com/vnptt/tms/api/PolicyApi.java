@@ -1,5 +1,6 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.table.PolicyOutput;
 import com.vnptt.tms.dto.PolicyDTO;
 import com.vnptt.tms.service.IPolicyService;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -130,6 +133,17 @@ public class PolicyApi {
         return result;
     }
 
+    /**
+     * api Show Policy Status and Action
+     * todo add ui for this
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/pie/policy")
+    public List<PieChart> showTotalPolicyStatus(@RequestParam(name = "type") String type) {
+        List<PieChart> result = policyService.getTotalPieChart(type);
+        return result;
+    }
 
     /**
      * api create new policy for web

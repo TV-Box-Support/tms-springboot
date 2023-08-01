@@ -1,5 +1,6 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.converter.DevicePolicyDetailConverter;
 import com.vnptt.tms.converter.PolicyConverter;
 import com.vnptt.tms.dto.DevicePolicyDetailDTO;
@@ -351,6 +352,22 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     @Override
     public Long countAllWithDeviceAndStatus(Long deviceId, Integer status) {
         return devicePolicyDetailRepository.countAllByDeviceEntityDetailIdAndStatus(deviceId, status);
+    }
+
+    @Override
+    public List<PieChart> getTotalPieChart(Long policyId) {
+        List<PieChart> result = new ArrayList<>();
+        Long run = devicePolicyDetailRepository.countAllByStatus(1);
+        Long running = devicePolicyDetailRepository.countAllByStatus(2);
+        Long success = devicePolicyDetailRepository.countAllByStatus(3);
+        Long fail = devicePolicyDetailRepository.countAllByStatus(4);
+        Long notRun = devicePolicyDetailRepository.countAllByStatus(0);
+        result.add(new PieChart(run, "Run"));
+        result.add(new PieChart(running, "Running"));
+        result.add(new PieChart(success, "Success"));
+        result.add(new PieChart(fail, "Fail"));
+        result.add(new PieChart(notRun, "Not Run"));
+        return result;
     }
 
     @Override
