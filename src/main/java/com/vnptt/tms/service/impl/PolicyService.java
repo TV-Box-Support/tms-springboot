@@ -62,11 +62,16 @@ public class PolicyService implements IPolicyService {
         if (policyEntity.getAction() > 3 || policyEntity.getAction() < 1) {
             throw new RuntimeException("Action of policy must be 1,2,3 ");
         }
+
         // oke if policy don't have command
         if (policyDTO.getCommandName() != null) {
             CommandEntity commandEntity = commandRepository.findOneByName(policyDTO.getCommandName());
             if (commandEntity != null) {
                 policyEntity.setCommandEntity(commandEntity);
+            }
+        } else {
+            if(policyDTO.getAction() == 3){
+                throw new RuntimeException("Action Run Command cann't null command");
             }
         }
 
