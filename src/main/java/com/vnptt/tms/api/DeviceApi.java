@@ -396,7 +396,6 @@ public class DeviceApi {
 
     /**
      * api Show history online for 30 day
-     * todo add ui
      *
      * @return
      */
