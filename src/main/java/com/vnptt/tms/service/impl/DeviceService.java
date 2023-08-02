@@ -706,12 +706,13 @@ public class DeviceService implements IDeviceService {
     @Override
     public List<AreaChartDeviceOnl> getAreaChartDeviceOnline() {
         List<AreaChartDeviceOnl> result = new ArrayList<>();
-        for (int i = 1; i < 31; i++) {
+        for (int i = 0; i < 30; i++) {
             LocalDate DaysAgo = LocalDate.now().minusDays(i);
             LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
             LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
             Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(start, end);
             AreaChartDeviceOnl areaChartDeviceOnl = new AreaChartDeviceOnl(DaysAgo, deviceOnline);
+            result.add(areaChartDeviceOnl);
         }
         return result;
     }
