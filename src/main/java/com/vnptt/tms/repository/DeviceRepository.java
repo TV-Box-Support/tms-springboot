@@ -54,4 +54,12 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     Long countByListDeviceDetailIdAndSnContaining(Long listDeviceId, String sn);
 
     List<DeviceEntity> findAllByOrderByModifiedDateDesc(Pageable pageable);
+
+    List<DeviceEntity> findAllByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow ,Pageable pageable);
+
+    List<DeviceEntity> findAllBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(String sn, Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow ,Pageable pageable);
+
+    Long countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
+
+    Long countBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(String sn, Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
 }

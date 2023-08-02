@@ -135,7 +135,6 @@ public class PolicyApi {
 
     /**
      * api Show Policy Status and Action
-     * todo add ui for this
      *
      * @return
      */

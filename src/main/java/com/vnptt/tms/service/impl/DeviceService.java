@@ -291,27 +291,25 @@ public class DeviceService implements IDeviceService {
      * find all device are running app 3 minute later to now
      *
      * @param applicationId
+     * @param pageable
      * @return
      */
     @Override
-    public List<DeviceDTO> findAllDeviceRunApp(Long applicationId) {
-        List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
-        List<DeviceApplicationEntity> deviceApplicationEntities = new ArrayList<>();
+    public List<DeviceDTO> findAllDeviceRunApp(Long applicationId, Pageable pageable) {
         List<DeviceDTO> result = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
 
-        historyApplicationEntities = historyApplicationRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
-        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
-            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneById(iteam.getHistoryDeviceApplicationEntity().getId());
-            if (deviceApplicationEntity != null && result.stream().noneMatch(deviceApplication -> deviceApplication.getId().equals(deviceApplicationEntity.getId()))) {
-                deviceApplicationEntities.add(deviceApplicationEntity);
-            }
-        }
-        for (DeviceApplicationEntity iteam : deviceApplicationEntities) {
-            DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceAppEntityDetail().getId());
-            if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
-                result.add(deviceConverter.toDTO(deviceEntity));
-            }
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(applicationId, time, LocalDateTime.now(), pageable);
+
+//        historyApplicationEntities = historyApplicationRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
+//        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
+//            DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneById(iteam.getHistoryDeviceApplicationEntity().getId());
+//            if (deviceApplicationEntity != null && result.stream().noneMatch(deviceApplication -> deviceApplication.getId().equals(deviceApplicationEntity.getId()))) {
+//                deviceApplicationEntities.add(deviceApplicationEntity);
+//            }
+//        }
+        for (DeviceEntity entity : deviceEntities) {
+            result.add(deviceConverter.toDTO(entity));
         }
         return result;
     }
@@ -715,6 +713,29 @@ public class DeviceService implements IDeviceService {
             result.add(areaChartDeviceOnl);
         }
         return result;
+    }
+
+    @Override
+    public List<DeviceDTO> findAllDeviceRunAppWithSn(Long applicationId, String sn, Pageable pageable) {
+        List<DeviceDTO> result = new ArrayList<>();
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(sn, applicationId, time, LocalDateTime.now(), pageable);
+        for (DeviceEntity entity : deviceEntities) {
+            result.add(deviceConverter.toDTO(entity));
+        }
+        return result;
+    }
+
+    @Override
+    public Long countAppActiveByApplicationIdAndSn(Long applicationId, String sn) {
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        return deviceRepository.countBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(sn, applicationId, time, LocalDateTime.now());
+    }
+
+    @Override
+    public Long countAppactiveByApplicationId(Long applicationId) {
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        return deviceRepository.countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
     }
 
 

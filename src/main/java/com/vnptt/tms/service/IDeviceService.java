@@ -37,7 +37,7 @@ public interface IDeviceService {
 
     List<DeviceDTO> findAllWithApplication(Long applicationId, Pageable pageable);
 
-    List<DeviceDTO> findAllDeviceRunApp(Long applicationId);
+    List<DeviceDTO> findAllDeviceRunApp(Long applicationId, Pageable pageable);
 
     List<DeviceDTO> mapDeviceToListDevice(Long listDeviceId, Long[] deviceIds);
 
@@ -96,4 +96,10 @@ public interface IDeviceService {
     Long countDeviceinListDevice(Long listDeviceId);
 
     List<AreaChartDeviceOnl> getAreaChartDeviceOnline();
+
+    List<DeviceDTO> findAllDeviceRunAppWithSn(Long applicationId, String sn, Pageable pageable);
+
+    Long countAppActiveByApplicationIdAndSn(Long applicationId, String sn);
+
+    Long countAppactiveByApplicationId(Long applicationId);
 }

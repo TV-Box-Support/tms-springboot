@@ -195,9 +195,20 @@ public class DeviceApi {
      * @return
      */
     @GetMapping(value = "/application/{applicationId}/device/now")
-    public DeviceOutput showAppRunNow(@PathVariable(value = "applicationId") Long applicationId) {
+    public DeviceOutput showAppRunNow(@PathVariable(value = "applicationId") Long applicationId,
+                                      @RequestParam(value = "page") Integer page,
+                                      @RequestParam(value = "limit") Integer limit,
+                                      @RequestParam(value = "search", required = false) String sn) {
         DeviceOutput result = new DeviceOutput();
-        result.setListResult(deviceService.findAllDeviceRunApp(applicationId));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (sn != null) {
+            result.setListResult(deviceService.findAllDeviceRunAppWithSn(applicationId, sn, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countAppActiveByApplicationIdAndSn(applicationId, sn) / limit));
+        } else {
+            result.setListResult(deviceService.findAllDeviceRunApp(applicationId, pageable));
+            result.setTotalPage((int) Math.ceil((double) deviceService.countAppactiveByApplicationId(applicationId) / limit));
+        }
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
