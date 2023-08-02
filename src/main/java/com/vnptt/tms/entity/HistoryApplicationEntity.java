@@ -9,12 +9,24 @@ public class HistoryApplicationEntity extends BaseCreateDateEntity {
     private Double cpu;
     @Column(name = "memory")
     private Double memory;
+
+    @Column(name = "main")
+    private boolean main = false;
+
     @ManyToOne
     @JoinColumn(name = "deviceApplicationId", nullable = false)
     private DeviceApplicationEntity historyDeviceApplicationEntity;
 
     public Double getCpu() {
         return cpu;
+    }
+
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain(boolean main) {
+        this.main = main;
     }
 
     public void setCpu(Double cpu) {
