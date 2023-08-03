@@ -29,7 +29,7 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     List<DeviceApplicationEntity> findAllByApplicationEntityDetailIdAndDeviceAppEntityDetailSnContainingOrderByModifiedDateDesc(Long applicationId,String sn, Pageable pageable);
 
-    Long countAllByApplicationEntityDetailIdAndDeviceAppEntityDetailSnContaining(Long applicationId,String sn);
+    Long countAllByApplicationEntityDetailIdAndDeviceAppEntityDetailSnContaining(Long applicationId, String sn);
 
     Long countAllByApplicationEntityDetailId(Long applicationId);
 
@@ -44,4 +44,5 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
 
     Long countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow, boolean main);
 
+    Long countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetween(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
 }

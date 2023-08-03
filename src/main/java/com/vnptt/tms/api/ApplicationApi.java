@@ -1,6 +1,7 @@
 package com.vnptt.tms.api;
 
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.table.ApplicationOutput;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.service.IApplicationService;
@@ -162,6 +163,19 @@ public class ApplicationApi {
     @GetMapping(value = "/chart/doubleBar/application")
     public List<DoubleBarChart> showDoubleBarChartStatus() {
         List<DoubleBarChart> result = applicationService.getBarChartApplicationDowload();
+        return result;
+    }
+
+    /**
+     * api Show Application piechart
+     * todo: add ui
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/pie/application/{applicationId}")
+    public List<PieChart> showPieChartApplication(@PathVariable(value = "applicationId") Long applicationId,
+                                                  @RequestParam(value = "type") String type) {
+        List<PieChart> result = applicationService.getPieChartApplicationDowload(applicationId, type);
         return result;
     }
 
