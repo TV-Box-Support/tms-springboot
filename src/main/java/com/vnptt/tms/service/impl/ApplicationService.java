@@ -259,9 +259,8 @@ public class ApplicationService implements IApplicationService {
 
     @Override
     public List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename, pageable).forEach(applicationEntities::add);
+        List<ApplicationEntity> applicationEntities = applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename, pageable);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);
