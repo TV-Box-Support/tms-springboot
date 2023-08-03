@@ -5,6 +5,7 @@ public class HistoryApplicationDTO extends AbstractCreateDateDTO{
     private Long deviceApplicationId;
     private Double cpu;
     private Double memory;
+    private boolean main;
 
     public Long getDeviceApplicationId() {
         return deviceApplicationId;
@@ -30,4 +31,11 @@ public class HistoryApplicationDTO extends AbstractCreateDateDTO{
         this.memory = memory;
     }
 
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain(boolean main) {
+        this.main = main;
+    }
 }

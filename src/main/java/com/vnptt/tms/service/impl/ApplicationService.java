@@ -1,6 +1,7 @@
 package com.vnptt.tms.service.impl;
 
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
 import com.vnptt.tms.entity.ApplicationEntity;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -227,7 +230,32 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<DoubleBarChart> getBarChartApplicationDowload() {
         List<DoubleBarChart> result = new ArrayList<>();
-        List<ApplicationEntity> list = applicationRepository.findTop4ByOrderByDeviceApplicationEntitiesDesc();
+        List<ApplicationEntity> list = applicationRepository.findTop4ByIssystemOrderByDeviceApplicationEntitiesDesc(false);
+
+        for (ApplicationEntity entity : list) {
+            LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+            Long number = deviceApplicationRepository.countByApplicationEntityDetailId(entity.getId());
+            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
+            result.add(new DoubleBarChart(entity.getName(), number - numberActiveNow, numberActiveNow));
+        }
+        return result;
+    }
+
+    @Override
+    public List<PieChart> getPieChartApplicationDowload(Long applicationId, String type) {
+        List<PieChart> result = new ArrayList<>();
+        if (Objects.equals(type, "install")) {
+            Long install = deviceApplicationRepository.countByApplicationEntityDetailId(applicationId);
+            Long all = deviceRepository.count();
+            result.add(new PieChart(all - install, "Not Install"));
+            result.add(new PieChart(install, " Install"));
+        } else if (Objects.equals(type, "active")) {
+            LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+            Long number = deviceApplicationRepository.countByApplicationEntityDetailId(applicationId);
+            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
+            result.add(new PieChart(number - numberActiveNow, "Not Active"));
+            result.add(new PieChart(numberActiveNow, "Active"));
+        }
         return result;
     }
 
@@ -251,9 +279,8 @@ public class ApplicationService implements IApplicationService {
 
     @Override
     public List<ApplicationDTO> findByPackagename(String packagename, Pageable pageable) {
-        List<ApplicationEntity> applicationEntities = new ArrayList<>();
         List<ApplicationDTO> result = new ArrayList<>();
-        applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename, pageable).forEach(applicationEntities::add);
+        List<ApplicationEntity> applicationEntities = applicationRepository.findByPackagenameContainingOrderByCreatedDateDesc(packagename, pageable);
         for (ApplicationEntity item : applicationEntities) {
             ApplicationDTO applicationDTO = applicationConverter.toDTO(item);
             result.add(applicationDTO);

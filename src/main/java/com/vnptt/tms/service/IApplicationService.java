@@ -1,6 +1,7 @@
 package com.vnptt.tms.service;
 
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
+import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.dto.ApplicationDTO;
 import org.springframework.data.domain.Pageable;
 
@@ -38,4 +39,6 @@ public interface IApplicationService {
     List<ApplicationDTO> findAllApplicationAliveOnBox(String sn);
 
     List<DoubleBarChart> getBarChartApplicationDowload();
+
+    List<PieChart> getPieChartApplicationDowload(Long applicationId, String type);
 }

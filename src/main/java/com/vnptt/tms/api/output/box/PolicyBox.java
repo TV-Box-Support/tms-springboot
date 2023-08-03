@@ -4,9 +4,7 @@ import com.vnptt.tms.dto.PolicyDTO;
 
 public class PolicyBox extends PolicyDTO {
     private Long idPolicyDetail;
-
     private String title;
-
     private String message;
 
     public String getTitle() {

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -62,11 +63,16 @@ public class PolicyService implements IPolicyService {
         if (policyEntity.getAction() > 3 || policyEntity.getAction() < 1) {
             throw new RuntimeException("Action of policy must be 1,2,3 ");
         }
+
         // oke if policy don't have command
         if (policyDTO.getCommandName() != null) {
             CommandEntity commandEntity = commandRepository.findOneByName(policyDTO.getCommandName());
             if (commandEntity != null) {
                 policyEntity.setCommandEntity(commandEntity);
+            }
+        } else {
+            if(policyDTO.getAction() == 3){
+                throw new RuntimeException("Action Run Command cann't null command");
             }
         }
 
@@ -261,7 +267,7 @@ public class PolicyService implements IPolicyService {
     @Override
     public List<PieChart> getTotalPieChart(String type) {
         List<PieChart> result = new ArrayList<>();
-        if (type == "status") {
+        if (Objects.equals(type, "status")) {
             Long running = policyRepository.countAllByStatus(1);
             Long pause = policyRepository.countAllByStatus(2);
             Long stop = policyRepository.countAllByStatus(3);
@@ -270,7 +276,7 @@ public class PolicyService implements IPolicyService {
             result.add(new PieChart(pause, "Pause"));
             result.add(new PieChart(stop, "Stop"));
             result.add(new PieChart(notRun, "Not Run"));
-        } else if( type == "action"){
+        } else if(Objects.equals(type, "action")){
             Long install = policyRepository.countAllByAction(1);
             Long uninstall = policyRepository.countAllByAction(2);
             Long runCommand = policyRepository.countAllByAction(3);

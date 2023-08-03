@@ -136,7 +136,6 @@ public class DevicePolicyDetailApi {
      * status 2 = success
      * status 3 = error
      * <p>
-     * todo: add search
      *
      * @param
      * @return
