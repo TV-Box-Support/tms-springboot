@@ -47,7 +47,7 @@ public class HistoryApplicationService implements IHistoryApplicationService {
         if (deviceApplicationEntity == null) {
             throw new ResourceNotFoundException("not found application info with packagename " + packagename + " in device with serialnumber " + sn);
         }
-
+        historyApplicationEntity.setMain(historyApplicationDTO.isMain());
         historyApplicationEntity.setHistoryDeviceApplicationEntity(deviceApplicationEntity);
         historyApplicationEntity = historyApplicationRepository.save(historyApplicationEntity);
         return historyApplicationConverter.toDTO(historyApplicationEntity);
