@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -227,7 +228,14 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<DoubleBarChart> getBarChartApplicationDowload() {
         List<DoubleBarChart> result = new ArrayList<>();
-        List<ApplicationEntity> list = applicationRepository.findTop4ByOrderByDeviceApplicationEntitiesDesc();
+        List<ApplicationEntity> list = applicationRepository.findTop4ByOrderByDeviceApplicationEntitiesIssystemDesc(false);
+
+        for (ApplicationEntity entity : list) {
+            LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+            Long number = deviceApplicationRepository.countByApplicationEntityDetailId(entity.getId());
+            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
+            result.add(new DoubleBarChart(entity.getName(), number - numberActiveNow, numberActiveNow));
+        }
         return result;
     }
 

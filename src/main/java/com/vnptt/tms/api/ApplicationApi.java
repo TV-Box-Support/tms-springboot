@@ -159,8 +159,8 @@ public class ApplicationApi {
      *
      * @return
      */
-    @GetMapping(value = "/chart/doubleBar")
-    public List<DoubleBarChart> showAreaChartStatus() {
+    @GetMapping(value = "/chart/doubleBar/application")
+    public List<DoubleBarChart> showDoubleBarChartStatus() {
         List<DoubleBarChart> result = applicationService.getBarChartApplicationDowload();
         return result;
     }
