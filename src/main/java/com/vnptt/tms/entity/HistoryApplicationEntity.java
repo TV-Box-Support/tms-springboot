@@ -11,7 +11,7 @@ public class HistoryApplicationEntity extends BaseCreateDateEntity {
     private Double memory;
 
     @Column(name = "main")
-    private boolean main = false;
+    private boolean main;
 
     @ManyToOne
     @JoinColumn(name = "deviceApplicationId", nullable = false)
