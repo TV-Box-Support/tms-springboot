@@ -438,7 +438,7 @@ public class DeviceService implements IDeviceService {
             Long ethernet = deviceRepository.countByNetworkContaining("Ethernet");
             Long diff = deviceRepository.countByNetworkContaining("diff");
             result.add(new PieChart(wifi, "Wifi"));
-            result.add(new PieChart(ethernet, "4K & Ethernet"));
+            result.add(new PieChart(ethernet, "Ethernet"));
         }
         return result;
     }
