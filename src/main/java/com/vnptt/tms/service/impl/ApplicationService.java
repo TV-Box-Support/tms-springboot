@@ -230,9 +230,25 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<DoubleBarChart> getBarChartApplicationDowload() {
         List<DoubleBarChart> result = new ArrayList<>();
-        List<ApplicationEntity> list = applicationRepository.findAllApplicationEntitiesByIssystemOrderByDeviceApplicationEntitiesDesc(false);
+        List<ApplicationEntity> list = applicationRepository.findAllApplicationEntitiesByIssystem(false);
+        List<ApplicationEntity> top4 = new ArrayList<>();
 
-        for (ApplicationEntity entity : list) {
+        if (list.size() > 4) {
+            for (int i = 0; i < 4; i++) {
+                ApplicationEntity entity = list.get(0);
+                for (ApplicationEntity applicationEntity : list) {
+                    if (applicationEntity.getDeviceApplicationEntities().size() > entity.getDeviceApplicationEntities().size()) {
+                        entity = applicationEntity;
+                    }
+                }
+                top4.add(entity);
+                list.remove(entity);
+            }
+        } else {
+            top4 = list;
+        }
+
+        for (ApplicationEntity entity : top4) {
             LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
             Long number = deviceApplicationRepository.countByApplicationEntityDetailId(entity.getId());
             Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
