@@ -357,11 +357,11 @@ public class DevicePolicyDetailService implements IDevicePolicyDetailnService {
     @Override
     public List<PieChart> getTotalPieChart(Long policyId) {
         List<PieChart> result = new ArrayList<>();
-        Long run = devicePolicyDetailRepository.countAllByStatus(1);
-        Long running = devicePolicyDetailRepository.countAllByStatus(2);
-        Long success = devicePolicyDetailRepository.countAllByStatus(3);
-        Long fail = devicePolicyDetailRepository.countAllByStatus(4);
-        Long notRun = devicePolicyDetailRepository.countAllByStatus(0);
+        Long run = devicePolicyDetailRepository.countAllByStatusAndPolicyEntityDetailId(1, policyId);
+        Long running = devicePolicyDetailRepository.countAllByStatusAndPolicyEntityDetailId(2, policyId);
+        Long success = devicePolicyDetailRepository.countAllByStatusAndPolicyEntityDetailId(3, policyId);
+        Long fail = devicePolicyDetailRepository.countAllByStatusAndPolicyEntityDetailId(4, policyId);
+        Long notRun = devicePolicyDetailRepository.countAllByStatusAndPolicyEntityDetailId(0, policyId);
         result.add(new PieChart(run, "Run"));
         result.add(new PieChart(running, "Running"));
         result.add(new PieChart(success, "Success"));

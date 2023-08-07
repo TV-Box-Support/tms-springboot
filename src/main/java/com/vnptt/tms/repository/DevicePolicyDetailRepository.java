@@ -28,5 +28,5 @@ public interface DevicePolicyDetailRepository extends JpaRepository<DevicePolicy
 
     Long countAllByDeviceEntityDetailId(Long deviceID);
 
-    Long countAllByStatus(int i);
+    Long countAllByStatusAndPolicyEntityDetailId(int i, Long policyId);
 }
