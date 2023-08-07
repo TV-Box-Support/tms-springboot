@@ -553,11 +553,17 @@ public class DeviceService implements IDeviceService {
                 continue;
             }
 
+            while(entity.getCreatedDate().isBefore(start.plusMinutes(i * 3).plusMinutes(-1).plusSeconds(-30)))
+            {
+                historyPerformanceEntity.remove(0);
+                entity = historyPerformanceEntity.get(0);
+            }
+
             if (entity.getCreatedDate().plusMinutes(-1).plusSeconds(-30).isBefore(start.plusMinutes(i * 3))
                     && entity.getCreatedDate().plusMinutes(1).plusSeconds(30).isAfter(start.plusMinutes(i * 3))) {
                 AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
                 result.add(areaChartHisPerf);
-                historyPerformanceEntity.remove(1);
+                historyPerformanceEntity.remove(0);
             } else {
                 AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
                 result.add(areaChartHisPerf);
