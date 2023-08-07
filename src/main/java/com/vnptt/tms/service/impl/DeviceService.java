@@ -543,6 +543,7 @@ public class DeviceService implements IDeviceService {
         }
 
         for (int i = 0; i < 480; i++) {
+
             HistoryPerformanceEntity entity = new HistoryPerformanceEntity();
             if (historyPerformanceEntity.size() != 0) {
                 entity = historyPerformanceEntity.get(0);
@@ -556,7 +557,7 @@ public class DeviceService implements IDeviceService {
                     && entity.getCreatedDate().plusMinutes(1).plusSeconds(30).isAfter(start.plusMinutes(i * 3))) {
                 AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
                 result.add(areaChartHisPerf);
-                historyPerformanceEntity.remove(0);
+                historyPerformanceEntity.remove(1);
             } else {
                 AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
                 result.add(areaChartHisPerf);
