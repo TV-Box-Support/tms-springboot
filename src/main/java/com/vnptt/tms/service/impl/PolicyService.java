@@ -200,6 +200,9 @@ public class PolicyService implements IPolicyService {
         }
 
         PolicyEntity policyEntity = policyRepository.findOneById(id);
+        if(policyEntity.getStatus() == 3){
+            throw new RuntimeException("Policy has stopped");
+        }
         policyEntity.setStatus(status);
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = policyEntity.getDevicePolicyDetailEntities();
         for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities) {
@@ -218,8 +221,6 @@ public class PolicyService implements IPolicyService {
                     if (iteam.getStatus() == 1) {
                         iteam.setStatus(4);
                     }
-
-
             }
 
         }
