@@ -251,7 +251,8 @@ public class ApplicationService implements IApplicationService {
         for (ApplicationEntity entity : top4) {
             LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
             Long number = deviceApplicationRepository.countByApplicationEntityDetailId(entity.getId());
-            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
+            Long numberActiveNow = deviceRepository.countDistinctByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
+            //Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
             result.add(new DoubleBarChart(entity.getName(), number - numberActiveNow, numberActiveNow));
         }
         return result;
