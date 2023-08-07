@@ -40,7 +40,7 @@ public class PolicyConverter {
         }
         dto = mapper.map(entity, PolicyDTO.class);
         if (entity.getCommandEntity() != null) {
-            dto.setCommandName(entity.getCommandEntity().getCommand());
+            dto.setCommandName(entity.getCommandEntity().getName());
         }
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(entity.getCreatedBy());

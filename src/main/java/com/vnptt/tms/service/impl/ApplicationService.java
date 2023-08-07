@@ -230,7 +230,7 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<DoubleBarChart> getBarChartApplicationDowload() {
         List<DoubleBarChart> result = new ArrayList<>();
-        List<ApplicationEntity> list = applicationRepository.findTop4ByIssystemOrderByDeviceApplicationEntitiesDesc(false);
+        List<ApplicationEntity> list = applicationRepository.findTop4ApplicationEntityByIssystemOrderByDeviceApplicationEntitiesDesc(false);
 
         for (ApplicationEntity entity : list) {
             LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
