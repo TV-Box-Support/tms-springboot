@@ -1,22 +1,24 @@
 package com.vnptt.tms.service.impl;
 
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.converter.ApplicationConverter;
 import com.vnptt.tms.dto.ApplicationDTO;
-import com.vnptt.tms.entity.ApplicationEntity;
-import com.vnptt.tms.entity.DeviceApplicationEntity;
-import com.vnptt.tms.entity.DeviceEntity;
+import com.vnptt.tms.entity.*;
 import com.vnptt.tms.exception.ResourceNotFoundException;
 import com.vnptt.tms.repository.ApplicationRepository;
 import com.vnptt.tms.repository.DeviceApplicationRepository;
 import com.vnptt.tms.repository.DeviceRepository;
+import com.vnptt.tms.repository.HistoryApplicationRepository;
 import com.vnptt.tms.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +36,9 @@ public class ApplicationService implements IApplicationService {
 
     @Autowired
     private DeviceApplicationRepository deviceApplicationRepository;
+
+    @Autowired
+    private HistoryApplicationRepository historyApplicationRepository;
 
 
     @Autowired
@@ -273,6 +278,52 @@ public class ApplicationService implements IApplicationService {
             result.add(new PieChart(number - numberActiveNow, "Not Active"));
             result.add(new PieChart(numberActiveNow, "Active"));
         }
+        return result;
+    }
+
+    @Override
+    public List<AreaChartHisPerf> getAreaChartApplication(Long deviceId, String packagename, Integer dayago) {
+        List<AreaChartHisPerf> result = new ArrayList<>();
+
+        LocalDate DaysAgo = LocalDate.now().minusDays(dayago);
+        LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+        DeviceApplicationEntity deviceApplicationEntity = deviceApplicationRepository.findOneByDeviceAppEntityDetailIdAndApplicationEntityDetailPackagename(deviceId, packagename);
+        if (deviceApplicationEntity == null){
+            throw new ResourceNotFoundException("application" + packagename + " not install in device with id " + deviceId);
+        }
+        List<HistoryApplicationEntity> historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween(deviceApplicationEntity.getId(), start, end);
+        if (historyApplicationEntities == null) {
+            throw new ResourceNotFoundException("application" + packagename + " not active in device with id " + deviceId + " " + dayago + " ago");
+        }
+
+        for (int i = 0; i < 480; i++) {
+
+            HistoryApplicationEntity entity = new HistoryApplicationEntity();
+            if (historyApplicationEntities.size() != 0) {
+                entity = historyApplicationEntities.get(0);
+            } else {
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChartHisPerf);
+                continue;
+            }
+
+            while (entity.getCreatedDate().isBefore(start.plusMinutes(i * 3).plusMinutes(-1).plusSeconds(-30))) {
+                historyApplicationEntities.remove(0);
+                entity = historyApplicationEntities.get(0);
+            }
+
+            if (entity.getCreatedDate().plusMinutes(-1).plusSeconds(-30).isBefore(start.plusMinutes(i * 3))
+                    && entity.getCreatedDate().plusMinutes(1).plusSeconds(30).isAfter(start.plusMinutes(i * 3))) {
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), entity.getCpu(), entity.getMemory());
+                result.add(areaChartHisPerf);
+                historyApplicationEntities.remove(0);
+            } else {
+                AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
+                result.add(areaChartHisPerf);
+            }
+        }
+
         return result;
     }
 

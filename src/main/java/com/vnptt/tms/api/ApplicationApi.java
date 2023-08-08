@@ -1,5 +1,6 @@
 package com.vnptt.tms.api;
 
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.api.output.table.ApplicationOutput;
@@ -167,8 +168,7 @@ public class ApplicationApi {
     }
 
     /**
-     * api Show Application piechart
-     * todo: add ui
+     * api Show Application pie chart
      *
      * @return
      */
@@ -176,6 +176,19 @@ public class ApplicationApi {
     public List<PieChart> showPieChartApplication(@PathVariable(value = "applicationId") Long applicationId,
                                                   @RequestParam(value = "type") String type) {
         List<PieChart> result = applicationService.getPieChartApplicationDowload(applicationId, type);
+        return result;
+    }
+
+    /**
+     * api Show Application area chart
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/area/device/{deviceId}/application")
+    public List<AreaChartHisPerf> showAreaChartApplication(@PathVariable(value = "deviceId") Long deviceId,
+                                                           @RequestParam(value = "packagename") String packagename,
+                                                           @RequestParam(value = "dayago") Integer dayago) {
+        List<AreaChartHisPerf> result = applicationService.getAreaChartApplication(deviceId, packagename, dayago);
         return result;
     }
 

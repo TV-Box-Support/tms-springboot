@@ -102,4 +102,6 @@ public interface IDeviceService {
     Long countAppActiveByApplicationIdAndSn(Long applicationId, String sn);
 
     Long countAppactiveByApplicationId(Long applicationId);
+
+    List<AreaChartDeviceOnl> getAreaChartDeviceTime(Long deviceId);
 }

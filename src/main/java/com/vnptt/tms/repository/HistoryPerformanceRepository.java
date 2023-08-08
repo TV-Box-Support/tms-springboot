@@ -21,4 +21,6 @@ public interface HistoryPerformanceRepository extends JpaRepository<HistoryPerfo
 
     List<HistoryPerformanceEntity> findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateAsc(Long deviceId, LocalDateTime localDateTime, LocalDateTime localDateTimeNow);
 
+    Long countByDeviceEntityHistoryIdAndAndCreatedDateBetween(Long deviceId, LocalDateTime start, LocalDateTime End);
+
 }

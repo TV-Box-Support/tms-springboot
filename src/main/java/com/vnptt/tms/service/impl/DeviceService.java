@@ -553,8 +553,7 @@ public class DeviceService implements IDeviceService {
                 continue;
             }
 
-            while(entity.getCreatedDate().isBefore(start.plusMinutes(i * 3).plusMinutes(-1).plusSeconds(-30)))
-            {
+            while (entity.getCreatedDate().isBefore(start.plusMinutes(i * 3).plusMinutes(-1).plusSeconds(-30))) {
                 historyPerformanceEntity.remove(0);
                 entity = historyPerformanceEntity.get(0);
             }
@@ -743,6 +742,20 @@ public class DeviceService implements IDeviceService {
     public Long countAppactiveByApplicationId(Long applicationId) {
         LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
         return deviceRepository.countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
+    }
+
+    @Override
+    public List<AreaChartDeviceOnl> getAreaChartDeviceTime(Long deviceId) {
+        List<AreaChartDeviceOnl> result = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            LocalDate DaysAgo = LocalDate.now().minusDays(i);
+            LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+            LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+            Long TimeOnline = historyPerformanceRepository.countByDeviceEntityHistoryIdAndAndCreatedDateBetween(deviceId, start, end);
+            AreaChartDeviceOnl areaChartDeviceOnl = new AreaChartDeviceOnl(DaysAgo, TimeOnline * 3);
+            result.add(areaChartDeviceOnl);
+        }
+        return result;
     }
 
 

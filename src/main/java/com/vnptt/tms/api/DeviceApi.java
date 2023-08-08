@@ -416,6 +416,17 @@ public class DeviceApi {
         return result;
     }
 
+    /**
+     * api Show time spend 1 week
+     *
+     * @return
+     */
+    @GetMapping(value = "/chart/area/device/device/{deviceId}")
+    public List<AreaChartDeviceOnl> showAreaChartDeviceTime(@PathVariable(value = "deviceId") Long deviceId) {
+        List<AreaChartDeviceOnl> result = deviceService.getAreaChartDeviceTime(deviceId);
+        return result;
+    }
+
 
     /**
      * api Create new device for production batch

@@ -1,5 +1,6 @@
 package com.vnptt.tms.service;
 
+import com.vnptt.tms.api.output.chart.AreaChartHisPerf;
 import com.vnptt.tms.api.output.chart.DoubleBarChart;
 import com.vnptt.tms.api.output.chart.PieChart;
 import com.vnptt.tms.dto.ApplicationDTO;
@@ -41,4 +42,6 @@ public interface IApplicationService {
     List<DoubleBarChart> getBarChartApplicationDowload();
 
     List<PieChart> getPieChartApplicationDowload(Long applicationId, String type);
+
+    List<AreaChartHisPerf> getAreaChartApplication(Long deviceId, String packagename, Integer dayago);
 }
