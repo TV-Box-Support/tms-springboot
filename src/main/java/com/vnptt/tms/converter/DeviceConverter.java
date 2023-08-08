@@ -75,11 +75,13 @@ public class DeviceConverter {
         if(dto.getNetwork() != null){
             entity.setNetwork(dto.getNetwork());
         }
+        if(dto.getMac() != null){
+            entity.setMac(dto.getMac());
+        }
 //        unnecessary remove to reduce error
 //        entity.setIp(dto.getIp());
 //        entity.setDate(dto.getDate());
 //        entity.setSn(dto.getSn());
-//        entity.setMac(dto.getMac());
         return entity;
     }
 }
