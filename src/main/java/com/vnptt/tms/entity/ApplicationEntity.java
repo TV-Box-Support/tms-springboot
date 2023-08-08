@@ -23,7 +23,6 @@ public class ApplicationEntity extends BaseCreateDateEntity {
             }, mappedBy = "applicationEntityDetail")
     private List<DeviceApplicationEntity> deviceApplicationEntities = new ArrayList<>();
 
-
     public String getPackagename() {
         return packagename;
     }

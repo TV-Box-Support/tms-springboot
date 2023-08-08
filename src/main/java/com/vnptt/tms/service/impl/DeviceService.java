@@ -438,7 +438,7 @@ public class DeviceService implements IDeviceService {
             Long ethernet = deviceRepository.countByNetworkContaining("Ethernet");
             Long diff = deviceRepository.countByNetworkContaining("diff");
             result.add(new PieChart(wifi, "Wifi"));
-            result.add(new PieChart(ethernet, "4K & Ethernet"));
+            result.add(new PieChart(ethernet, "Ethernet"));
         }
         return result;
     }
@@ -543,6 +543,7 @@ public class DeviceService implements IDeviceService {
         }
 
         for (int i = 0; i < 480; i++) {
+
             HistoryPerformanceEntity entity = new HistoryPerformanceEntity();
             if (historyPerformanceEntity.size() != 0) {
                 entity = historyPerformanceEntity.get(0);
@@ -550,6 +551,11 @@ public class DeviceService implements IDeviceService {
                 AreaChartHisPerf areaChartHisPerf = new AreaChartHisPerf(start.plusMinutes(i * 3), 0.0, 0.0);
                 result.add(areaChartHisPerf);
                 continue;
+            }
+
+            while (entity.getCreatedDate().isBefore(start.plusMinutes(i * 3).plusMinutes(-1).plusSeconds(-30))) {
+                historyPerformanceEntity.remove(0);
+                entity = historyPerformanceEntity.get(0);
             }
 
             if (entity.getCreatedDate().plusMinutes(-1).plusSeconds(-30).isBefore(start.plusMinutes(i * 3))
@@ -736,6 +742,20 @@ public class DeviceService implements IDeviceService {
     public Long countAppactiveByApplicationId(Long applicationId) {
         LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
         return deviceRepository.countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
+    }
+
+    @Override
+    public List<AreaChartDeviceOnl> getAreaChartDeviceTime(Long deviceId) {
+        List<AreaChartDeviceOnl> result = new ArrayList<>();
+        for (int i = 7; i > 0; i--) {
+            LocalDate DaysAgo = LocalDate.now().minusDays(i - 1);
+            LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
+            LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
+            Long TimeOnline = historyPerformanceRepository.countByDeviceEntityHistoryIdAndAndCreatedDateBetween(deviceId, start, end);
+            AreaChartDeviceOnl areaChartDeviceOnl = new AreaChartDeviceOnl(DaysAgo, TimeOnline * 3);
+            result.add(areaChartDeviceOnl);
+        }
+        return result;
     }
 
 

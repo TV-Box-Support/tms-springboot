@@ -139,6 +139,9 @@ public class ApkService implements IApkService {
         List<ApkDTO> result = new ArrayList<>();
         for (Long apkId : apkIds) {
             ApkEntity apkEntity = policyRepository.findById(policyId).map(policy -> {
+                if(policy.getAction() == 3){
+                    throw new RuntimeException("Can not add apk to a Policy Run Command");
+                }
                 if(policy.getApkEntitiesPolicy().size() + apkIds.length  > 3){
                     throw new RuntimeException("a working policy can only have a maximum of 3 APKs");
                 }

@@ -71,7 +71,7 @@ public class PolicyService implements IPolicyService {
                 policyEntity.setCommandEntity(commandEntity);
             }
         } else {
-            if(policyDTO.getAction() == 3){
+            if (policyDTO.getAction() == 3) {
                 throw new RuntimeException("Action Run Command cann't null command");
             }
         }
@@ -200,6 +200,9 @@ public class PolicyService implements IPolicyService {
         }
 
         PolicyEntity policyEntity = policyRepository.findOneById(id);
+        if(policyEntity.getStatus() == 3){
+            throw new RuntimeException("Policy has stopped");
+        }
         policyEntity.setStatus(status);
         List<DevicePolicyDetailEntity> devicePolicyDetailEntities = policyEntity.getDevicePolicyDetailEntities();
         for (DevicePolicyDetailEntity iteam : devicePolicyDetailEntities) {
@@ -215,11 +218,13 @@ public class PolicyService implements IPolicyService {
                     }
                     break;
                 case 3:
-                    iteam.setStatus(4);
-
+                    if (iteam.getStatus() == 1) {
+                        iteam.setStatus(4);
+                    }
             }
 
         }
+
         policyEntity = policyRepository.save(policyEntity);
         return policyConverter.toDTO(policyEntity);
     }
@@ -276,7 +281,7 @@ public class PolicyService implements IPolicyService {
             result.add(new PieChart(pause, "Pause"));
             result.add(new PieChart(stop, "Stop"));
             result.add(new PieChart(notRun, "Not Run"));
-        } else if(Objects.equals(type, "action")){
+        } else if (Objects.equals(type, "action")) {
             Long install = policyRepository.countAllByAction(1);
             Long uninstall = policyRepository.countAllByAction(2);
             Long runCommand = policyRepository.countAllByAction(3);

@@ -45,4 +45,7 @@ public interface DeviceApplicationRepository extends JpaRepository<DeviceApplica
     Long countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow, boolean main);
 
     Long countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetween(Long applicationId, @Param("localDateTime") LocalDateTime localDateTime, @Param("localDateTimeNow") LocalDateTime localDateTimeNow);
+
+    DeviceApplicationEntity findOneByDeviceAppEntityDetailIdAndApplicationEntityDetailPackagename(Long deviceId, String packagename);
+
 }
