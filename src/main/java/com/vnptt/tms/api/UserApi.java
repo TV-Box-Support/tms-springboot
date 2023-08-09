@@ -149,13 +149,6 @@ public class UserApi {
     }
 
     /**
-     * api create new user (only use to test before token
-     *
-     * @param model
-     * @return
-     */
-
-    /**
      * api update password
      *
      * @param id
