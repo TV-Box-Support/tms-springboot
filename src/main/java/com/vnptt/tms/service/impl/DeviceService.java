@@ -447,7 +447,7 @@ public class DeviceService implements IDeviceService {
     public List<BarChart> getTotalBarChart() {
         List<BarChart> result = new ArrayList<>();
         for (int i = 7; i > 0; i--) {
-            LocalDate DaysAgo = LocalDate.now().minusDays(i);
+            LocalDate DaysAgo = LocalDate.now().minusDays(i - 1);
             LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
             LocalDateTime end;
             if (i == 1) {
