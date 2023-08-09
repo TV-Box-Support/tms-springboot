@@ -123,9 +123,21 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/listDevice/{listDeviceId}/user")
-    public UserOutput showListDeviceInRoles(@PathVariable(name = "listDeviceId") Long listDeviceId) {
+    public UserOutput showListDeviceInRoles(@PathVariable(name = "listDeviceId") Long listDeviceId,
+                                            @RequestParam(value = "page") Integer page,
+                                            @RequestParam(value = "limit") Integer limit,
+                                            @RequestParam(value = "search", required = false) String search) {
         UserOutput result = new UserOutput();
-        result.setListResult(userService.findUserManagementListDevice(listDeviceId));
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if (search != null) {
+            result.setListResult(userService.findUserManagementListDeviceWithName(listDeviceId, search, pageable));
+            result.setTotalPage((int) Math.ceil((double) userService.totalUserManagementListDeviceWithName(listDeviceId, search) / limit));
+        } else {
+            result.setListResult(userService.findUserManagementListDevice(listDeviceId, pageable));
+            result.setTotalPage((int) Math.ceil((double) userService.totalUserManagementListDevice(listDeviceId) / limit));
+        }
+
 
         if (result.getListResult().size() >= 1) {
             result.setMessage("Request Success");
@@ -142,10 +154,6 @@ public class UserApi {
      * @param model
      * @return
      */
-//    @PostMapping(value = "/user")
-//    public UserDTO createUser(@RequestBody UserDTO model) {
-//        return userService.save(model);
-//    }
 
     /**
      * api update password
