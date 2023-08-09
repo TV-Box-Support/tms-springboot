@@ -43,7 +43,13 @@ public interface IUserService {
 
     Long totalItemWithActive(Integer active);
 
-    List<UserDTO> findUserManagementListDevice(Long listDeviceId);
+    List<UserDTO> findUserManagementListDevice(Long listDeviceId, Pageable pageable);
 
     UserDTO forceUpdate(UserDTO model);
+
+    List<UserDTO> findUserManagementListDeviceWithName(Long listDeviceId, String search, Pageable pageable);
+
+    Long totalUserManagementListDeviceWithName(Long listDeviceId, String search);
+
+    Long totalUserManagementListDevice(Long listDeviceId);
 }

@@ -227,7 +227,7 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAllDeviceRunNow(Pageable pageable) {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
         historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, LocalDateTime.now(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
@@ -397,7 +397,7 @@ public class DeviceService implements IDeviceService {
     @Override
     public TerminalStudioOutput updateTerminalStudioInfo() {
         TerminalStudioOutput terminalStudioOutput = new TerminalStudioOutput();
-        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-5);
         LocalDateTime timeLast7day = LocalDateTime.now().plusDays(-7);
         LocalDateTime timeLast30day = LocalDateTime.now().plusDays(-30);
         Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
@@ -449,12 +449,7 @@ public class DeviceService implements IDeviceService {
         for (int i = 7; i > 0; i--) {
             LocalDate DaysAgo = LocalDate.now().minusDays(i - 1);
             LocalDateTime start = LocalDateTime.of(DaysAgo, LocalTime.MIN);
-            LocalDateTime end;
-            if (i == 1) {
-                end = LocalDateTime.now();
-            } else {
-                end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
-            }
+            LocalDateTime end = LocalDateTime.of(DaysAgo, LocalTime.MAX);
             Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(start, end);
             result.add(new BarChart(DaysAgo, deviceOnline));
         }
@@ -481,7 +476,7 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public Long countDeviceRunNow() {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
         return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, LocalDateTime.now());
     }
 
@@ -606,7 +601,7 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAllDeviceRunNowWithSN(String serialmunber, Pageable pageable) {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
         historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByCreatedDateDesc(serialmunber, time, LocalDateTime.now(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
@@ -619,7 +614,7 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public Long countDeviceRunNowWithSN(String serialmunber) {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
         return deviceRepository.countDistinctBySnContainingAndHistoryPerformanceEntitiesCreatedDateBetween(serialmunber, time, LocalDateTime.now());
     }
 
