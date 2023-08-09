@@ -228,6 +228,7 @@ public class DeviceService implements IDeviceService {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
+        System.out.println("LocalDateTime.now() - 5m: " + time);
         LocalDateTime end = LocalDateTime.now().plusMinutes(-5);
         historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, LocalDateTime.now(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
