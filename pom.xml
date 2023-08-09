@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.vnptt</groupId>
 	<artifactId>tms</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.7</version>
 	<name>tms</name>
 	<description>project Terminal Management System</description>
 	<properties>
