@@ -154,16 +154,17 @@ public class UserService implements IUserService {//, UserDetailsService {
      * get all user manager list
      *
      * @param listDeviceId
+     * @param pageable
      * @return
      */
     @Override
-    public List<UserDTO> findUserManagementListDevice(Long listDeviceId) {
+    public List<UserDTO> findUserManagementListDevice(Long listDeviceId, Pageable pageable) {
         List<UserDTO> result = new ArrayList<>();
         ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
         if (listDevice == null) {
             throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
         }
-        List<UserEntity> userEntities = listDevice.getUserEntitiesListDevice();
+        List<UserEntity> userEntities = userRepository.findAllByDeviceEntitiesIdOrderByModifiedDateDesc(listDeviceId, pageable);
         for (UserEntity entity : userEntities) {
             result.add(userConverter.toDTO(entity));
         }
@@ -204,6 +205,30 @@ public class UserService implements IUserService {//, UserDetailsService {
         }
 
         return userConverter.toDTO(userEntity);
+    }
+
+    @Override
+    public List<UserDTO> findUserManagementListDeviceWithName(Long listDeviceId, String search, Pageable pageable) {
+        List<UserDTO> result = new ArrayList<>();
+        ListDeviceEntity listDevice = listDeviceRepository.findOneById(listDeviceId);
+        if (listDevice == null) {
+            throw new ResourceNotFoundException("not found list device with Id = " + listDeviceId);
+        }
+        List<UserEntity> userEntities = userRepository.findAllByDeviceEntitiesIdAndNameContainingOrderByModifiedDateDesc(listDeviceId, search, pageable);
+        for (UserEntity entity : userEntities) {
+            result.add(userConverter.toDTO(entity));
+        }
+        return result;
+    }
+
+    @Override
+    public Long totalUserManagementListDeviceWithName(Long listDeviceId, String search) {
+        return userRepository.countByDeviceEntitiesIdAndNameContaining(listDeviceId, search);
+    }
+
+    @Override
+    public Long totalUserManagementListDevice(Long listDeviceId) {
+        return userRepository.countByDeviceEntitiesId(listDeviceId);
     }
 
     @Override
