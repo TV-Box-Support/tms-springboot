@@ -189,7 +189,6 @@ public class DeviceApi {
 
     /**
      * api Show list device play application now
-     * todo: add ui
      *
      * @param applicationId
      * @return
