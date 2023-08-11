@@ -296,7 +296,7 @@ public class DeviceApi {
     /**
      * api show all device in list Device
      *
-     * @param listDeviceId id of listdevice
+     * @param listDeviceId id of list-device
      * @return list device in listDevice
      */
     @GetMapping(value = "/listDevice/{listDeviceId}/device")

@@ -24,9 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -228,6 +226,11 @@ public class DeviceService implements IDeviceService {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
+        System.out.println("LocalDateTime.now() - 5m: " + time);
+        LocalDateTime now = LocalDateTime.now();
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh"); // Đặt múi giờ mong muốn, ví dụ: Asia/Ho_Chi_Minh
+        ZonedDateTime zonedDateTime = now.atZone(zoneId);
+        System.out.println(" zonedDateTime "+ zonedDateTime);
         historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, LocalDateTime.now(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
