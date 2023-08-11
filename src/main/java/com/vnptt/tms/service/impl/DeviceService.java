@@ -137,6 +137,8 @@ public class DeviceService implements IDeviceService {
             throw new ResourceNotFoundException("Not found device with Serialnumber = " + serialnumber);
         }
 
+        System.out.println("ip "+ ip);
+
         try {
             // A File object pointing to file*.mmdb database
             File database = new File("src/main/resources/ipdatabase/data.mmdb");
@@ -149,6 +151,7 @@ public class DeviceService implements IDeviceService {
             CityResponse response = reader.city(ipAddress);
 
             City city = response.getCity();
+            System.out.println(" city "+ city);
             if (!Objects.equals(city.getName(), entity.getLocation())) {
                 entity.setLocation(city.getName());
             }
