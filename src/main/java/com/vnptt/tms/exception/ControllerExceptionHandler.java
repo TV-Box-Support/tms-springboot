@@ -8,6 +8,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
+import static com.vnptt.tms.utils.CustomDateTime.nowPlus7Hours;
+
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
@@ -16,7 +18,7 @@ public class ControllerExceptionHandler {
     public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now(),
+                nowPlus7Hours(),
                 ex.getMessage(),
                 request.getDescription(false));
 
@@ -28,7 +30,7 @@ public class ControllerExceptionHandler {
     public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now(),
+                nowPlus7Hours(),
                 ex.getMessage(),
                 request.getDescription(false));
 
@@ -40,7 +42,7 @@ public class ControllerExceptionHandler {
     public ErrorMessage FileStorageException(FileStorageException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now(),
+                nowPlus7Hours(),
                 ex.getMessage(),
                 request.getDescription(false));
         return message;
@@ -51,7 +53,7 @@ public class ControllerExceptionHandler {
     public ErrorMessage FileNotFoundException(FileNotFoundException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now(),
+                nowPlus7Hours(),
                 ex.getMessage(),
                 request.getDescription(false));
         return message;

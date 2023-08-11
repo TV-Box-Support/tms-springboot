@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.vnptt.tms.utils.CustomDateTime.nowPlus7Hours;
+
 
 @Service
 public class HistoryPerformanceService implements IHistoryPerformanceService {
@@ -126,8 +128,8 @@ public class HistoryPerformanceService implements IHistoryPerformanceService {
         }
         List<HistoryPerformanceDTO> result = new ArrayList<>();
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateDesc(deviceId, time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistoryIdAndAndCreatedDateBetweenOrderByCreatedDateDesc(deviceId, time, nowPlus7Hours());
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             HistoryPerformanceDTO historyPerformanceDTO = historyPerformanceConverter.toDTO(iteam);
             result.add(historyPerformanceDTO);

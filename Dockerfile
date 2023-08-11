@@ -1,5 +1,4 @@
 FROM openjdk:11
-#FROM adoptopenjdk:11-jdk-hotspot-focal
 COPY . /opt
 WORKDIR /opt
 ADD target/tms-server-docker-ec2.jar tms-server-docker-ec2.jar

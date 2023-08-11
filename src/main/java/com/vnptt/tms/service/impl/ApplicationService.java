@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.vnptt.tms.utils.CustomDateTime.nowPlus7Hours;
+
 
 @Service
 public class ApplicationService implements IApplicationService {
@@ -254,11 +256,10 @@ public class ApplicationService implements IApplicationService {
         }
 
         for (ApplicationEntity entity : top4) {
-            LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+            LocalDateTime time = nowPlus7Hours();
             Long number = deviceApplicationRepository.countByApplicationEntityDetailId(entity.getId());
-            Long numberActiveNow = deviceRepository.countDistinctByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
+            Long numberActiveNow = deviceRepository.countDistinctByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailMain(entity.getId(), time, nowPlus7Hours(), true);
             String name = entity.getName() + " - " + entity.getVersion();
-            //Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetweenAndHistoryApplicationEntitiesDetailMain(entity.getId(), time, LocalDateTime.now(), true);
             result.add(new DoubleBarChart(name, number - numberActiveNow, numberActiveNow));
         }
         return result;
@@ -273,9 +274,9 @@ public class ApplicationService implements IApplicationService {
             result.add(new PieChart(all - install, "Not Install"));
             result.add(new PieChart(install, " Install"));
         } else if (Objects.equals(type, "active")) {
-            LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+            LocalDateTime time = nowPlus7Hours().plusMinutes(-3);
             Long number = deviceApplicationRepository.countByApplicationEntityDetailId(applicationId);
-            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
+            Long numberActiveNow = deviceApplicationRepository.countByApplicationEntityDetailIdAndHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, nowPlus7Hours());
             result.add(new PieChart(number - numberActiveNow, "Not Active"));
             result.add(new PieChart(numberActiveNow, "Active"));
         }

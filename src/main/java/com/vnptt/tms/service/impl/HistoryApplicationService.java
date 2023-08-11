@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.vnptt.tms.utils.CustomDateTime.nowPlus7Hours;
+
 
 @Service
 public class HistoryApplicationService implements IHistoryApplicationService {
@@ -104,8 +106,8 @@ public class HistoryApplicationService implements IHistoryApplicationService {
         }
         List<HistoryApplicationDTO> result = new ArrayList<>();
         List<HistoryApplicationEntity> historyApplicationEntities = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween(deviceApplicationId, time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
+        historyApplicationEntities = historyApplicationRepository.findAllByHistoryDeviceApplicationEntityIdAndCreatedDateBetween(deviceApplicationId, time, nowPlus7Hours());
         for (HistoryApplicationEntity iteam : historyApplicationEntities) {
             HistoryApplicationDTO historyApplicationDTO = historyApplicationConverter.toDTO(iteam);
             result.add(historyApplicationDTO);

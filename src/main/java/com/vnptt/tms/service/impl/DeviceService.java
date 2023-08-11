@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.vnptt.tms.utils.CustomDateTime.nowPlus7Hours;
+
 @Service
 public class DeviceService implements IDeviceService {
 
@@ -228,13 +230,11 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAllDeviceRunNow(Pageable pageable) {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
-        System.out.println("LocalDateTime.now() - 5m: " + time);
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-5);
+        System.out.println("nowPlus7Hours() - 5m: " + time);
         LocalDateTime now = LocalDateTime.now();
-        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh"); // Đặt múi giờ mong muốn, ví dụ: Asia/Ho_Chi_Minh
-        ZonedDateTime zonedDateTime = now.atZone(zoneId);
-        System.out.println(" zonedDateTime "+ zonedDateTime);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, LocalDateTime.now(), pageable);
+        System.out.println(" LocalDateTime none fix "+ now);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, nowPlus7Hours(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
@@ -282,8 +282,8 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findDeviceActive(int day, long hour, int minutes, Pageable pageable) {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, LocalDateTime.now(), pageable);
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(time, nowPlus7Hours(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
@@ -303,9 +303,9 @@ public class DeviceService implements IDeviceService {
     @Override
     public List<DeviceDTO> findAllDeviceRunApp(Long applicationId, Pageable pageable) {
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-3);
 
-        List<DeviceEntity> deviceEntities = deviceRepository.findAllByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(applicationId, time, LocalDateTime.now(), pageable);
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(applicationId, time, nowPlus7Hours(), pageable);
 
 //        historyApplicationEntities = historyApplicationRepository.findAllByCreatedDateBetween(time, LocalDateTime.now());
 //        for (HistoryApplicationEntity iteam : historyApplicationEntities) {
@@ -403,12 +403,12 @@ public class DeviceService implements IDeviceService {
     @Override
     public TerminalStudioOutput updateTerminalStudioInfo() {
         TerminalStudioOutput terminalStudioOutput = new TerminalStudioOutput();
-        LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-5);
-        LocalDateTime timeLast7day = LocalDateTime.now().plusDays(-7);
-        LocalDateTime timeLast30day = LocalDateTime.now().plusDays(-30);
-        Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
-        Long last7day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast7day, LocalDateTime.now());
-        Long last30day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast30day, LocalDateTime.now());
+        LocalDateTime timeOnline = nowPlus7Hours().plusMinutes(-5);
+        LocalDateTime timeLast7day = nowPlus7Hours().plusDays(-7);
+        LocalDateTime timeLast30day = nowPlus7Hours().plusDays(-30);
+        Long deviceOnline = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, nowPlus7Hours());
+        Long last7day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast7day, nowPlus7Hours());
+        Long last30day = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeLast30day, nowPlus7Hours());
         terminalStudioOutput.setOnline(deviceOnline);
         terminalStudioOutput.setLast7day(last7day);
         terminalStudioOutput.setLast30day(last30day);
@@ -421,8 +421,8 @@ public class DeviceService implements IDeviceService {
         List<PieChart> result = new ArrayList<>();
         if (Objects.equals(type, "online")) {
             Long total = deviceRepository.count();
-            LocalDateTime timeOnline = LocalDateTime.now().plusMinutes(-3);
-            Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, LocalDateTime.now());
+            LocalDateTime timeOnline = nowPlus7Hours().plusMinutes(-3);
+            Long online = deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(timeOnline, nowPlus7Hours());
             Long notActive = deviceRepository.countDistinctByHistoryPerformanceEntitiesIsNull();
             Long offline = total - online;
             result.add(new PieChart(online, "Online"));
@@ -482,14 +482,14 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public Long countDeviceRunNow() {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
-        return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-5);
+        return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, nowPlus7Hours());
     }
 
     @Override
     public Long countDeviceActive(int day, long hour, int minutes) {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
-        return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-minutes).plusDays(-day).plusHours(-hour);
+        return deviceRepository.countDistinctByHistoryPerformanceEntitiesCreatedDateBetween(time, nowPlus7Hours());
     }
 
     @Override
@@ -607,8 +607,8 @@ public class DeviceService implements IDeviceService {
     public List<DeviceDTO> findAllDeviceRunNowWithSN(String serialmunber, Pageable pageable) {
         List<HistoryPerformanceEntity> historyPerformanceEntities = new ArrayList<>();
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
-        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByCreatedDateDesc(serialmunber, time, LocalDateTime.now(), pageable);
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-5);
+        historyPerformanceEntities = historyPerformanceRepository.findAllByDeviceEntityHistorySnContainingAndCreatedDateBetweenOrderByCreatedDateDesc(serialmunber, time, nowPlus7Hours(), pageable);
         for (HistoryPerformanceEntity iteam : historyPerformanceEntities) {
             DeviceEntity deviceEntity = deviceRepository.findOneById(iteam.getDeviceEntityHistory().getId());
             if (deviceEntity != null && result.stream().noneMatch(device -> device.getId().equals(deviceEntity.getId()))) {
@@ -620,8 +620,8 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public Long countDeviceRunNowWithSN(String serialmunber) {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-5);
-        return deviceRepository.countDistinctBySnContainingAndHistoryPerformanceEntitiesCreatedDateBetween(serialmunber, time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-5);
+        return deviceRepository.countDistinctBySnContainingAndHistoryPerformanceEntitiesCreatedDateBetween(serialmunber, time, nowPlus7Hours());
     }
 
     @Override
@@ -725,8 +725,8 @@ public class DeviceService implements IDeviceService {
     @Override
     public List<DeviceDTO> findAllDeviceRunAppWithSn(Long applicationId, String sn, Pageable pageable) {
         List<DeviceDTO> result = new ArrayList<>();
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
-        List<DeviceEntity> deviceEntities = deviceRepository.findAllBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(sn, applicationId, time, LocalDateTime.now(), pageable);
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-3);
+        List<DeviceEntity> deviceEntities = deviceRepository.findAllBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetweenOrderByDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateDesc(sn, applicationId, time, nowPlus7Hours(), pageable);
         for (DeviceEntity entity : deviceEntities) {
             result.add(deviceConverter.toDTO(entity));
         }
@@ -735,14 +735,14 @@ public class DeviceService implements IDeviceService {
 
     @Override
     public Long countAppActiveByApplicationIdAndSn(Long applicationId, String sn) {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
-        return deviceRepository.countBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(sn, applicationId, time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-3);
+        return deviceRepository.countBySnContainingAndDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(sn, applicationId, time, nowPlus7Hours());
     }
 
     @Override
     public Long countAppactiveByApplicationId(Long applicationId) {
-        LocalDateTime time = LocalDateTime.now().plusMinutes(-3);
-        return deviceRepository.countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, LocalDateTime.now());
+        LocalDateTime time = nowPlus7Hours().plusMinutes(-3);
+        return deviceRepository.countByDeviceApplicationEntitiesApplicationEntityDetailIdAndDeviceApplicationEntitiesHistoryApplicationEntitiesDetailCreatedDateBetween(applicationId, time, nowPlus7Hours());
     }
 
     @Override
