@@ -21,6 +21,11 @@ public class DeviceDetailsServiceImpl implements UserDetailsService {
     @Autowired
     DeviceRepository deviceRepository;
 
+    // Khi một phương thức được đánh dấu bằng @Transactional, nó tạo ra một giao dịch (transaction)
+    // xung quanh các thao tác trên cơ sở dữ liệu
+    // Giao dịch có thể được xem như một gói chứa các thao tác dữ liệu, và nó đảm bảo rằng các thao tác đó được
+    // thực hiện hoàn toàn hoặc không được thực hiện chút nào. Nếu một thao tác bị lỗi, giao dịch sẽ tự động được
+    // rollback (quay trở lại trạng thái trước khi giao dịch bắt đầu), để đảm bảo tính nhất quán của dữ liệu.
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String serialnumber) throws UsernameNotFoundException {

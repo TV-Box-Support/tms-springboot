@@ -30,20 +30,19 @@ public class AlertDialogApi {
                                                      @RequestParam(value = "search", required = false) String title) {
         AlertDialogOutput result = new AlertDialogOutput();
         if (page != null && limit != null) {
-            if(title == null){
+            if (title == null) {
                 result.setPage(page);
                 Pageable pageable = PageRequest.of(page - 1, limit);
                 result.setListResult((CommandNotificationService.findAll(pageable)));
                 result.setTotalPage((int) Math.ceil((double) CommandNotificationService.totalItem() / limit));
-            } else{
+            } else {
                 result.setPage(page);
                 Pageable pageable = PageRequest.of(page - 1, limit);
                 result.setListResult((CommandNotificationService.findAllWithMessage(title, pageable)));
                 result.setTotalPage((int) Math.ceil((double) CommandNotificationService.countAllWithTitle(title) / limit));
             }
-
         } else {
-            if(title != null){
+            if (title != null) {
                 throw new RuntimeException("page and limit fields are required when searching");
             }
             result.setListResult(CommandNotificationService.findAll());

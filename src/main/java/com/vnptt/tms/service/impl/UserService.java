@@ -30,7 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+// @Service là một annotation trong Spring Framework được sử dụng để đánh dấu một lớp là một dịch vụ (service).
+// Khi một lớp được đánh dấu bằng @Service, nó cho biết rằng lớp đó chịu trách nhiệm thực hiện các nhiệm vụ,
+// xử lý logic và tương tác với các thành phần khác trong ứng dụng.
 @Service
 public class UserService implements IUserService {//, UserDetailsService {
 

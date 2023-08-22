@@ -14,13 +14,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+// @Component là một annotation được sử dụng để đánh dấu một class là một bean componen
+// Khi một class được đánh dấu bằng @Component, Spring Boot sẽ quản lý và tạo các instance của class đó.
+//
+// Điều này cho phép bạn sử dụng dependency injection để tự động tiêm (Autowired)các instance của các bean component vào các
+// thành phần khác trong ứng dụng.
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
     /**
-     * responce exception Unauthorized
+     * response exception Unauthorized
+     * This method is used to handle cases when a request is not authenticated or access is not available
      *
      * @param request
      * @param response

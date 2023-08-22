@@ -2,6 +2,24 @@ package com.vnptt.tms.api.output.chart;
 
 import java.time.LocalDate;
 
+/**
+ * BarChart (horizontal column)
+ *
+ *  time ^
+ *       |
+ *  100 - ██████████████████████████████████
+ *       |
+ *   80 - ████████████
+ *       |
+ *   60 - ██████████████████████
+ *       |
+ *   40 - ████████████████████████████
+ *       |
+ *   20 - █████████████████
+ *       |
+ *    0 - ████████████████████████████████████████████████████████
+ *       0         10        20        30        40        50       devicenumber
+ */
 public class BarChart {
     private LocalDate date;
     private Long devicenumber;

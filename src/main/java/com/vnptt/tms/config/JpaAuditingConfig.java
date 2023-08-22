@@ -29,13 +29,14 @@ public class JpaAuditingConfig {
     public static class AuditorAwareImpl implements AuditorAware<String> {
         @Override
         public Optional<String> getCurrentAuditor() {
-//            only use to test when not authorized
-//
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            if (authentication == null || !authentication.isAuthenticated()) {
-//                return null;
-//            }
-//            return Optional.ofNullable(authentication.getName());
+            // only use to test when not authorized
+            //
+            // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            // if (authentication == null || !authentication.isAuthenticated()) {
+            //     return null;
+            // }
+            // return Optional.ofNullable(authentication.getName());
+
             try {
                 String username = SecurityContextHolder.getContext().getAuthentication().getName();
                 return Optional.ofNullable(username);

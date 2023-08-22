@@ -2,6 +2,9 @@ package com.vnptt.tms.security.responce;
 
 import java.util.List;
 
+/**
+ *  response login
+ */
 public class JwtResponse {
 
     private Long id;

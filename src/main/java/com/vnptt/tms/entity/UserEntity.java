@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// @Entity là một annotation trong JPA (Java Persistence API) được sử dụng để đánh dấu một lớp là một đối tượng ánh xạ
+// (mapping entity). Khi một lớp được đánh dấu bằng @Entity, nó cho biết rằng lớp đó tương ứng với một bảng trong
+// cơ sở dữ liệu và các trường dữ liệu của lớp sẽ được ánh xạ sang các cột trong bản
 @Entity
 @Table(name = "User")
 public class UserEntity extends BaseEntity {

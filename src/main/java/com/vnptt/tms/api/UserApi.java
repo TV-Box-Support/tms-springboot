@@ -10,11 +10,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+// @CrossOrigin là một annotation được sử dụng để cấu hình chính sách Cross-Origin Resource Sharing (CORS) cho một API
+// hoặc một phương thức API cụ thể. CORS là một cơ chế bảo mật trong trình duyệt web, nó đảm bảo rằng một trang web
+// chỉ có thể gửi yêu cầu HTTP tới một nguồn tài nguyên (API) thuộc một nguồn gốc (origin) cụ thể.
 @CrossOrigin
+// Khi một lớp được đánh dấu bằng @RestController, nó cho biết rằng lớp đó sẽ xử lý các yêu cầu HTTP và trả về dữ liệu
+// dưới dạng dữ liệu (JSON, XML, v.v.) thay vì trang HTML
 @RestController
 @RequestMapping("TMS/api")
 public class UserApi {
 
+    //  @Autowired là một annotation trong Spring Boot được sử dụng để đánh dấu một đối tượng (dependency) để được tự động
+    // tiêm (inject) vào một thành phần khác trong ứng dụng.
+    //
+    //  Khi một đối tượng được đánh dấu bằng @Autowired, Spring Boot sẽ tự động tìm và cung cấp một phiên bản thích hợp
+    // của đối tượng đó để tiêm vào thành phần sử dụng nó.
     @Autowired
     private IUserService userService;
 
@@ -26,6 +36,13 @@ public class UserApi {
      * @return
      */
     @GetMapping(value = "/user")
+    //  @PreAuthorize là một annotation trong Spring Security được sử dụng để kiểm tra quyền trước khi thực hiện một
+    // phương thức trong ứng dụng. Nó cho phép bạn xác định các điều kiện (expressions) để kiểm tra quyền truy cập của
+    // người dùng trong quá trình xử lý yêu cầu.
+    //
+    //  Khi một phương thức được đánh dấu bằng @PreAuthorize, Spring Security sẽ kiểm tra các điều kiện quyền truy cập
+    // được xác định bởi annotation này trước khi phương thức được thực thi. Nếu người dùng không đáp ứng các yêu cầu về
+    // quyền truy cập, một ngoại lệ sẽ được ném và phương thức sẽ không được thực thi.
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserOutput showUser(@RequestParam(value = "page", required = false) Integer page,
                                @RequestParam(value = "limit", required = false) Integer limit,

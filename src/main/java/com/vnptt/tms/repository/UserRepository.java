@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+// JpaRepository là một interface trong Spring Data JPA cung cấp các phương thức tiêu chuẩn để thực hiện các thao tác
+// CRUD (Create, Read, Update, Delete) trên đối tượng ánh xạ. Nó cung cấp các phương thức như save, findById, findAll,
+// delete, v.v.
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findOneById(Long id);
