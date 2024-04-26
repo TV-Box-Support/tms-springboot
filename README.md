@@ -12,9 +12,9 @@ Show some ❤️ and star ⭐ the repo if you liked it.
   <img src="media/logo/aosp-atv.png" height="120px" />
 </p>
 
-![GitHub stars](https://img.shields.io/github/stars/chunhthanhde/Food-Restaurant-UI?style=social)
-![GitHub forks](https://img.shields.io/github/forks/chunhthanhde/Food-Restaurant-UI?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/chunhthanhde/Food-Restaurant-UI?style=social)
+![GitHub stars](https://img.shields.io/github/stars/chunhthanhde/tms-springboot?style=social)
+![GitHub forks](https://img.shields.io/github/forks/chunhthanhde/tms-springboot?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/chunhthanhde/tms-springboot?style=social)
 
 <a href="https://www.linkedin.com/in/chunhthanhde/">
   <img src="https://img.shields.io/badge/Support-Recommend%2FEndorse%20me%20on%20Linkedin-blue?style=for-the-badge&logo=linkedin" alt="Support me on LinkedIn" />
@@ -24,7 +24,7 @@ Show some ❤️ and star ⭐ the repo if you liked it.
 
 <a href="https://www.buymeacoffee.com/chunhthanhde" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-This source code is the back end of the TMS Project. For security reasons, I cannot publish the application source code of this system. The following link is the source code of the web client interface for TMS Smart Box device managers: https://github.com/ChunhThanhDe/tms-reactjs
+🚑 This source code is the back end of the TMS Project. For security reasons, I cannot 🙌 publish the application source code of this system. The following link is the source code of the web client interface for TMS Smart Box device managers: https://github.com/ChunhThanhDe/tms-reactjs
 
 ## 🗂️ Overview
 
