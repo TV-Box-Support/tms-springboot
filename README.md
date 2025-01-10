@@ -182,7 +182,7 @@ password: root
 
 First of all, I would like to thank the HEC Electronic Technology Center of 🏢 VNPT Technology Company for creating
 conditions for me to build and develop this topic on the company's SmartBox 3 device. I would also like to thank 💝 [Nguyen
-Vinh Khang](https://github.com/NguyenVinhKhang) for helping me develop the Web client source code for the system and 💝 Le Thu An for working with me to build a
+Vinh Khang](https://github.com/NguyenVinhKhang) for helping me develop the Web client source code for the system and 💝 [Le Thu An](https://www.facebook.com/thu.an.712662) for working with me to build a
 Business Analyst for the project. ❤️ 
 
 ## 🌟 Star History
